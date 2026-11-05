@@ -1,7 +1,7 @@
 /* Origo · service worker: permite instalar la app y abrirla sin conexión.
    La página se pide siempre a internet primero (así llegan las actualizaciones) y, si no hay conexión, se usa la copia guardada.
    No toca las peticiones a Firestore ni al inicio de sesión. */
-const C='origo-v1',BASE=['./','index.html','manifest.webmanifest','assets/icon-192.png','assets/icon-512.png'];
+const C='origo-v2',BASE=['./','index.html','manifest.webmanifest','assets/icon-192.png','assets/icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(BASE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
