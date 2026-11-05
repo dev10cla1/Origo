@@ -50,7 +50,10 @@ Barra inferior: **Hoy · Registros · Salud · Más**.
 - Ninguna pantalla calcula dosis: la medicación solo guarda la pauta del pediatra.
 
 ## Límites conocidos
-Notificaciones reales · vídeos · avatar con foto · abrir la app **sin conexión desde cero** necesita un service worker (archivo aparte `sw.js`; no incluido para mantener un solo archivo). Con la app abierta, los registros sin conexión se envían solos al volver.
+Notificaciones reales · vídeos · avatar con foto (los registros sin conexión se envían solos al volver).
+
+## Instalación (PWA)
+`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker pide la página a internet primero (las actualizaciones llegan solas) y guarda el SDK de Firebase. Si cambias la lista de archivos de `sw.js`, sube la versión `origo-v1`.
 
 ## Cómo publicar
 Sube `index.html` a un repositorio de GitHub → Settings → Pages → rama `main`, carpeta raíz. Abre el enlace en el móvil y "Añadir a pantalla de inicio". Haz copias periódicas con Ajustes → Exportar (incluye fotos).
