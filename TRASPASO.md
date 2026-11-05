@@ -3,7 +3,7 @@
 App web para familias: seguimiento del bebé, salud, preparativos y recuerdos. Es **un solo archivo** (`index.html`, ~190 KB: HTML + CSS + JS, sin dependencias ni servidor). Se publica en GitHub Pages y se instala en el móvil con "Añadir a pantalla de inicio".
 
 ## Estado
-Fases 1 a 7 del rediseño **completadas y verificadas**. **Fase 8 (Firebase)**: código hecho y probado con un servidor simulado de dos móviles; falta pegar la configuración real (`FIREBASE_CONFIG`, al principio del script) y publicar las reglas (`reglas-firestore.txt`).
+Fases 1 a 7 del rediseño **completadas y verificadas**. **Fase 8 (Firebase)**: código hecho y probado con un servidor simulado de dos móviles; configuración real ya puesta (proyecto `origo-5ae53`); comprobar que las reglas de `reglas-firestore.txt` están publicadas.
 
 Verificación final: 27 pasos de uso real con Chromium (alta, registros rápidos, edición, deshacer, Salud, informe, pañales, preparativos, desarrollo, ajustes, persistencia) sin fallos ni errores de consola; 150 comprobaciones de pantalla (15 pantallas × 5 anchos × claro/noche) sin desbordes. Scripts en `qa/`.
 
