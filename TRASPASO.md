@@ -12,7 +12,7 @@ Azul petróleo `#234366` (principal) · verde salvia `#82ADA0` · coral `#ECAF8E
 
 ## Navegación
 Barra inferior: **Hoy · Registros · Salud · Más**.
-- **Hoy** (dos modos según `nacido()`: sin `cfg.nac` o fecha ya pasada = nacido):
+- **Hoy** (dos modos según `nacido()`: sin `cfg.nac`, o fecha pasada sin `cfg.emb` = nacido):
   - *Embarazo* (`cfg.nac` futura, `vEmb()`): cuenta atrás, semana aproximada (40 − ceil(días/7), acotada a 4..42), trimestre, barra de semanas, un consejo de organización, progreso de Preparativos (botón → Más › Preparativos), próxima cita y botón **Ya ha nacido** (hoja con la fecha real → guarda `cfg.nac` y pasa al modo nacido). Sin botones de registro ni resumen; `tick()` sale si no existe `#wk`.
   - *Nacido*: estado actual, "Más registros", resumen del día, actividad reciente y pendientes. **Barra fija inferior** `#qbar` (Toma · Pañal · Sueño, 64 px, encima de la nav; `--nh` = alto de la nav, `body.qb` sube el aviso) solo en esta pestaña. Sin "mantener pulsado": **Toma** abre `sheetToma` (valores por defecto = últimos usados; un toque en Guardar), **Pañal** abre `panelPanal`, **Sueño** abre `panelSueno` (ahora / a las…; `toggleSueno(ts)` acepta hora).
   - Actividad reciente: `evRow(e,full,del)`; con `del` añade papelera (`ACT.elim`, borrado lógico + Deshacer). Solo se usa en Hoy.
