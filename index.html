@@ -209,9 +209,14 @@ function endGate(){Sync.gate=false;closeSheet();checkOnboard()}
 function checkOnboard(){if(Sync.firstFam&&!Sync.gate&&!cfg.nombre&&$('ov').style.display!=='flex')onboard()}
 const busy=(id,on)=>{const b=$(id);if(b){b.disabled=on;b.style.opacity=on?.5:1}};
 function gateLogin(){
-  gate('<h2 style="margin-top:0;text-align:center">Entrar en Origo</h2><div class="mute" style="text-align:center;margin-bottom:6px">Con una cuenta, los registros se comparten entre los móviles de la familia.</div><label>Correo</label><input id="le" type="email" autocomplete="email" value="'+esc(Sync.email)+'"><label>Contraseña</label><input id="lp" type="password" autocomplete="current-password"><div class="grid" style="margin-top:6px"><button class="sec" id="lc">Crear cuenta</button><button class="sec" id="li" style="background:var(--acc);color:var(--on)">Entrar</button></div><button class="sec" id="lr" style="width:100%;margin-top:10px;background:none">He olvidado la contraseña</button>');
+  gate('<h2 style="margin-top:0;text-align:center">Entrar en Origo</h2><div class="mute" style="text-align:center;margin-bottom:6px">Con una cuenta, los registros se comparten entre los móviles de la familia.</div><button class="sec" id="lg" style="width:100%;margin:6px 0 4px;background:var(--acc);color:var(--on)">Entrar con Google</button><div class="mute" style="text-align:center;margin:8px 0 0">o con correo y contraseña</div><label>Correo</label><input id="le" type="email" autocomplete="email" value="'+esc(Sync.email)+'"><label>Contraseña</label><input id="lp" type="password" autocomplete="current-password"><div class="grid" style="margin-top:6px"><button class="sec" id="lc">Crear cuenta</button><button class="sec" id="li">Entrar</button></div><button class="sec" id="lr" style="width:100%;margin-top:10px;background:none">He olvidado la contraseña</button>');
   const F=Sync.F,go=(fn,id)=>async()=>{const e=$('le').value.trim(),p=$('lp').value;gmsg('');busy(id,true);try{Sync.email=e;LS.set('origo.email',e);await fn(Sync.auth,e,p)}catch(x){gmsg(authMsg(x.code))}busy(id,false)};
   $('li').onclick=go(F.signInWithEmailAndPassword,'li');$('lc').onclick=go(F.createUserWithEmailAndPassword,'lc');
+  $('lg').onclick=async()=>{gmsg('');const pr=()=>{const p=new F.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});return p};busy('lg',true);
+    try{await F.signInWithPopup(Sync.auth,pr())}
+    catch(x){const c=x.code||'';if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'){try{await F.signInWithRedirect(Sync.auth,pr())}catch(y){gmsg(authMsg(y.code))}}
+      else if(c!=='auth/popup-closed-by-user'&&c!=='auth/cancelled-popup-request')gmsg(c==='auth/operation-not-allowed'?'Falta activar Google en Firebase (Authentication → Método de acceso)':c==='auth/unauthorized-domain'?'Falta añadir este dominio en Firebase (Authentication → Dominios autorizados)':authMsg(c))}
+    busy('lg',false)};
   $('lr').onclick=async()=>{const e=$('le').value.trim();if(!e)return gmsg('Escribe tu correo arriba');try{await F.sendPasswordResetEmail(Sync.auth,e);gmsg('Te hemos enviado un correo para cambiarla')}catch(x){gmsg(authMsg(x.code))}};
 }
 const ALF='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -280,7 +285,7 @@ async function iniciarFirebase(){
     F.onAuthStateChanged(Sync.auth,async u=>{
       if(!u){Sync.ready=false;if(Sync.uid&&Sync.fid){Sync.uid=null;return salir()}return gateLogin()}
       if(Sync.uid&&Sync.uid!==u.uid){Object.keys(localStorage).filter(k=>/^(bebe|origo)\./.test(k)&&k!=='origo.email').forEach(k=>localStorage.removeItem(k));location.reload();return}
-      Sync.uid=u.uid;LS.set('origo.uid',u.uid);Store.ev.forEach(e=>{if(!e.por&&!Sync.fid)e.por=u.uid});
+      Sync.uid=u.uid;LS.set('origo.uid',u.uid);if(u.email){Sync.email=u.email;LS.set('origo.email',u.email)}Store.ev.forEach(e=>{if(!e.por&&!Sync.fid)e.por=u.uid});
       let fid=Sync.fid;
       if(!fid){try{const s=await F.getDoc(F.doc(Sync.db,'usuarios',u.uid));fid=s.exists()&&s.data().fid}catch(_){}}
       if(!fid){endGate();return gateFamilia()}
