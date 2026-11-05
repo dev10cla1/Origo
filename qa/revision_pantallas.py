@@ -10,6 +10,7 @@ SCR=[('Hoy','tab="hoy";masSub=null'),('Registros','tab="his";regVista="crono";ma
 for k in ['cre','tem','med','vac','cit']:SCR.append(('Salud/'+k,'tab="cre";sal="%s"'%k))
 SCR+= [('Más','tab="mas";masSub=null'),('Pañales','tab="mas";masSub="pan"'),('Preparativos','tab="mas";masSub="prep";prepOpen["Dormitorio y descanso"]=true'),('Ajustes','tab="mas";masSub="aju"')]
 for k in ['mom','hit','ali']:SCR.append(('Desarrollo/'+k,'tab="mas";masSub="des";sub="%s"'%k))
+SCR.append(('Hoy embarazo','tab="hoy";masSub=null;cfg.nac=new Date(Date.now()+75*864e5).toISOString().slice(0,10)'))
 bad=[];tot=0
 with sync_playwright() as p:
     b=p.chromium.launch()

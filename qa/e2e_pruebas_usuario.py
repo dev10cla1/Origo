@@ -19,20 +19,20 @@ with sync_playwright() as p:
         pg.fill('#on','Lucía');pg.fill('#of',nac);pg.click('#sh .chips button[data-v=f]');pg.click('#shs');pg.wait_for_selector('#bT')
         assert 'Lucía' in pg.inner_text('#app')
     step('Alta inicial (nombre, fecha, sexo)',onboarding)
-    def toma_rapida(): pg.click('#bT');pg.wait_for_selector('#toast',state='visible');assert 'Toma' in pg.inner_text('#tmsg')
-    step('Toma con un toque',toma_rapida)
+    def toma_rapida(): pg.click('#bT');pg.wait_for_selector('#sh input#ml');pg.click('#shs');pg.wait_for_selector('#toast',state='visible');assert 'Toma' in pg.inner_text('#tmsg')
+    step('Toma: abrir hoja y Guardar con un toque',toma_rapida)
     def panal():
         pg.click('#bP');pg.click('#sh button[data-v=caca]');pg.wait_for_timeout(200);assert 'Pañal' in pg.inner_text('#tmsg')
     step('Pañal (panel de 4 botones)',panal)
     def sueno():
-        pg.click('#bS');pg.wait_for_timeout(1300);assert pg.is_visible('#ban');pg.click('#ban button');pg.wait_for_timeout(200);assert not pg.is_visible('#ban')
+        pg.click('#bS');pg.click('#sh button[data-v=ahora]');pg.wait_for_timeout(1300);assert pg.is_visible('#ban');pg.click('#ban button');pg.wait_for_timeout(200);assert not pg.is_visible('#ban')
     step('Sueño: iniciar, cronómetro, finalizar',sueno)
     def toma_detalle():
-        b=pg.locator('#bT').bounding_box();pg.mouse.move(b['x']+30,b['y']+30);pg.mouse.down();pg.wait_for_timeout(700);pg.mouse.up()
+        pg.click('#bT')
         pg.wait_for_selector('#sh input#ml');pg.fill('#ml','150');pg.click('#shs');pg.wait_for_timeout(200)
-    step('Toma con detalle (mantener pulsado)',toma_detalle)
+    step('Toma con detalle (cantidad)',toma_detalle)
     def pecho():
-        b=pg.locator('#bT').bounding_box();pg.mouse.move(b['x']+30,b['y']+30);pg.mouse.down();pg.wait_for_timeout(700);pg.mouse.up()
+        pg.click('#bT')
         pg.click('#sh .chips[id=lt] button[data-v=pecho]');pg.click('#sh .chips[id=ld] button[data-v=i]');pg.fill('#mn','12');pg.click('#shs');pg.wait_for_timeout(200)
     step('Toma de pecho (lado y duración)',pecho)
     def temp():
