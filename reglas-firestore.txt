@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function dentro() { return request.auth != null; }
+    function esMiembro(fid) {
+      return dentro() && request.auth.uid in get(/databases/$(database)/documents/familias/$(fid)).data.miembros;
+    }
+
+    // Cada persona solo ve qué familia es la suya
+    match /usuarios/{uid} {
+      allow read, write: if dentro() && request.auth.uid == uid;
+    }
+
+    match /familias/{fid} {
+      allow read: if dentro() && request.auth.uid in resource.data.miembros;
+      allow create: if dentro() && request.resource.data.miembros == [request.auth.uid];
+      // Un miembro puede cambiarlo todo; alguien con el código solo puede añadirse a sí mismo
+      allow update: if dentro() && (
+        request.auth.uid in resource.data.miembros
+        || (
+          resource.data.miembros.size() < 6
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['miembros', 'nombres'])
+          && request.resource.data.miembros == resource.data.miembros.concat([request.auth.uid])
+          && request.resource.data.nombres.diff(resource.data.nombres).affectedKeys().hasOnly([request.auth.uid])
+        )
+      );
+      allow delete: if false;
+
+      // Registros y fotos: solo los miembros de la familia
+      match /{coleccion}/{docId} {
+        allow read, write: if esMiembro(fid);
+      }
+    }
+  }
+}
