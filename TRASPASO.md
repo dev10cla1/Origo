@@ -46,7 +46,7 @@ Barra inferior: **Hoy · Registros · Salud · Más**.
 - **Curvas OMS 2006** (0–24 m, peso/talla/perímetro, niño/niña): parámetros LMS contrastados con tablas publicadas; cada mediana cae en P50.
 - **Hitos**: CDC/AAP 2022 (2, 4, 6, 9, 12 meses), redactados con palabras propias; categorías asignadas manualmente.
 - **Alimentación**: resumen de recomendaciones AEP/AESAN (miel, nitratos, mercurio, atragantamiento, gluten 4–11 m).
-- **Vacunas**: calendario andaluz 2026 solo **parcialmente verificado** (rotavirus desde los 2 m y triple vírica/varicela a los 2 años confirmados; 4, 11 y 15 meses tomados de años anteriores). Está marcado como orientativo.
+- **Vacunas**: calendario andaluz 2026 **verificado con la Instrucción DGSPyOF-1/2026 y las instrucciones de neumococo y meningococo de andavac.es** (nov 2026): hexavalente 2-4-11 · neumococo 2-4-6-11 · meningococo B 2-4-15 · MenACWY 4 y 12 · rotavirus 2 y 4 · triple vírica 12 m y 2 años · varicela 15 m y 2 años. No incluye nirsevimab (VRS) ni gripe (campañas anuales; se pueden añadir con «Añadir vacuna»). Revisar cada enero.
 - Ninguna pantalla calcula dosis: la medicación solo guarda la pauta del pediatra.
 
 ## Límites conocidos

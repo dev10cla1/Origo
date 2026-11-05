@@ -419,7 +419,9 @@ function render(){
 }
 
 /* ===== Salud: temperatura, pauta del pediatra, citas y vacunas ===== */
-const VAC=[[2,'Hexavalente, neumococo, meningococo B y rotavirus'],[4,'Hexavalente, neumococo y meningococo B'],[11,'Hexavalente y neumococo'],[15,'Meningococo B'],[24,'Triple vírica y varicela']];
+/* Calendario sistemático de Andalucía 2026 (Instrucción DGSPyOF-1/2026, andavac.es): hexavalente 2-4-11 · neumococo VNC20 2-4-6-11 · meningococo B 2-4-15 ·
+   meningococo ACWY 4 y 12 · rotavirus 2 y 4 · triple vírica 12 m y 2 años · varicela 15 m y 2 años. El id de cada dosis es 'v'+mes (las ya anotadas se conservan). */
+const VAC=[[2,'Hexavalente, neumococo, meningococo B y rotavirus'],[4,'Hexavalente, neumococo, meningococo B, meningococo ACWY y rotavirus'],[6,'Neumococo'],[11,'Hexavalente y neumococo'],[12,'Triple vírica y meningococo ACWY'],[15,'Meningococo B y varicela'],[24,'Triple vírica y varicela']];
 /* ===== Más: preparativos y stock de pañales ===== */
 const ACT={
   temp(){sheet('<h2 style="margin-top:0">Temperatura</h2><label>Grados (°C)</label><input id="tc" type="number" step="0.1" inputmode="decimal"><label>Hora</label><input id="hr" type="time" value="'+nowHM()+'">',()=>{const c=+$('tc').value;if(!c||c<30||c>43)return false;addEv('temp',{c},toTs($('hr').value),'Temperatura registrada')})},
@@ -799,7 +801,7 @@ function vacList(){
 }
 function vVac(){
   const V=vacList(),f=d=>new Date(d+'T12:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
-  let h='<h2>Vacunas</h2><div class="mute" style="margin-bottom:8px">Calendario de Andalucía como referencia orientativa. Toca una vacuna para ajustar la fecha prevista o anotar la fecha real. Confirma las pautas con tu centro de salud o en andavac.es.</div>';
+  let h='<h2>Vacunas</h2><div class="mute" style="margin-bottom:8px">Calendario oficial de Andalucía 2026. Toca una vacuna para ajustar la fecha prevista o anotar la fecha real. La primera dosis de rotavirus (oral) debe ponerse antes de las 20 semanas de vida. Confirma las pautas con tu centro de salud o en andavac.es.</div>';
   if(!cfg.nac)h+='<div class="card mute">Indica la fecha de nacimiento en Más → Ajustes para calcular las fechas previstas.</div>';
   h+='<div class="card" style="padding:2px 14px">'+V.map(v=>{const late=!v.ok&&v.prev&&new Date(v.prev+'T12:00')<new Date();return'<div class="it ev" data-a="vac" data-v="'+v.id+'"><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:500">'+esc(v.t)+'</div><div class="mute">'+(v.ok?'Administrada'+(v.real?' el '+f(v.real):''):'Prevista: '+(v.prev?f(v.prev):'sin fecha'))+(v.nota?' · '+esc(v.nota):'')+'</div></div><span class="pill" style="'+(v.ok?'background:var(--t2);color:var(--ok)':late?'background:var(--warnbg);color:var(--warn)':'')+'">'+(v.ok?'Puesta':late?'Revisar':'Pendiente')+'</span></div>'}).join('')+'</div>';
   return h+'<button class="sec" style="width:100%;margin-top:10px" data-a="vacadd">Añadir vacuna</button>';
