@@ -8,7 +8,7 @@ Fases 1 a 7 del rediseño **completadas y verificadas**. **Fase 8 (Firebase)**: 
 Verificación final: 27 pasos de uso real con Chromium (alta, registros rápidos, edición, deshacer, Salud, informe, pañales, preparativos, desarrollo, ajustes, persistencia) sin fallos ni errores de consola; 150 comprobaciones de pantalla (15 pantallas × 5 anchos × claro/noche) sin desbordes. Scripts en `qa/`.
 
 ## Identidad visual
-Azul petróleo `#234366` (principal) · verde salvia `#82ADA0` · coral `#ECAF8E` · fondo `#F4F7F8`. Modo noche propio (fondo `#0C1524`), automático de 21:00 a 07:00 o forzado en Ajustes. El logo va **incrustado en base64** (recortes del original, sin redibujar); copias en `assets/`.
+Azul petróleo `#234366` (principal) · verde salvia `#82ADA0` · coral `#ECAF8E` · fondo `#F4F7F8`. Modo noche propio (fondo `#0C1524`), automático de 21:00 a 07:00 o forzado en Ajustes. El logo va **incrustado como SVG vectorial** (calcado de los contornos del original, mismos colores y formas, nítido a cualquier tamaño); copias en `assets/*.svg`. Los iconos `icon-192/512.png` se generan desde `assets/icono-app.svg`.
 
 ## Navegación
 Barra inferior: **Hoy · Registros · Salud · Más**.
@@ -53,7 +53,7 @@ Barra inferior: **Hoy · Registros · Salud · Más**.
 Notificaciones reales · vídeos · avatar con foto (los registros sin conexión se envían solos al volver).
 
 ## Instalación (PWA)
-`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker pide la página a internet primero (las actualizaciones llegan solas) y guarda el SDK de Firebase. Si cambias la lista de archivos de `sw.js`, sube la versión `origo-v1`.
+`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker pide la página a internet primero (las actualizaciones llegan solas) y guarda el SDK de Firebase. Si cambias la lista de archivos de `sw.js` o los iconos, sube la versión (`origo-v2` ahora).
 
 ## Cómo publicar
 Sube `index.html` a un repositorio de GitHub → Settings → Pages → rama `main`, carpeta raíz. Abre el enlace en el móvil y "Añadir a pantalla de inicio". Haz copias periódicas con Ajustes → Exportar (incluye fotos).
