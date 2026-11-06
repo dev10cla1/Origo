@@ -60,7 +60,7 @@ label{font-size:13px;color:var(--mute)}
 .it:last-child{border:0}
 .brand{display:flex;align-items:center;gap:12px}.brand img{display:block;width:auto}[data-t=dark] .brand{display:inline-flex;background:#f4f7f8;border-radius:14px;padding:6px 14px}
 .hero{background:var(--hero);color:var(--herot)}.hero .mute{color:var(--hm)}.hero .bar{background:rgba(255,255,255,.18)}
-#bT{background:var(--c1);color:var(--c1t)}#bP{background:var(--c2);color:var(--ct)}#bS{background:var(--c3);color:var(--ct)}#bS.run{background:var(--c1);color:var(--c3)}
+.big #bT{background:var(--c1);color:var(--c1t)}.big #bP{background:var(--c2);color:var(--ct)}.big #bS{background:var(--c3);color:var(--ct)}.big #bS.run{background:var(--c1);color:var(--c3)}
 .it.dn span:first-child{text-decoration:line-through;opacity:.55}
 .rt{width:100%;border-collapse:collapse;font-size:14px}.rt td,.rt th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}.rt th{color:var(--mute);font-weight:600;font-size:12px}
 #rep{display:none;position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:14px}
@@ -86,9 +86,61 @@ main{padding:16px}h1{letter-spacing:-.01em}
 @media (max-width:359px){.brand{gap:8px}.brand img:first-child{height:36px}.brand img:last-child{height:17px}[data-t=dark] .brand{padding:5px 10px}.top .sec{padding:8px 10px!important}main{padding:12px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:18px}.tli{position:relative;cursor:pointer}.tld{position:absolute;left:-24px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--acc);border:2px solid var(--bg)}.tl .day{margin-top:6px}
+
+/* ===== Escena: fondo ilustrado según la luz del día (Hoy) ===== */
+:root{--nh:72px}
+#scene{display:none;position:absolute;top:0;left:0;right:0;margin:0 auto;max-width:640px;aspect-ratio:1438/2576;background:center top/cover no-repeat;z-index:0;pointer-events:none}
+@media (min-width:641px){#scene{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}}
+body.scn #scene{display:block}body.scn main{position:relative;z-index:1}
+[data-f=noche]{--sb:#091523;--st:#071629;--nm:#fff;--nm2:rgba(196,220,245,.88);--hf:brightness(0) invert(1);--gb:rgba(20,44,82,.7);--gc:#fff;--img:url(assets/escena-noche.jpg)}
+[data-f=amanecer]{--sb:#113149;--st:#96caed;--nm:#15325a;--nm2:rgba(21,50,90,.78);--hf:none;--gb:rgba(255,255,255,.6);--gc:#1b3a63;--img:url(assets/escena-amanecer.jpg)}
+[data-f=dia]{--sb:#0d244c;--st:#2a9ded;--nm:#fff;--nm2:#fff;--hf:brightness(0) invert(1);--gb:rgba(255,255,255,.28);--gc:#fff;--img:url(assets/escena-dia.jpg)}
+[data-f=atardecer]{--sb:#1d1841;--st:#5d3180;--nm:#fff;--nm2:rgba(255,232,214,.9);--hf:brightness(0) invert(1);--gb:rgba(40,24,80,.55);--gc:#fff;--img:url(assets/escena-atardecer.jpg)}
+#scene{background-image:var(--img)}
+body.scn{background:var(--sb)}
+.scn main{--card:rgba(14,30,58,.66);--ink:#e8eef5;--mute:#a9b9cc;--line:rgba(255,255,255,.1);--acc:#8fd9c2;--accbg:rgba(255,255,255,.1);--on:#0c1524;--ok:#7fd1b4;--warn:#efb08c;--warnbg:rgba(239,176,140,.15);--bad:#f09a90;--badbg:rgba(240,154,144,.15);--hero:rgba(14,30,58,.66);--herot:#fff;--hm:rgba(220,230,242,.75);--hok:#7fe0c4;--hwarn:#f2c27d;--hbad:#f29a8d;--t1:rgba(127,224,196,.14);--t2:rgba(127,224,196,.14);--t3:rgba(242,194,125,.16);color:var(--ink)}
+.scn main .card{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.scn main h2{color:#fff}.scn main .lnk{color:rgba(230,238,246,.85)}
+.hx{display:flex;flex-direction:column;min-height:calc(100vh - var(--nh) - env(safe-area-inset-top) - 16px);min-height:calc(100svh - var(--nh) - env(safe-area-inset-top) - 16px);padding-bottom:12px}
+.hx.emb{min-height:0;padding-bottom:0}
+.htop{display:flex;align-items:center;justify-content:space-between;margin:2px 0 0}
+.hb{display:flex;align-items:center;gap:10px}.hb img{display:block;width:auto;filter:var(--hf)}
+.gear{width:50px;height:50px;border-radius:50%;border:0;background:var(--gb);color:var(--gc);display:grid;place-items:center;padding:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.gear svg{width:26px;height:26px;fill:currentColor}
+.hn{text-align:center;margin-top:clamp(18px,6vh,64px)}
+.hn .nm{font-size:clamp(46px,15vw,66px);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--nm);word-break:break-word}
+[data-f=noche] .hn,[data-f=atardecer] .hn{text-shadow:0 2px 18px rgba(0,0,0,.28)}
+[data-f=dia] .hn{text-shadow:0 2px 6px rgba(10,40,70,.45),0 2px 22px rgba(10,40,70,.35)}
+[data-f=amanecer] .hn{text-shadow:0 1px 14px rgba(255,255,255,.5)}
+.hn .ag{font-size:clamp(18px,5.4vw,22px);font-weight:600;color:var(--nm2);margin-top:6px}
+.hsp{flex:1;min-height:24px}
+.st{background:rgba(10,24,48,.5);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:14px 18px 13px;color:#fff;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.18);margin-bottom:12px}
+.st .row{align-items:center}
+.stl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:rgba(232,240,248,.86)}
+.sd{width:9px;height:9px;border-radius:50%;background:#7fe0c4;box-shadow:0 0 0 4px rgba(127,224,196,.18)}
+.sth{font-size:12.5px;color:rgba(222,232,244,.78);text-align:right}
+.stv{font-size:30px;font-weight:700;letter-spacing:-.01em;margin:4px 0 0;font-variant-numeric:tabular-nums}
+.st .bar{height:5px;margin-top:10px;background:rgba(255,255,255,.14)}
+.stf{display:flex;justify-content:space-between;gap:10px;margin-top:11px;font-size:13px;color:rgba(222,232,244,.78)}.stf b{color:#fff;font-weight:600}
+.qk{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.qk button{height:clamp(112px,16vh,134px);border-radius:28px;border:1px solid rgba(255,255,255,.1);background:rgba(18,40,78,.78);color:#fff;font:600 17px/1.2 inherit;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 26px rgba(0,0,0,.22);touch-action:manipulation;user-select:none;-webkit-user-select:none;transition:transform .12s}
+.qk button:active{transform:scale(.95)}
+.qk button svg{width:52px;height:52px;display:block}
+.qk button.run{border-color:rgba(127,224,196,.7);box-shadow:0 0 0 2px rgba(127,224,196,.35),0 10px 26px rgba(0,0,0,.22)}
+.hacc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.hacc button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:13px 10px;font:inherit;font-weight:600;font-size:15px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.scn .emb .tip{border-top-color:rgba(255,255,255,.14)}
+/* Barra de navegación */
+nav{border-top:0;border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(35,67,102,.08);z-index:9}
+nav button{position:relative;padding:11px 0 12px;font-size:13px}
+nav button.on::after{content:"";position:absolute;bottom:4px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:2px;background:currentColor}
+[data-t=dark] nav{box-shadow:none;border-top:1px solid var(--line)}
+body.scn nav{background:rgba(12,28,54,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);box-shadow:none}
+body.scn nav button{color:rgba(170,192,220,.9)}body.scn nav button.on{color:#7fe0c4}
 </style>
 </head>
 <body>
+<div id="scene" aria-hidden="true"></div>
 <div id="ban"><span id="bant"></span><button id="banb">Despertó</button></div>
 <main id="app"></main>
 <div id="rep"><div class="repbar"><button class="sec" data-r="x">Cerrar</button><span><button class="sec" data-r="7">7 d</button><button class="sec" data-r="14">14 d</button><button class="sec" data-r="30">30 d</button></span></div><div class="repbar"><button class="sec" data-r="c">Copiar texto</button><button class="sec" data-r="p">Imprimir / PDF</button></div><div id="repb"></div></div>
@@ -328,9 +380,18 @@ function toTs(hhmm){const[h,m]=hhmm.split(':').map(Number),d=new Date();d.setHou
 const nowHM=()=>hm(Date.now());
 
 /* ===== Tema (automático: noche de 21:00 a 07:00) ===== */
-function theme(){const h=new Date().getHours(),t=cfg.tema||'auto';
-  const dark=t==='noche'||(t==='auto'&&(h>=21||h<7));
-  document.documentElement.dataset.t=dark?'dark':'light';const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?'#0c1524':'#f4f7f8'}
+/* Fase del día según la salida y puesta del sol (aproximación para Andalucía, lat. 37,4 · long. -5) */
+function sol(d=new Date()){const n=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5),g=2*Math.PI/365*(n-1),R=Math.PI/180,lat=37.4*R,lon=-5;
+  const eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g));
+  const de=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g);
+  const ha=Math.acos(Math.cos(90.833*R)/(Math.cos(lat)*Math.cos(de))-Math.tan(lat)*Math.tan(de))/R,tz=-d.getTimezoneOffset();
+  return[720-4*(lon+ha)-eq+tz,720-4*(lon-ha)-eq+tz]}
+let faseFija=null;
+function fase(){if(faseFija)return faseFija;const d=new Date(),m=d.getHours()*60+d.getMinutes(),[a,p]=sol(d);
+  return m>=a-30&&m<a+90?'amanecer':m>=a+90&&m<p-75?'dia':m>=p-75&&m<p+30?'atardecer':'noche'}
+function theme(){const f=fase(),t=cfg.tema||'auto';document.documentElement.dataset.f=f;
+  const dark=t==='noche'||(t==='auto'&&f==='noche');
+  document.documentElement.dataset.t=dark?'dark':'light';const m=document.querySelector('meta[name=theme-color]');if(m)m.content=document.body.classList.contains('scn')?getComputedStyle(document.documentElement).getPropertyValue('--st').trim():dark?'#0c1524':'#f4f7f8'}
 
 /* ===== Hoja inferior y avisos ===== */
 function sheet(html,onSave){
@@ -401,7 +462,7 @@ function state(){
 
 /* vCre: ver bloque de curvas OMS más abajo */
 function vAju(){
-  return'<h1>Ajustes</h1><div class="card" style="margin-top:12px"><label>Nombre</label><input id="cn" value="'+esc(cfg.nombre)+'"><label>Fecha de nacimiento</label><input id="cf" type="date" value="'+esc(cfg.nac)+'"><label>Sexo (curvas de la OMS)</label>'+chips('cx',[['f','Niña'],['m','Niño']],cfg.sexo)+'<label>Tema</label>'+chips('ct',[['auto','Auto (noche 21–7 h)'],['claro','Claro'],['noche','Noche']],cfg.tema||'auto')+'<button class="sec" id="cs" style="width:100%">Guardar ajustes</button></div>'+
+  return'<h1>Ajustes</h1><div class="card" style="margin-top:12px"><label>Nombre</label><input id="cn" value="'+esc(cfg.nombre)+'"><label>Fecha de nacimiento</label><input id="cf" type="date" value="'+esc(cfg.nac)+'"><label>Sexo (curvas de la OMS)</label>'+chips('cx',[['f','Niña'],['m','Niño']],cfg.sexo)+'<label>Tema</label>'+chips('ct',[['auto','Auto (según la luz)'],['claro','Claro'],['noche','Noche']],cfg.tema||'auto')+'<button class="sec" id="cs" style="width:100%">Guardar ajustes</button></div>'+
   vFam()+'<h2>Copia de seguridad</h2><div class="card"><div class="mute" style="margin-bottom:10px">'+(Sync.on?'Los datos se comparten entre los móviles de la familia. Aun así, exporta una copia de vez en cuando.':'Los datos viven solo en este dispositivo. Haz copias de vez en cuando.')+'</div><div class="grid"><button class="sec" id="ex">Exportar</button><button class="sec" id="im">Importar</button></div><input type="file" id="fi" accept=".json" style="display:none"></div>'+
   '<button class="sec bad" id="rs" style="width:100%">Borrar todos los datos</button>';
 }
@@ -426,8 +487,9 @@ function bind(){
 }
 
 function render(){
-  $('app').innerHTML=(tab==='hoy'&&nacido()?brand('<button class="sec" data-a="resumen" style="padding:8px 14px">Resumen</button>'):brand())+{hoy:vHoy,his:vHis,cre:vSalud,mas:vMas}[tab]();
-  renderNav();document.documentElement.style.setProperty('--nh',$('nav').offsetHeight+'px');document.body.classList.toggle('qb',!!$('qbar'));bind();tick();
+  document.body.classList.toggle('scn',tab==='hoy');
+  $('app').innerHTML=(tab==='hoy'?'':brand())+{hoy:vHoy,his:vHis,cre:vSalud,mas:vMas}[tab]();
+  renderNav();theme();document.documentElement.style.setProperty('--nh',$('nav').offsetHeight+'px');document.body.classList.toggle('qb',!!$('qbar'));bind();tick();
 }
 
 /* ===== Salud: temperatura, pauta del pediatra, citas y vacunas ===== */
@@ -626,9 +688,9 @@ function vEmb(){
     tips=['Apunta las dudas que te vayan surgiendo para llevarlas a las consultas.','Buen momento para ir revisando la lista de preparativos y marcar lo que ya tienes.','Ve preparando la bolsa del hospital, instala la silla del coche y ten a mano la tarjeta sanitaria.'],
     P=prep(),act=P.filter(x=>x.s!=='no'),ok=act.filter(x=>x.s==='comp'||x.s==='reg'),pct=act.length?Math.round(ok.length/act.length*100):0,
     ci=(cfg.citas||[]).filter(c=>new Date(c.f)-Date.now()>=7*864e5).sort((a,b)=>a.f<b.f?-1:1)[0],L=Store.live();
-  return'<div class="row" style="margin:2px 0 14px"><div><div class="mute">'+sal+'</div><h1 style="font-size:24px;margin:2px 0">'+esc(nom)+'</h1><div class="mute">Embarazo · semana '+sem+'</div></div><button class="av" data-a="perfil" aria-label="Perfil del bebé">'+esc(nom.charAt(0).toUpperCase())+'</button></div>'+
-  '<div class="card hero emb"><div class="mute">Cuenta atrás</div><div class="cd" id="cd"'+(d<1?' style="font-size:30px"':'')+'>'+(d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista')+'</div>'+(d<1?'<div class="mute">Cuando nazca, pulsa «Ya ha nacido».</div>':'')+
-  '<div style="font-weight:600;margin-top:6px">Semana '+sem+' de embarazo · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><div class="mute">Semana aproximada. Orientativo.</div>'+
+  return hTop(nom,d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista',true)+'</section><div style="height:clamp(150px,30vh,300px)"></div>'+
+  '<div class="card hero emb">'+(d<1?'<div class="mute">Cuando nazca, pulsa «Ya ha nacido».</div>':'')+
+  '<div style="font-weight:600;margin-top:2px">Semana '+sem+' de embarazo · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><div class="mute">Semana aproximada. Orientativo.</div>'+
   '<div class="bar"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas':'Pasada la fecha prevista')+'</div>'+
   '<div class="tip">'+tips[tri-1]+'</div></div>'+
   '<div class="card"><div class="row"><b>Preparativos</b><span class="mute">'+ok.length+' de '+act.length+' hechos</span></div><div class="bar"><i style="width:'+pct+'%;background:var(--ok)"></i></div><button class="sec" style="width:100%;margin-top:10px" data-a="prepir">Ver preparativos</button></div>'+
@@ -636,19 +698,28 @@ function vEmb(){
   '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button>'+
   (L.length?'<div class="row"><h2>Actividad reciente</h2><button class="lnk" data-a="tab" data-v="his">Ver todo ›</button></div><div class="card" style="padding:2px 14px">'+L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'')+pendientes();
 }
+
+/* ===== Escena de Hoy: cabecera, nombre, tarjeta de estado y botones grandes ===== */
+const IQ={toma:'<svg viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate(16 24 24)"><rect x="20" y="2" width="8" height="8" rx="4" fill="#e3f8f1"/><rect x="16.5" y="8.5" width="15" height="6" rx="2.5" fill="#6fd3b4"/><rect x="15" y="14" width="18" height="31" rx="6.5" fill="#eafbf5"/><path d="M15 31h18v7.5a6.5 6.5 0 0 1-6.5 6.5h-5A6.5 6.5 0 0 1 15 38.5z" fill="#bdeedd"/><path d="M19 21h5M19 26h5M19 31h5" stroke="#5fc7a8" stroke-width="2.4" stroke-linecap="round"/></g></svg>',
+ panal:'<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 15h38v6c0 11.5-8.5 20-19 20S5 32.5 5 21z" fill="#f5fbfd"/><rect x="4" y="10" width="40" height="8" rx="3.5" fill="#7fdcc0"/><path d="M10.5 22.5c4 2.2 6.8 6.8 7 13M37.5 22.5c-4 2.2-6.8 6.8-7 13" stroke="#5fc7a8" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="21" y="12" width="6" height="4" rx="2" fill="#e3f8f1"/></svg>',
+ sueno:'<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M29 5a19 19 0 1 0 14 27A16 16 0 0 1 29 5z" fill="#f7c97f"/></svg>',
+ sol:'<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="9.5" fill="#f7d77f"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2" stroke="#f7d77f" stroke-width="3.2" stroke-linecap="round"/></svg>'};
+const GEAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L14.9 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.4 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1l.4 2.9h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12.9 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" fill-rule="evenodd"/></svg>';
+function hTop(nom,sub,emb){return'<section class="hx'+(emb?' emb':'')+'"><div class="htop"><div class="hb"><img src="'+MARK_SRC+'" height="40" alt="Origo"><img src="'+WORD_SRC+'" height="18" alt="" aria-hidden="true"></div><button class="gear" data-a="perfil" aria-label="Ajustes">'+GEAR+'</button></div><div class="hn"><div class="nm">'+esc(nom)+'</div><div class="ag"'+(emb?' id="cd"':'')+'>'+sub+'</div></div>'}
 function vHoy(){
   if(!nacido())return vEmb();
   const s=state(),n=Date.now(),hr=new Date().getHours(),sal=hr<6||hr>=21?'Buenas noches':hr<13?'Buenos días':'Buenas tardes',nom=cfg.nombre||'Bebé',t0=dayStart();
   const pis=s.pan.filter(e=>e.datos.k==='pis'||e.datos.k==='ambos').length,caca=s.pan.filter(e=>e.datos.k==='caca'||e.datos.k==='ambos').length;
   const ml=s.tomasHoy.reduce((a,e)=>a+(e.datos.ml||0),0),sl=s.L.filter(e=>e.tipo==='sueno'&&(e.fin||n)>t0),sm=sl.reduce((a,e)=>a+(e.fin||n)-Math.max(e.inicio,t0),0);
   const pd=s.lastPan?PK[s.lastPan.datos.k]:'',td=s.last?evInfo(s.last)[1]:'';
-  return'<div class="row" style="margin:2px 0 14px"><div><div class="mute">'+sal+'</div><h1 style="font-size:24px;margin:2px 0">'+esc(nom)+'</h1><div class="mute">'+ageTxt2()+'</div></div><button class="av" data-a="perfil" aria-label="Perfil del bebé">'+esc(nom.charAt(0).toUpperCase())+'</button></div>'+
-  '<div class="card hero"><div class="mute">Estado actual</div><div class="val" id="wk" style="font-size:26px">—</div><div class="mute" id="wkh"></div><div class="bar"><i id="wbar"></i></div><div class="hrow"><div><div class="mute">Última toma</div>'+(s.last?'<b id="ago">—</b><div class="mute">'+td+'</div>':'<b>Sin registros</b>')+'</div><div><div class="mute">Último pañal</div>'+(s.lastPan?'<b id="pago">—</b><div class="mute">'+pd+'</div>':'<b>Sin registros</b>')+'</div></div></div>'+
-  '<button class="sec" style="width:100%;margin-top:12px" data-a="otros">Temperatura, medicación, medidas y más</button>'+
+  return hTop(nom,ageTxt2())+'<div class="hsp"></div>'+
+  '<div class="st"><div class="row"><span class="stl"><i class="sd" id="sd"></i><span id="wkl">Estado</span></span><span class="sth" id="wkh"></span></div><div class="stv" id="wk">—</div><div class="bar"><i id="wbar"></i></div>'+
+  '<div class="stf"><span>Toma <b id="ago">'+(s.last?'—':'sin registros')+'</b></span><span>Pañal <b id="pago">'+(s.lastPan?'—':'sin registros')+'</b></span></div></div>'+
+  '<div class="qk"><button id="bT">'+IQ.toma+'Toma</button><button id="bP">'+IQ.panal+'Pañal</button><button id="bS" class="'+(s.S?'run':'')+'"><span id="bSi">'+(s.S?IQ.sol:IQ.sueno)+'</span><span id="bSt">'+(s.S?'Despertó':'Sueño')+'</span></button></div></section>'+
+  '<div class="hacc"><button data-a="otros">Más registros</button><button data-a="resumen">Resumen</button></div>'+
   '<h2>Resumen del día</h2><div class="card sum"><div><b>'+s.tomasHoy.length+'</b><span class="mute">'+(ml?ml+' ml':'tomas')+'</span></div><div><b>'+s.pan.length+'</b><span class="mute">'+(s.pan.length?pis+' pipí · '+caca+' caca':'pañales')+'</span></div><div><b>'+(sm?dur(sm).replace(' min','m').replace(' h ','h '):'0')+'</b><span class="mute">'+sl.length+(sl.length===1?' siesta':' siestas')+'</span></div></div>'+
   '<div class="row"><h2>Actividad reciente</h2><button class="lnk" data-a="tab" data-v="his">Ver todo ›</button></div>'+
-  (s.L.length?'<div class="card" style="padding:2px 14px">'+s.L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'<div class="card mute" style="text-align:center;padding:20px 14px">Aún no hay registros. Usa los botones de abajo para empezar.</div>')+pendientes()+'<div class="qsp"></div>'+
-  '<div id="qbar"><div class="big"><button id="bT">'+IC.toma+'Toma</button><button id="bP">'+IC.panal+'Pañal</button><button id="bS" class="'+(s.S?'run':'')+'">'+IC.sueno+'<span id="bSt">'+(s.S?'Despertó':'Sueño')+'</span></button></div></div>';
+  (s.L.length?'<div class="card" style="padding:2px 14px">'+s.L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'<div class="card mute" style="text-align:center;padding:20px 14px">Aún no hay registros. Usa los botones de arriba para empezar.</div>')+pendientes();
 }
 const FIL={f:['toma','alim','comida'],p:['panal'],s:['sueno'],h:['temp','med','medida']};
 function vCrono(){
@@ -660,7 +731,7 @@ function vCrono(){
   L.forEach(e=>{const k=new Date(e.inicio).toLocaleDateString('sv-SE');if(k!==cur){if(open)h+='</div>';cur=k;open=true;h+='<div class="day">'+(k===hoy?'Hoy':k===ayer?'Ayer':new Date(e.inicio).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</div><div class="card" style="padding:2px 14px">'}h+=evRow(e)});
   return h+(open?'</div>':'');
 }
-ico.mas=ico.aju;ico.pan=IC.panal;
+ico.mas='<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>';ico.pan=IC.panal;
 function sheetToma(){sheet('<h2 style="margin-top:0">Toma</h2>'+chips('lt',[['formula','Biberón fórmula'],['materna','Biberón materna'],['pecho','Pecho']],lastLeche())+'<label>Cantidad (ml)</label><input id="ml" type="number" inputmode="numeric" value="'+lastMl()+'"><label>Solo pecho: lado y duración</label>'+chips('ld',[['i','Izquierdo'],['d','Derecho'],['a','Ambos']],'')+'<input id="mn" type="number" inputmode="numeric" placeholder="Minutos (opcional)"><label>Hora</label><input id="hr" type="time" value="'+nowHM()+'">',()=>{
   const l=chipVal('lt'),d={ml:l==='pecho'?0:(+$('ml').value||0),leche:l};if(l==='pecho'){d.lado=chipVal('ld');d.min=+$('mn').value||0}
   addEv('toma',d,toTs($('hr').value),'Toma registrada')})}
@@ -1001,19 +1072,18 @@ Object.assign(ACT,{
 /* ===== Reloj: actualiza tiempos sin redibujar ===== */
 function tick(){
   const s=state(),n=Date.now();
-  if(s.S){$('ban').style.display='flex';$('bant').textContent='Durmiendo · '+clock(n-s.S.inicio)}else $('ban').style.display='none';
+  if(s.S&&tab!=='hoy'){$('ban').style.display='flex';$('bant').textContent='Durmiendo · '+clock(n-s.S.inicio)}else $('ban').style.display='none';
   if(tab!=='hoy'||!$('wk'))return;
-  if($('ago'))$('ago').textContent=s.last?'hace '+dur(n-s.last.inicio):'—';
-  if($('pago'))$('pago').textContent=s.lastPan?'hace '+dur(n-s.lastPan.inicio):'—';
-  const[lo,hi]=ventana(ageM());
-  if(s.S){$('wk').textContent='Durmiendo';$('wkh').textContent='Desde las '+hm(s.S.inicio);$('wbar').style.width='0'}
+  if($('ago')&&s.last)$('ago').textContent='hace '+dur(n-s.last.inicio);
+  if($('pago')&&s.lastPan)$('pago').textContent='hace '+dur(n-s.lastPan.inicio);
+  const[lo,hi]=ventana(ageM()),dot=c=>{$('sd').style.background=c;$('sd').style.boxShadow='0 0 0 4px color-mix(in srgb,'+c+' 22%,transparent)'};
+  if(s.S){$('wkl').textContent='Durmiendo';$('wk').textContent=clock(n-s.S.inicio);$('wkh').textContent='desde las '+hm(s.S.inicio);$('wbar').style.width='0';dot('#f7c97f')}
   else if(s.lastSleep){
-    const mins=(n-s.lastSleep.fin)/60000,p=Math.min(100,mins/hi*100);
-    $('wk').textContent=dur(n-s.lastSleep.fin);
-    $('wkh').textContent='Suele estar despierto entre '+lo+' y '+hi+' min'+(mins>=hi?' · ya pasó el rango':mins>=lo?' · es buen momento para dormir':'');
-    $('wbar').style.width=p+'%';$('wbar').style.background=mins>=hi?'var(--hbad)':mins>=lo?'var(--hwarn)':'var(--hok)';
-  }else{$('wk').textContent='—';$('wkh').textContent='Registra una siesta para ver el tiempo despierto. Rango orientativo: '+lo+'–'+hi+' min.';$('wbar').style.width='0'}
-  
+    const mins=(n-s.lastSleep.fin)/60000,p=Math.min(100,mins/hi*100),c=mins>=hi?'var(--hbad,#f29a8d)':mins>=lo?'var(--hwarn,#f2c27d)':'var(--hok,#7fe0c4)';
+    $('wkl').textContent='Despierto';$('wk').textContent=dur(n-s.lastSleep.fin);
+    $('wkh').textContent=mins>=hi?'Ya pasó su ventana de sueño':mins>=lo?'Buen momento para dormir':'Ventana de sueño: '+lo+'–'+hi+' min';
+    $('wbar').style.width=p+'%';$('wbar').style.background=c;dot(c);
+  }else{$('wkl').textContent='Estado';$('wk').textContent='Sin siestas aún';$('wkh').textContent='Ventana: '+lo+'–'+hi+' min';$('wbar').style.width='0';dot('#7fe0c4')}
 }
 
 /* ===== Familia: tarjeta de Ajustes y autoría en el Resumen ===== */

@@ -10,11 +10,14 @@ Verificación final: 27 pasos de uso real con Chromium (alta, registros rápidos
 ## Identidad visual
 Azul petróleo `#234366` (principal) · verde salvia `#82ADA0` · coral `#ECAF8E` · fondo `#F4F7F8`. Modo noche propio (fondo `#0C1524`), automático de 21:00 a 07:00 o forzado en Ajustes. El logo va **incrustado como SVG vectorial** (calcado de los contornos del original, mismos colores y formas, nítido a cualquier tamaño); copias en `assets/*.svg`. Los iconos `icon-192/512.png` se generan desde `assets/icono-app.svg`.
 
+## Escena (fondo según la luz del día)
+Cuatro ilustraciones en `assets/escena-{amanecer,dia,atardecer,noche}.jpg` (1438×2576). `fase()` calcula la salida y puesta del sol con `sol()` (aprox. Andalucía, lat. 37,4 · long. −5): **amanecer** de −30 min a +90 min de la salida, **día** hasta 75 min antes de la puesta, **atardecer** de −75 a +30 min de la puesta, **noche** el resto. Se guarda en `html[data-f]`; cada fase define colores (`--sb` fondo inferior, `--st` color de la barra de estado del móvil, `--nm` color del nombre, etc.). `theme()` (cada minuto) la actualiza; el tema **Auto** pasa a modo noche cuando la fase es noche. La escena (`#scene`) solo se ve en Hoy (`body.scn`), y ahí las tarjetas son de cristal oscuro. Para probar una fase: `faseFija='dia';theme();render()`.
+
 ## Navegación
-Barra inferior: **Hoy · Registros · Salud · Más**.
+Barra inferior redondeada con indicador bajo la pestaña activa (oscura translúcida en Hoy): **Hoy · Registros · Salud · Más**.
 - **Hoy** (dos modos según `nacido()`: sin `cfg.nac`, o fecha pasada sin `cfg.emb` = nacido):
-  - *Embarazo* (`cfg.nac` futura, `vEmb()`): cuenta atrás, semana aproximada (40 − ceil(días/7), acotada a 4..42), trimestre, barra de semanas, un consejo de organización, progreso de Preparativos (botón → Más › Preparativos), próxima cita y botón **Ya ha nacido** (hoja con la fecha real → guarda `cfg.nac` y pasa al modo nacido). Sin botones de registro ni resumen; `tick()` sale si no existe `#wk`.
-  - *Nacido*: estado actual, "Más registros", resumen del día, actividad reciente y pendientes. **Barra fija inferior** `#qbar` (Toma · Pañal · Sueño, 64 px, encima de la nav; `--nh` = alto de la nav, `body.qb` sube el aviso) solo en esta pestaña. Sin "mantener pulsado": **Toma** abre `sheetToma` (valores por defecto = últimos usados; un toque en Guardar), **Pañal** abre `panelPanal`, **Sueño** abre `panelSueno` (ahora / a las…; `toggleSueno(ts)` acepta hora).
+  - *Embarazo* (`cfg.nac` futura, `vEmb()`): misma escena con nombre y cuenta atrás; debajo, semana aproximada (40 − ceil(días/7), acotada a 4..42), trimestre, barra de semanas, un consejo de organización, progreso de Preparativos (botón → Más › Preparativos), próxima cita y botón **Ya ha nacido** (hoja con la fecha real → guarda `cfg.nac` y pasa al modo nacido). Sin botones de registro ni resumen; `tick()` sale si no existe `#wk`.
+  - *Nacido*: **escena ilustrada** a pantalla completa (ver «Escena»). Primera pantalla (`.hx`, alto = pantalla − nav): cabecera (logo + engranaje → Ajustes), nombre grande y edad, y abajo la **tarjeta de estado** minimalista (`.st`: despierto/durmiendo, tiempo, barra de ventana de sueño, última toma y último pañal; la actualiza `tick()` con `#wkl #wk #wkh #wbar #sd #ago #pago`) y los **tres botones grandes** (`.qk`: Toma · Pañal · Sueño, iconos de color `IQ`). Al deslizar: Más registros · Resumen (cambio de turno), resumen del día, actividad reciente y pendientes. **Toma** abre `sheetToma` (valores por defecto = últimos usados), **Pañal** `panelPanal`, **Sueño** `panelSueno` (ahora / a las…). En Hoy no se muestra la franja «Durmiendo» (`#ban`), solo en las demás pestañas.
   - Actividad reciente: `evRow(e,full,del)`; con `del` añade papelera (`ACT.elim`, borrado lógico + Deshacer). Solo se usa en Hoy.
   - Contraste: `--mute` claro `#5c6d83` (antes `#62748a`, 4,45:1 sobre `--bg`); el modo noche ya cumplía 4,5:1.
 - **Registros**: cronología con filtros y selector de día · Estadísticas (hoy / 7 / 30 días con comparación).
@@ -57,7 +60,7 @@ Barra inferior: **Hoy · Registros · Salud · Más**.
 Notificaciones reales · vídeos · avatar con foto (los registros sin conexión se envían solos al volver).
 
 ## Instalación (PWA)
-`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker pide la página a internet primero (las actualizaciones llegan solas) y guarda el SDK de Firebase. Si cambias la lista de archivos de `sw.js` o los iconos, sube la versión (`origo-v2` ahora).
+`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker pide la página a internet primero (las actualizaciones llegan solas) y guarda el SDK de Firebase. Si cambias la lista de archivos de `sw.js` o los iconos, sube la versión (`origo-v3` ahora).
 
 ## Cómo publicar
 Sube `index.html` a un repositorio de GitHub → Settings → Pages → rama `main`, carpeta raíz. Abre el enlace en el móvil y "Añadir a pantalla de inicio". Haz copias periódicas con Ajustes → Exportar (incluye fotos).
