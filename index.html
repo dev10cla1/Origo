@@ -704,8 +704,8 @@ function pendientes(){
   const n=Date.now(),it=[];
   infos().forEach(i=>{if(i.last&&n-i.last.inicio<864e5)it.push([i.ok?'ok':'warn','Medicación · '+esc(i.p.farmaco),i.ok?'Ya se puede dar otra dosis':'Próxima dosis posible a las '+hm(i.next)])});
   const nq=(cfg.preg||[]).filter(x=>!x.ok).length;if(nq)it.push(['acc','Preguntas para el pediatra',nq+(nq===1?' pregunta pendiente':' preguntas pendientes')]);
-  (cfg.citas||[]).filter(c=>{const d=new Date(c.f)-n;return d>-36e5&&d<7*864e5}).sort((a,b)=>a.f<b.f?-1:1).forEach(c=>it.push(['acc',esc(c.t),new Date(c.f).toLocaleString('es-ES',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(c.p?' · '+esc(c.p):'')]));
-  vacList().forEach(v=>{if(v.ok||!v.prev)return;const d=new Date(v.prev+'T12:00'),df=(d-n)/864e5;if(df<30&&df>-60)it.push([df<0?'warn':'acc','Vacuna · '+esc(v.t),(df<0?'Fecha prevista pasada (':'Prevista el ')+d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+(df<0?')':'')])});
+  (cfg.citas||[]).filter(c=>{const d=new Date(c.f)-n;return d>-36e5&&d<7*864e5}).sort((a,b)=>a.f<b.f?-1:1).forEach(c=>it.push(['acc',esc(c.t),citaF(c)+(c.p?' · '+esc(c.p):'')]));
+  vacList().forEach(v=>{if(v.ok||!v.prev||vacCita(v.id))return;const d=new Date(v.prev+'T12:00'),df=(d-n)/864e5;if(df<30&&df>-60)it.push([df<0?'warn':'acc','Vacuna · '+esc(v.t),(df<0?'Fecha prevista pasada (':'Prevista el ')+d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+(df<0?')':'')])});
   const mn=(cfg.menu||{})[dkey(0)];if(mn&&Object.keys(mn).length)it.push(['mint','Menú de hoy',SL.filter(([k])=>mn[k]).map(([k,l])=>l+': '+esc(mn[k])).join(' · ')]);
   if(cfg.talla&&cfg.stock&&(cfg.stock[cfg.talla]||0)<=10)it.push(['warn','Pañales talla '+cfg.talla,'Quedan '+(cfg.stock[cfg.talla]||0)+' unidades']);
   if(!it.length)return'';
@@ -728,7 +728,7 @@ function vEmb(){
   '<div class="bar"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas':'Pasada la fecha prevista')+'</div>'+
   '<div class="tip">'+tips[tri-1]+'</div></div>'+
   '<div class="card"><div class="row"><b>Preparativos</b><span class="mute">'+ok.length+' de '+act.length+' hechos</span></div><div class="bar"><i style="width:'+pct+'%;background:var(--ok)"></i></div><button class="sec" style="width:100%;margin-top:10px" data-a="prepir">Ver preparativos</button></div>'+
-  (ci?'<div class="card"><div class="mute">Próxima cita</div><b>'+esc(ci.t)+'</b><div class="mute">'+new Date(ci.f).toLocaleString('es-ES',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})+(ci.p?' · '+esc(ci.p):'')+'</div></div>':'')+
+  (ci?'<div class="card"><div class="mute">Próxima cita</div><b>'+esc(ci.t)+'</b><div class="mute">'+citaF(ci,1)+(ci.p?' · '+esc(ci.p):'')+'</div></div>':'')+
   '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button>'+
   (L.length?'<div class="row"><h2>Actividad reciente</h2><button class="lnk" data-a="tab" data-v="his">Ver todo ›</button></div><div class="card" style="padding:2px 14px">'+L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'')+pendientes();
 }
@@ -804,7 +804,7 @@ Object.assign(ACT,{
       (T?row('Última temperatura',T.datos.c+' °C · '+new Date(T.inicio).toLocaleString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):'')+
       infos().filter(i=>i.last).map(i=>row('Medicación · '+esc(i.p.farmaco),i.ok?'Se puede dar otra dosis':'Próxima a las '+hm(i.next))).join('')+
       (mo?row('Última nota',esc(mo.tipo==='momento'?mo.datos.t:mo.datos.n+': '+mo.datos.nota)):'')+
-      (ci?row('Próxima cita',esc(ci.t)+' · '+new Date(ci.f).toLocaleString('es-ES',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):''),'Cerrar')},
+      (ci?row('Próxima cita',esc(ci.t)+' · '+citaF(ci)):''),'Cerrar')},
   ev(id){
     const e=Store.ev.find(x=>x.id===id),t=e.tipo,d=e.datos,H='<label>Hora</label><input id="eh" type="datetime-local" value="'+dtl(e.inicio)+'">',del='<button class="sec bad" style="width:100%;margin-bottom:12px" data-a="elim" data-v="'+id+'">Eliminar registro</button>';
     let f=H,save=()=>{};
@@ -951,14 +951,23 @@ function vVac(){
   const V=vacList(),f=d=>new Date(d+'T12:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
   let h='<h2>Vacunas</h2><div class="mute" style="margin-bottom:8px">Calendario oficial de Andalucía 2026. Toca una vacuna para ajustar la fecha prevista o anotar la fecha real. La primera dosis de rotavirus (oral) debe ponerse antes de las 20 semanas de vida. Confirma las pautas con tu centro de salud o en andavac.es.</div>';
   if(!cfg.nac)h+='<div class="card mute">Indica la fecha de nacimiento en Más → Ajustes para calcular las fechas previstas.</div>';
-  h+='<div class="card" style="padding:2px 14px">'+V.map(v=>{const late=!v.ok&&v.prev&&new Date(v.prev+'T12:00')<new Date();return'<div class="it ev" data-a="vac" data-v="'+v.id+'"><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:500">'+esc(v.t)+'</div><div class="mute">'+(v.ok?'Administrada'+(v.real?' el '+f(v.real):''):'Prevista: '+(v.prev?f(v.prev):'sin fecha'))+(v.nota?' · '+esc(v.nota):'')+'</div></div><span class="pill" style="'+(v.ok?'background:var(--t2);color:var(--ok)':late?'background:var(--warnbg);color:var(--warn)':'')+'">'+(v.ok?'Puesta':late?'Revisar':'Pendiente')+'</span></div>'}).join('')+'</div>';
+  h+='<div class="card" style="padding:2px 14px">'+V.map(v=>{const late=!v.ok&&v.prev&&new Date(v.prev+'T12:00')<new Date();return'<div class="it ev" data-a="vac" data-v="'+v.id+'"><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:500">'+esc(v.t)+'</div><div class="mute">'+(v.ok?'Administrada'+(v.real?' el '+f(v.real):''):'Prevista: '+(v.prev?f(v.prev):'sin fecha'))+(v.nota?' · '+esc(v.nota):'')+(!v.ok&&vacCita(v.id)?' · en Citas':'')+'</div></div><span class="pill" style="'+(v.ok?'background:var(--t2);color:var(--ok)':late?'background:var(--warnbg);color:var(--warn)':'')+'">'+(v.ok?'Puesta':late?'Revisar':'Pendiente')+'</span></div>'}).join('')+'</div>';
   return h+'<button class="sec" style="width:100%;margin-top:10px" data-a="vacadd">Añadir vacuna</button>';
 }
 /* --- Citas y preguntas --- */
+/* Fecha de una cita; las citas «de día» (vacuna sin hora) no muestran hora */
+function citaF(c,lg){const o=lg?{weekday:'long',day:'numeric',month:'long'}:{weekday:'short',day:'numeric',month:'short'};return c.dia?new Date(c.f).toLocaleDateString('es-ES',o):new Date(c.f).toLocaleString('es-ES',Object.assign(o,{hour:'2-digit',minute:'2-digit'}))}
+/* Vacuna con fecha → cita médica enlazada (campo vac) */
+const vacCita=id=>(cfg.citas||[]).find(c=>c.vac===id);
+function vacSync(id,nom,fecha,hora,on){
+  cfg.citas=cfg.citas||[];let c=vacCita(id);
+  if(!on||!fecha){if(c)cfg.citas=cfg.citas.filter(x=>x!==c);return}
+  if(!c){c={id:'cv-'+id,vac:id,t:'Vacuna'};cfg.citas.push(c)}
+  c.m=nom;c.f=fecha+'T'+(hora||'23:59');if(hora)delete c.dia;else c.dia=1}
 const CTIPOS=['Vacuna','Revisión del niño sano','Urgencias','Especialista','Otra consulta'];
 function vCit(){
   const n=Date.now(),C=(cfg.citas||[]).slice().sort((a,b)=>a.f<b.f?-1:1),fu=C.filter(c=>new Date(c.f)>=n-36e5),pa=C.filter(c=>new Date(c.f)<n-36e5).reverse(),Q=cfg.preg||[];
-  const row=c=>'<div class="it ev" data-a="cite" data-v="'+c.id+'"><div style="flex:1;min-width:0"><b style="font-size:15px">'+esc(c.t)+(c.m?' · '+esc(c.m):'')+'</b><div class="mute">'+new Date(c.f).toLocaleString('es-ES',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+([c.centro,c.prof].filter(Boolean).length?' · '+esc([c.centro,c.prof].filter(Boolean).join(' · ')):'')+'</div>'+(c.p?'<div class="mute">Preguntar: '+esc(c.p)+'</div>':'')+(c.obs?'<div class="mute">Observaciones: '+esc(c.obs)+'</div>':'')+'</div><span class="mute">›</span></div>';
+  const row=c=>'<div class="it ev" data-a="cite" data-v="'+c.id+'"><div style="flex:1;min-width:0"><b style="font-size:15px">'+esc(c.t)+(c.m?' · '+esc(c.m):'')+'</b><div class="mute">'+citaF(c)+([c.centro,c.prof].filter(Boolean).length?' · '+esc([c.centro,c.prof].filter(Boolean).join(' · ')):'')+'</div>'+(c.p?'<div class="mute">Preguntar: '+esc(c.p)+'</div>':'')+(c.obs?'<div class="mute">Observaciones: '+esc(c.obs)+'</div>':'')+'</div><span class="mute">›</span></div>';
   let h='<h2>Citas médicas</h2><button class="sec" style="width:100%;margin-bottom:10px" data-a="cita">Añadir cita</button>';
   h+=fu.length?'<div class="card" style="padding:2px 14px">'+fu.map(row).join('')+'</div>':'<div class="card mute" style="text-align:center;padding:18px 14px">No hay citas próximas.</div>';
   h+='<h2>Preguntas para el pediatra</h2><div class="card" style="padding:2px 14px">'+(Q.length?Q.map(x=>'<div class="it"><span data-a="pq" data-v="'+x.id+'" style="flex:1;cursor:pointer'+(x.ok?';opacity:.55;text-decoration:line-through':'')+'">'+esc(x.q)+'</span><button class="lnk" aria-label="Quitar" data-a="pqdel" data-v="'+x.id+'">×</button></div>').join(''):'<div class="mute" style="padding:10px 0">Anota aquí lo que quieras preguntar en la próxima visita.</div>')+'</div><button class="sec" style="width:100%;margin-top:10px" data-a="preg">Añadir pregunta</button><div class="mute" style="margin:6px 2px">Toca una pregunta para marcarla como resuelta.</div>';
@@ -969,7 +978,9 @@ function citaForm(c){
   const ts=CTIPOS.includes(c.t)?CTIPOS:CTIPOS.concat(c.t?[c.t]:[]);
   return'<label>Tipo</label><select id="ct2">'+ts.map(t=>'<option'+(t===c.t?' selected':'')+'>'+esc(t)+'</option>').join('')+'</select><label>Motivo</label><input id="cm" value="'+esc(c.m)+'"><label>Fecha y hora</label><input id="cf2" type="datetime-local" value="'+esc(c.f)+'"><label>Centro</label><input id="cc" value="'+esc(c.centro)+'"><label>Profesional</label><input id="cpr" value="'+esc(c.prof)+'"><label>Dudas para esta visita</label><input id="cp" value="'+esc(c.p)+'"><label>Observaciones posteriores</label><textarea id="co">'+esc(c.obs)+'</textarea>';
 }
-function citaRead(c){if(!$('cf2').value)return false;Object.assign(c,{t:$('ct2').value,m:$('cm').value.trim(),f:$('cf2').value,centro:$('cc').value.trim(),prof:$('cpr').value.trim(),p:$('cp').value.trim(),obs:$('co').value.trim()});return true}
+function citaRead(c){if(!$('cf2').value)return false;if(c.dia&&$('cf2').value.slice(11)!=='23:59')delete c.dia;Object.assign(c,{t:$('ct2').value,m:$('cm').value.trim(),f:$('cf2').value,centro:$('cc').value.trim(),prof:$('cpr').value.trim(),p:$('cp').value.trim(),obs:$('co').value.trim()});
+  if(c.vac){const d=c.f.slice(0,10),x=(cfg.vacX||[]).find(v=>v.id===c.vac);if(x)x.prev=d;else{cfg.vacs=cfg.vacs||{};cfg.vacs[c.vac]=Object.assign(cfg.vacs[c.vac]||{},{prev:d})}}
+  return true}
 function histMed(){const M=medidas().reverse();return M.length?'<h2>Historial de mediciones</h2><div class="card" style="padding:2px 14px">'+M.slice(0,15).map(e=>evRow(e,1)).join('')+'</div>':''}
 const vSalud=()=>'<h1>Salud</h1><div class="chips" style="margin-top:12px;overflow-x:auto">'+[['cre','Crecimiento'],['tem','Temperatura'],['med','Medicación'],['vac','Vacunas'],['cit','Citas']].map(([k,l])=>'<button data-a="sal" data-v="'+k+'" class="'+(k===sal?'on':'')+'" style="flex:0 0 auto;padding:10px 14px">'+l+'</button>').join('')+'</div>'+({cre:()=>vCre()+histMed(),tem:vTemp,med:vMed,vac:vVac,cit:vCit})[sal]()+'<button class="sec" style="width:100%;margin-top:14px" data-a="inf">Informe para el pediatra</button>';
 
@@ -1015,11 +1026,12 @@ Object.assign(ACT,{
     if(!id){if(P.length>1)return panel('<h2 style="margin-top:0">¿Qué medicamento?</h2><div class="pg" style="grid-template-columns:1fr">'+P.map(p=>'<button data-a="dosis" data-v="'+p.id+'">'+IC.med+esc(p.farmaco)+'</button>').join('')+'</div>');id=P[0].id}
     closeSheet();const i=pautaInfo(id),go=()=>addEv('med',{farmaco:i.p.farmaco,ml:i.p.ml,conc:i.p.conc},0,'Dosis registrada');
     if(i.ok)go();else sheet('<h2 style="margin-top:0">¿Registrar igualmente?</h2><div class="mute" style="margin-bottom:12px">Según la pauta aún no toca (próxima a las '+hm(i.next)+'). Registra solo si ya se la has dado.</div>',()=>{go()})},
-  vac(id){const v=vacList().find(x=>x.id===id);sheet('<h2 style="margin-top:0">'+esc(v.t)+'</h2><label>Fecha prevista</label><input id="vp" type="date" value="'+esc(v.prev)+'"><label>Estado</label>'+chips('vs',[['0','Pendiente'],['1','Administrada']],v.ok?'1':'0')+'<label>Fecha real</label><input id="vr" type="date" value="'+esc(v.real)+'"><label>Notas (lote, reacción…)</label><input id="vn" value="'+esc(v.nota)+'">'+(v.x?'<button class="sec bad" style="width:100%;margin:6px 0 10px" data-a="vacdel" data-v="'+id+'">Eliminar vacuna</button>':''),()=>{
+  vac(id){const v=vacList().find(x=>x.id===id),vc=vacCita(id);sheet('<h2 style="margin-top:0">'+esc(v.t)+'</h2><label>Fecha prevista</label><input id="vp" type="date" value="'+esc(v.prev)+'">'+'<label>Hora de la cita (opcional)</label><input id="vh" type="time" value="'+esc(vc&&!vc.dia?vc.f.slice(11,16):'')+'"><label>Añadir a Citas médicas</label>'+chips('vci',[['1','Sí'],['0','No']],v.ok&&!vc?'0':'1')+'<label>Estado</label>'+chips('vs',[['0','Pendiente'],['1','Administrada']],v.ok?'1':'0')+'<label>Fecha real</label><input id="vr" type="date" value="'+esc(v.real)+'"><label>Notas (lote, reacción…)</label><input id="vn" value="'+esc(v.nota)+'">'+(v.x?'<button class="sec bad" style="width:100%;margin:6px 0 10px" data-a="vacdel" data-v="'+id+'">Eliminar vacuna</button>':''),()=>{
     const r={prev:$('vp').value,ok:chipVal('vs')==='1',real:$('vr').value,nota:$('vn').value.trim()};if(r.ok&&!r.real)r.real=dkey(0);
+    vacSync(id,v.t,r.prev,$('vh').value,chipVal('vci')==='1');
     if(v.x)Object.assign(cfg.vacX.find(x=>x.id===id),r);else{cfg.vacs=cfg.vacs||{};cfg.vacs[id]=r}saveCfg();render()})},
-  vacadd(){sheet('<h2 style="margin-top:0">Añadir vacuna</h2><label>Nombre</label><input id="vnm" placeholder="Ej.: Gripe, bronquiolitis…"><label>Fecha prevista</label><input id="vp" type="date" value="'+dkey(0)+'">',()=>{const t=$('vnm').value.trim();if(!t)return false;cfg.vacX=(cfg.vacX||[]).concat({id:'vx'+Math.random().toString(36).slice(2,7),t,prev:$('vp').value});saveCfg();render()})},
-  vacdel(id){closeSheet();cfg.vacX=cfg.vacX.filter(x=>x.id!==id);saveCfg();render()},
+  vacadd(){sheet('<h2 style="margin-top:0">Añadir vacuna</h2><label>Nombre</label><input id="vnm" placeholder="Ej.: Gripe, bronquiolitis…"><label>Fecha prevista</label><input id="vp" type="date" value="'+dkey(0)+'"><label>Hora de la cita (opcional)</label><input id="vh" type="time"><label>Añadir a Citas médicas</label>'+chips('vci',[['1','Sí'],['0','No']],'1'),()=>{const t=$('vnm').value.trim();if(!t)return false;const id='vx'+Math.random().toString(36).slice(2,7);cfg.vacX=(cfg.vacX||[]).concat({id,t,prev:$('vp').value});vacSync(id,t,$('vp').value,$('vh').value,chipVal('vci')==='1');saveCfg();render()})},
+  vacdel(id){closeSheet();cfg.vacX=cfg.vacX.filter(x=>x.id!==id);vacSync(id,'','','',false);saveCfg();render()},
   cita(){const c={t:CTIPOS[1]};sheet('<h2 style="margin-top:0">Nueva cita</h2>'+citaForm(c),()=>{if(!citaRead(c))return false;c.id=Date.now().toString(36);cfg.citas=(cfg.citas||[]).concat(c);saveCfg();render()})},
   cite(id){const c=cfg.citas.find(x=>x.id===id);sheet('<h2 style="margin-top:0">Cita</h2><button class="sec bad" style="width:100%;margin-bottom:12px" data-a="cdel2" data-v="'+id+'">Eliminar cita</button>'+citaForm(c),()=>{if(!citaRead(c))return false;saveCfg();render()})},
   cdel2(id){closeSheet();const C=cfg.citas,i=C.findIndex(x=>x.id===id),x=C.splice(i,1)[0];saveCfg();render();toast('Cita eliminada',()=>{C.splice(i,0,x);saveCfg();render()})},
