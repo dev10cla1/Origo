@@ -174,6 +174,21 @@ body.scn:not(.hoy){background:linear-gradient(180deg,var(--shg) 0,var(--sb) 520p
 .mn button svg{color:var(--sha,var(--acc))}
 .emb.st-like{cursor:pointer}
 body.scn #ban{background:var(--shg);color:#fff}
+
+/* Navegación por niveles: .seg = secciones de una pantalla (nivel 1) · .t2 = vistas dentro de una sección (nivel 2) · .fl = filtros */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:5px;margin:14px 0 4px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09)}
+.seg button{border:0;background:none;color:var(--mute);font:inherit;font-size:12px;font-weight:600;padding:9px 2px 8px;border-radius:15px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;transition:background .15s,color .15s}
+.seg button span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.seg svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg button.on{background:var(--acc);color:var(--on)}
+@media (max-width:380px){.seg{gap:2px;padding:4px}.seg button{font-size:11px;letter-spacing:-.01em}}
+.seg.h button{flex-direction:row;justify-content:center;gap:8px;font-size:15px;padding:11px 4px}.seg.h svg{width:20px;height:20px}
+.t2{display:flex;gap:20px;border-bottom:1px solid var(--line);margin:2px 0 12px;overflow-x:auto;scrollbar-width:none}.t2::-webkit-scrollbar{display:none}
+.t2 button{position:relative;flex:none;background:none;border:0;color:var(--mute);font:inherit;font-size:15px;font-weight:600;padding:8px 0 11px}
+.t2 button.on{color:var(--ink)}.t2 button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:2px;background:var(--acc)}
+.fl{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+.fl button{background:none;border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600}
+.fl button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc)}
 </style>
 </head>
 <body>
@@ -599,7 +614,7 @@ function vCre(){
   let h='<h2>Crecimiento</h2><div class="card">';
   if(!cfg.nac)h+='<div class="mute">Indica la fecha de nacimiento (en Más) para ver las curvas de la OMS.</div>';
   else if(!cfg.sexo)h+='<div class="mute">Para ver las curvas de la OMS indica el sexo del bebé.</div><div class="chips" style="margin-top:8px"><button data-a="sexo" data-v="f">Niña</button><button data-a="sexo" data-v="m">Niño</button></div>';
-  else h+='<div class="chips">'+['w','l','c'].map(c=>'<button data-a="cv" data-v="'+c+'" class="'+(c===k?'on':'')+'">'+({w:'Peso',l:'Talla',c:'Perímetro'})[c]+'</button>').join('')+'</div>'+(P.length?curvaSvg(k,P):'<div class="mute">Aún no hay medidas de '+NOM[k].toLowerCase()+'.</div>');
+  else h+=T2('cv',[['w','Peso'],['l','Talla'],['c','Perímetro craneal']],k)+(P.length?curvaSvg(k,P):'<div class="mute">Aún no hay medidas de '+NOM[k].toLowerCase()+'.</div>');
   h+=ultimas(M)+'</div><div class="mute" style="margin:-4px 2px 10px">Percentiles orientativos de la OMS (2006). La interpretación la hace tu pediatra.</div><button class="sec" id="addM" style="width:100%">Añadir medidas</button>';
   return h;
 }
@@ -659,7 +674,7 @@ const dkey=i=>{const d=new Date();d.setDate(d.getDate()+i);return d.toLocaleDate
 const edadM=()=>cfg.nac?mesesDe(Date.now()):0;
 const hitoAbierto=m=>openG[m]!==undefined?openG[m]:(edadM()>=m-1.5&&edadM()<=m+2);
 function vDes(){
-  return'<h1>Desarrollo</h1><div class="chips" style="margin-top:12px">'+[['mom','Diario'],['hit','Hitos'],['ali','Alimentos']].map(([k,l])=>'<button data-a="sub" data-v="'+k+'" class="'+(k===sub?'on':'')+'">'+l+'</button>').join('')+'</div>'+({mom:vMom,hit:vHit,ali:vAli})[sub]();
+  return'<h1>Desarrollo</h1>'+SG('sub',[['mom','Diario',IC.momento],['hit','Hitos',ISG.est],['ali','Alimentos',IC.alim]],sub)+({mom:vMom,hit:vHit,ali:vAli})[sub]();
 }
 Object.assign(ACT,{
   sub(v){sub=v;render()},
@@ -759,7 +774,7 @@ const FIL={f:['toma','alim','comida'],p:['panal'],s:['sueno'],h:['temp','med','m
 function vCrono(){
   let L=Store.live();if(filt!=='all')L=L.filter(e=>FIL[filt].includes(e.tipo));
   L=dia?L.filter(e=>new Date(e.inicio).toLocaleDateString('sv-SE')===dia):L.slice(0,200);
-  let h='<div class="chips" style="margin-top:12px;overflow-x:auto">'+[['all','Todo'],['f','Alimentación'],['p','Pañales'],['s','Sueño'],['h','Salud']].map(([k,l])=>'<button data-a="filt" data-v="'+k+'" class="'+(k===filt?'on':'')+'" style="flex:0 0 auto;padding:10px 14px">'+l+'</button>').join('')+'</div><div class="row" style="align-items:flex-end"><label style="flex:1">Ver un día<input id="hd" type="date" value="'+dia+'" style="margin:4px 0 0"></label>'+(dia?'<button class="sec" data-a="hdclr" style="margin-bottom:0">Ver todo</button>':'')+'</div>';
+  let h='<div style="height:8px"></div>'+T2('filt',[['all','Todo'],['f','Alimentación'],['p','Pañales'],['s','Sueño'],['h','Salud']],filt,1)+'<div class="row" style="align-items:flex-end"><label style="flex:1">Ver un día<input id="hd" type="date" value="'+dia+'" style="margin:4px 0 0"></label>'+(dia?'<button class="sec" data-a="hdclr" style="margin-bottom:0">Ver todo</button>':'')+'</div>';
   if(!L.length)return h+'<div class="card mute" style="text-align:center;padding:24px 14px;margin-top:12px">'+(dia||filt!=='all'?'No hay registros con este filtro.':'Aún no hay registros. Empieza desde Hoy.')+'</div>';
   const hoy=dkey(0),ayer=dkey(-1);let cur='',open=false;
   L.forEach(e=>{const k=new Date(e.inicio).toLocaleDateString('sv-SE');if(k!==cur){if(open)h+='</div>';cur=k;open=true;h+='<div class="day">'+(k===hoy?'Hoy':k===ayer?'Ayer':new Date(e.inicio).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</div><div class="card" style="padding:2px 14px">'}h+=evRow(e)});
@@ -982,7 +997,10 @@ function citaRead(c){if(!$('cf2').value)return false;if(c.dia&&$('cf2').value.sl
   if(c.vac){const d=c.f.slice(0,10),x=(cfg.vacX||[]).find(v=>v.id===c.vac);if(x)x.prev=d;else{cfg.vacs=cfg.vacs||{};cfg.vacs[c.vac]=Object.assign(cfg.vacs[c.vac]||{},{prev:d})}}
   return true}
 function histMed(){const M=medidas().reverse();return M.length?'<h2>Historial de mediciones</h2><div class="card" style="padding:2px 14px">'+M.slice(0,15).map(e=>evRow(e,1)).join('')+'</div>':''}
-const vSalud=()=>'<h1>Salud</h1><div class="chips" style="margin-top:12px;overflow-x:auto">'+[['cre','Crecimiento'],['tem','Temperatura'],['med','Medicación'],['vac','Vacunas'],['cit','Citas']].map(([k,l])=>'<button data-a="sal" data-v="'+k+'" class="'+(k===sal?'on':'')+'" style="flex:0 0 auto;padding:10px 14px">'+l+'</button>').join('')+'</div>'+({cre:()=>vCre()+histMed(),tem:vTemp,med:vMed,vac:vVac,cit:vCit})[sal]()+'<button class="sec" style="width:100%;margin-top:14px" data-a="inf">Informe para el pediatra</button>';
+const SG=(a,it,cur,h)=>'<div class="seg'+(h?' h':'')+'">'+it.map(([k,l,i])=>'<button data-a="'+a+'" data-v="'+k+'" class="'+(k==cur?'on':'')+'">'+(i||'')+'<span>'+l+'</span></button>').join('')+'</div>';
+const T2=(a,it,cur,fl)=>'<div class="'+(fl?'fl':'t2')+'">'+it.map(([k,l])=>'<button data-a="'+a+'" data-v="'+k+'" class="'+(k==cur?'on':'')+'">'+l+'</button>').join('')+'</div>';
+const ISG={jer:I('<path d="M18 2l4 4M20 4l-9 9M15 5l4 4M9.5 10.5l4 4-6 6H3.5v-4z"/>'),cal:I('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),est:I('<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>')};
+const vSalud=()=>'<h1>Salud</h1>'+SG('sal',[['cre','Medidas',IC.medida],['tem','Fiebre',IC.temp],['med','Medicinas',IC.med],['vac','Vacunas',ISG.jer],['cit','Citas',ISG.cal]],sal)+({cre:()=>vCre()+histMed(),tem:vTemp,med:vMed,vac:vVac,cit:vCit})[sal]()+'<button class="sec" style="width:100%;margin-top:14px" data-a="inf">Informe para el pediatra</button>';
 
 /* --- Estadísticas (Registros) --- */
 const MET={ml:['Leche'],tomas:['Tomas'],pan:['Pañales'],sue:['Sueño'],sies:['Siestas']};
@@ -1003,14 +1021,14 @@ function barSvg(days,m){
 }
 function vStats(){
   const N=stP,cur=periodo(0,N),prev=periodo(N,N),F={ml:x=>Math.round(x)+' ml',tomas:fx,pan:fx,sue:fh,sies:fx};
-  let h='<div class="chips" style="margin-top:12px">'+[[1,'Hoy'],[7,'7 días'],[30,'30 días']].map(([k,l])=>'<button data-a="stp" data-v="'+k+'" class="'+(k===N?'on':'')+'">'+l+'</button>').join('')+'</div>';
+  let h='<div style="height:6px"></div>'+T2('stp',[[1,'Hoy'],[7,'7 días'],[30,'30 días']],N);
   if(!cur.n)return h+'<div class="card mute" style="text-align:center;padding:24px 14px">Aún no hay registros en este periodo.</div>';
   h+='<div class="card"><div class="mute">'+(N===1?'Hoy frente a ayer (hoy aún no ha terminado)':'Media por día · '+cur.n+(cur.n===1?' día':' días')+' con registros')+'</div><table class="rt"><tr><th></th><th>'+(N===1?'Hoy':'Actual')+'</th><th>'+(N===1?'Ayer':'Anterior')+'</th></tr>'+Object.keys(MET).map(m=>'<tr><td>'+MET[m][0]+'</td><td><b>'+F[m](cur.avg[m])+'</b></td><td class="mute">'+(prev.n?F[m](prev.avg[m]):'Sin datos')+'</td></tr>').join('')+'</table></div>';
-  if(N>1)h+='<div class="chips" style="overflow-x:auto">'+Object.keys(MET).map(m=>'<button data-a="stm" data-v="'+m+'" class="'+(m===stM?'on':'')+'" style="flex:0 0 auto;padding:10px 14px">'+MET[m][0]+'</button>').join('')+'</div><div class="card"><div class="mute" style="margin-bottom:4px">'+MET[stM][0]+' por día'+(stM==='sue'?' (horas)':stM==='ml'?' (ml)':'')+'</div>'+barSvg(cur.days,stM)+'<div class="mute">Cada barra es un día; la última es hoy.</div></div>';
+  if(N>1)h+=''+T2('stm',Object.keys(MET).map(m=>[m,MET[m][0]]),stM,1)+'<div class="card"><div class="mute" style="margin-bottom:4px">'+MET[stM][0]+' por día'+(stM==='sue'?' (horas)':stM==='ml'?' (ml)':'')+'</div>'+barSvg(cur.days,stM)+'<div class="mute">Cada barra es un día; la última es hoy.</div></div>';
   return h+'<div class="mute" style="margin:6px 2px">Estos datos solo resumen lo que has registrado. No indican problemas médicos ni de desarrollo.</div>';
 }
 function vHis(){
-  return'<h1>Registros</h1><div class="chips" style="margin-top:12px"><button data-a="rv" data-v="crono" class="'+(regVista==='crono'?'on':'')+'">Cronología</button><button data-a="rv" data-v="stats" class="'+(regVista==='stats'?'on':'')+'">Estadísticas</button></div>'+(regVista==='stats'?vStats():vCrono());
+  return'<h1>Registros</h1>'+SG('rv',[['crono','Cronología',ico.his],['stats','Estadísticas',ico.cre]],regVista,1)+(regVista==='stats'?vStats():vCrono());
 }
 
 Object.assign(ACT,{
@@ -1051,7 +1069,7 @@ const SLN=Object.fromEntries(SL),ACEP={b:'Bien',r:'Poco',n:'Rechaza'};IC.comida=
 
 function vMom(){
   let L=Store.live().filter(e=>e.tipo==='momento');if(dfil!=='all')L=L.filter(e=>(e.datos.cat||'anec')===dfil);
-  let h='<button class="sec" style="width:100%;margin:12px 0 10px" data-a="mom">Añadir recuerdo</button><div class="chips" style="overflow-x:auto">'+[['all','Todo']].concat(DCAT).map(([k,l])=>'<button data-a="dfil" data-v="'+k+'" class="'+(k===dfil?'on':'')+'" style="flex:0 0 auto;padding:10px 14px">'+l+'</button>').join('')+'</div>';
+  let h='<button class="sec" style="width:100%;margin:12px 0 10px" data-a="mom">Añadir recuerdo</button>'+T2('dfil',[['all','Todo']].concat(DCAT),dfil,1);
   if(!L.length)return h+'<div class="card mute" style="text-align:center;padding:24px 14px">'+(dfil==='all'?'Aquí guardarás anécdotas, primeras veces y momentos especiales, con foto si quieres.':'No hay recuerdos en esta categoría.')+'</div>';
   let cur='';h+='<div class="tl">';
   L.forEach(e=>{const mk=new Date(e.inicio).toLocaleDateString('es-ES',{month:'long',year:'numeric'}),f=e.datos.foto&&FOT[e.datos.foto];if(mk!==cur){cur=mk;h+='<div class="day">'+mk+'</div>'}
@@ -1065,7 +1083,7 @@ function hitoRow(x,edad){const d=(cfg.hitos||{})[x.id],ob=(cfg.hitoO||{})[x.id];
   return'<div class="it"><div data-a="hit2" data-v="'+x.id+'" style="flex:1;min-width:0;cursor:pointer"><div style="font-size:15px">'+x.t+'</div><div class="mute">'+(edad?'Orientativo: '+x.m+' meses':HCN[x.c])+(d?' · Logrado el '+new Date(d).toLocaleDateString('es-ES'):'')+(ob?'<br>'+esc(ob):'')+'</div></div><button class="sec'+(d?' on':'')+'" style="padding:6px 10px" data-a="hito" data-v="'+x.id+'">'+(d?'Logrado':'Marcar')+'</button></div>'}
 function vHit(){
   const hd=cfg.hitos||{},I=hitoItems();
-  let h='<div class="chips" style="margin-top:12px"><button data-a="hv" data-v="edad" class="'+(hitoVista==='edad'?'on':'')+'">Por edad</button><button data-a="hv" data-v="cat" class="'+(hitoVista==='cat'?'on':'')+'">Por categoría</button></div><div class="mute" style="margin:2px 2px 10px">Hitos que consiguen al menos 3 de cada 4 bebés a cada edad (CDC y AAP, 2022). Las edades son orientativas, no plazos. Cada bebé va a su ritmo; si algo te preocupa, coméntalo con tu pediatra.</div>';
+  let h='<div style="height:8px"></div>'+T2('hv',[['edad','Por edad'],['cat','Por categoría']],hitoVista)+'<div class="mute" style="margin:2px 2px 10px">Hitos que consiguen al menos 3 de cada 4 bebés a cada edad (CDC y AAP, 2022). Las edades son orientativas, no plazos. Cada bebé va a su ritmo; si algo te preocupa, coméntalo con tu pediatra.</div>';
   if(hitoVista==='edad')HITOS.forEach(([m])=>{const R=I.filter(x=>x.m===m);h+='<details class="card"'+(hitoAbierto(m)?' open':'')+'><summary data-a="hg" data-v="'+m+'"><span>'+m+' meses</span><span class="mute">'+R.filter(x=>hd[x.id]).length+'/'+R.length+'</span></summary>'+R.map(x=>hitoRow(x,0)).join('')+'</details>'});
   else Object.keys(HCN).forEach(c=>{const R=I.filter(x=>x.c===c);h+='<details class="card"'+(openG['k'+c]?' open':'')+'><summary data-a="hgk" data-v="k'+c+'"><span>'+HCN[c]+'</span><span class="mute">'+R.filter(x=>hd[x.id]).length+'/'+R.length+'</span></summary>'+R.map(x=>hitoRow(x,1)).join('')+'</details>'});
   return h;
@@ -1086,7 +1104,7 @@ function vAli(){
   const C=Store.live().filter(e=>e.tipo==='comida');
   h+='<h2>Diario de comidas</h2>'+(C.length?'<div class="card" style="padding:2px 14px">'+C.slice(0,10).map(e=>evRow(e,1)).join('')+'</div>':'<div class="card mute">Anota lo que come en cada comida para llevar el control.</div>');
   const M=(cfg.menu||{})[dkey(menuDia)]||{};
-  h+='<h2>Plan de comidas</h2><div class="chips" style="overflow-x:auto">'+[0,1,2,3,4,5,6].map(i=>{const d=new Date();d.setDate(d.getDate()+i);return'<button data-a="mdia" data-v="'+i+'" class="'+(i===menuDia?'on':'')+'" style="flex:0 0 auto;padding:10px 12px">'+(i?d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric'}):'Hoy')+'</button>'}).join('')+'</div><div class="card" style="padding:0 14px">'+SL.map(([k,l])=>'<div class="it"><span><b>'+l+'</b><div class="mute">'+esc(M[k]||'Sin planificar')+'</div></span><button class="sec" style="padding:6px 10px" data-a="mslot" data-v="'+k+'">'+(M[k]?'Editar':'Añadir')+'</button></div>').join('')+'</div>';
+  h+='<h2>Plan de comidas</h2>'+T2('mdia',[0,1,2,3,4,5,6].map(i=>{const d=new Date();d.setDate(d.getDate()+i);return[i,i?d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric'}):'Hoy']}),menuDia,1)+'<div class="card" style="padding:0 14px">'+SL.map(([k,l])=>'<div class="it"><span><b>'+l+'</b><div class="mute">'+esc(M[k]||'Sin planificar')+'</div></span><button class="sec" style="padding:6px 10px" data-a="mslot" data-v="'+k+'">'+(M[k]?'Editar':'Añadir')+'</button></div>').join('')+'</div>';
   return h;
 }
 function aliSheet(pf){pf=pf||{};
