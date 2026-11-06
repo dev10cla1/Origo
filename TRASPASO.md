@@ -23,6 +23,7 @@ Toda la app usa los colores de la fase (`body.scn`): en Hoy con la ilustración 
   - Contraste: `--mute` claro `#5c6d83` (antes `#62748a`, 4,45:1 sobre `--bg`); el modo noche ya cumplía 4,5:1.
 - **Registros**: cronología con filtros y selector de día · Estadísticas (hoy / 7 / 30 días con comparación).
 - **Salud**: Crecimiento (curvas OMS) · Temperatura · Medicación · Vacunas · Citas + informe para el pediatra.
+  - Vacunas → Citas: al guardar una vacuna con fecha (o al añadir una), se crea o actualiza una cita enlazada (`vacSync`, campo `vac`, id `cv-…`), con hora opcional (sin hora → `dia:1`, se muestra solo la fecha con `citaF`). Editar la fecha en la cita cambia la fecha prevista de la vacuna; elegir «No» o borrar la vacuna quita la cita. Pendientes no repite la vacuna si ya tiene cita.
 - **Más**: Pañales · Preparativos · Desarrollo (Diario, Hitos, Alimentos) · Ajustes y copia de seguridad.
 
 ## Arquitectura del código (dentro de `index.html`)
