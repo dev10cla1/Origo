@@ -25,7 +25,7 @@ with sync_playwright() as p:
         pg.click('#bP');pg.click('#sh button[data-v=caca]');pg.wait_for_timeout(200);assert 'Pañal' in pg.inner_text('#tmsg')
     step('Pañal (panel de 4 botones)',panal)
     def sueno():
-        pg.click('#bS');pg.click('#sh button[data-v=ahora]');pg.wait_for_timeout(1300);assert pg.is_visible('#ban');pg.click('#ban button');pg.wait_for_timeout(200);assert not pg.is_visible('#ban')
+        pg.click('#bS');pg.click('#sh button[data-v=ahora]');pg.wait_for_timeout(1300);assert pg.inner_text('#wkl')=='Durmiendo' and pg.inner_text('#bSt')=='Despertó';pg.click('#bS');pg.click('#sh button[data-v=ahora]');pg.wait_for_timeout(300);assert pg.inner_text('#wkl')=='Despierto'
     step('Sueño: iniciar, cronómetro, finalizar',sueno)
     def toma_detalle():
         pg.click('#bT')
