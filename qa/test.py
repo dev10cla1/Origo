@@ -1,6 +1,11 @@
-import re,sys,time,base64,io,datetime,json
+import re,sys,os,time,base64,io,datetime,json,subprocess,atexit
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from comun import QA,RAIZ,SALIDA,navegador
 from playwright.sync_api import sync_playwright
-MOCK=open('/home/claude/qa2/mock.js').read()
+MOCK=open(os.path.join(QA,'mock.js')).read()
+# servidor simulado (dos móviles): sirve index.html desde la raíz del repositorio
+if not os.environ.get('ORIGO_SIN_SERVIDOR'):
+    _srv=subprocess.Popen([sys.executable,os.path.join(QA,'server.py')],cwd=RAIZ);atexit.register(_srv.kill);time.sleep(1)
 URL='http://127.0.0.1:8765/index.html'
 R=[];ERR={}
 def res(n,ok,info=''):
@@ -22,11 +27,13 @@ def wait(f,t=5,step=0.2):
         time.sleep(step)
     return False
 def txt(p):return p.inner_text('body')
-def tab(p,k):p.click(f'nav button[data-k={k}]');time.sleep(0.3)
+def tab(p,k):p.evaluate("k=>{closeSheet();if(k==='hoy'){tab='hoy';masSub=null;render()}else ACT.ir(k==='mas'?'aju':k)}",k);time.sleep(0.3)
+def toma(p):p.click('#bT');p.click('#shs')
+def sueno(p):p.click('#bS');p.click('#sh button[data-v=ahora]')
 def signup(p,mail):
     p.wait_for_selector('#le',timeout=8000);p.fill('#le',mail);p.fill('#lp','123456');p.click('#lc')
 with sync_playwright() as pw:
-    br=pw.chromium.launch()
+    br=navegador(pw)
     cA,A=mk(br,'A');cB,B=mk(br,'B')
     A.goto(URL)
     try:
@@ -41,18 +48,18 @@ with sync_playwright() as pw:
     A.fill('#on','Lucía');A.fill('#of',d);A.click('#os button[data-v=f]');A.click('#shs');time.sleep(0.5)
     res('1c baby shown',wait(lambda:'Lucía' in txt(A)),txt(A)[:100].replace('\n',' '))
     # 2
-    A.click('#bT');time.sleep(0.5)
+    toma(A);time.sleep(0.5)
     A.click('#bP');time.sleep(0.3)
     try:A.click('#sh button[data-v=caca]');time.sleep(0.3)
     except Exception as x:res('2 pañal sheet',False,str(x)[:100])
     # maybe needs save
     if A.is_visible('#shs'):A.click('#shs')
     time.sleep(0.3)
-    A.click('#bS');time.sleep(0.5)
+    sueno(A);time.sleep(0.5)
     evs=A.evaluate("JSON.parse(localStorage.getItem('bebe.ev')||'[]').map(e=>e.tipo)")
     res('2 A events',sorted(evs)==['panal','sueno','toma'],str(evs))
     # 3
-    tab(A,'mas');A.click('[data-a=mas][data-v=aju]');time.sleep(0.5)
+    tab(A,'aju');time.sleep(0.5)
     m=re.search(r'[A-Z0-9]{4}-[A-Z0-9]{4}',txt(A));code=m.group(0) if m else None
     res('3 invite code',bool(code),str(code))
     # 4
@@ -65,14 +72,14 @@ with sync_playwright() as pw:
     res('4b B Registros shows author Iván',ok,txt(B)[:300].replace('\n',' | '))
     h=txt(B);res('4c B sees toma/pañal/sueño',all(w in h for w in('Toma','Pañal','Sueño')) or all(w.lower() in h.lower() for w in('toma','pañal','sue')),'')
     # 5
-    tab(B,'hoy');B.click('#bT');time.sleep(0.2)
+    tab(B,'hoy');toma(B);time.sleep(0.2)
     tab(A,'his');ok=wait(lambda:'Ana' in txt(A),4)
     res('5a A sees B toma w/ author Ana',ok,txt(A)[:200].replace('\n',' | '))
-    ban=B.is_visible('#ban');B.click('#banb')
+    tab(B,'his');tab(A,'his');ban=B.is_visible('#ban');B.click('#banb')
     ok=wait(lambda:A.is_hidden('#ban'),4)
     res('5b sleep ended on B -> A banner gone',ban and ok,f'B banner visible before={ban}')
     # 6
-    tab(A,'mas');A.click('[data-a=mas][data-v=aju]') if not A.query_selector('#ct') else None
+    tab(A,'aju')
     A.evaluate("cfg.prepV=5;cfg.tema='noche';saveCfg()")
     B.evaluate("cfg.talla='T2';cfg.stock=Object.assign(cfg.stock||{},{T2:7});saveCfg()")
     time.sleep(2)
@@ -80,8 +87,8 @@ with sync_playwright() as pw:
     exp=lambda c:c.get('prepV')==5 and c.get('tema')=='noche' and c.get('talla')=='T2' and (c.get('stock') or {}).get('T2')==7
     res('6 cfg merge both ways',exp(ca) and exp(cb),f'A={json.dumps(ca)[:200]} B={json.dumps(cb)[:200]}')
     # 7
-    tab(A,'hoy');n0=A.evaluate("Store.live().length");A.click('#bT');time.sleep(0.3)
-    idt=A.evaluate("Store.live()[0].id")
+    tab(A,'hoy');n0=A.evaluate("Store.live().length");toma(A);time.sleep(0.3)
+    idt=A.evaluate("Store.ev[Store.ev.length-1].id")  # el último añadido (la hora de la toma va sin segundos)
     A.click('#undo');time.sleep(1.5)
     gone_B=B.evaluate(f"!Store.live().some(e=>e.id=='{idt}')")
     gone_A=A.evaluate(f"!Store.live().some(e=>e.id=='{idt}')")
@@ -102,35 +109,31 @@ with sync_playwright() as pw:
     ids=A.evaluate("Store.ev.map(e=>e.id)")
     res('10b after listener, events intact, no dups',nl2==before and len(ids)==len(set(ids)),f'{nl2} seen={seen}')
     # B event added while A reloaded? add and check incremental
-    B.evaluate("document.querySelector('nav button[data-k=hoy]').click()");B.click('#bT');time.sleep(1.5)
+    tab(B,'hoy');toma(B);time.sleep(1.5)
     res('10c post-reload incremental event',A.evaluate("Store.live().length")==before+1,'')
     # 11 photo
     from PIL import Image
-    buf=io.BytesIO();Image.new('RGB',(60,40),(200,30,90)).save(buf,'JPEG');open('/home/claude/qa2/p.jpg','wb').write(buf.getvalue())
-    tab(A,'mas');
-    if A.query_selector('[data-a=mback]'):A.click('[data-a=mback]')
-    A.click('[data-a=mas][data-v=des]');time.sleep(0.3)
+    buf=io.BytesIO();Image.new('RGB',(60,40),(200,30,90)).save(buf,'JPEG');open(os.path.join(SALIDA,'p.jpg'),'wb').write(buf.getvalue())
+    tab(A,'des');time.sleep(0.3)
     A.click('[data-a=sub][data-v=mom]');time.sleep(0.3)
     A.click('[data-a=mom]');time.sleep(0.3)
-    A.fill('#mt','Primera foto');A.set_input_files('#mfo','/home/claude/qa2/p.jpg')
+    A.fill('#mt','Primera foto');A.set_input_files('#mfo',os.path.join(SALIDA,'p.jpg'))
     wait(lambda:A.query_selector('#mfp img') is not None,5);A.click('#shs');time.sleep(1.5)
     nfot=A.evaluate("Object.keys(FOT).length");
-    tab(B,'mas')
-    if B.query_selector('[data-a=mback]'):B.click('[data-a=mback]')
-    B.click('[data-a=mas][data-v=des]');time.sleep(0.3);B.click('[data-a=sub][data-v=mom]')
+    tab(B,'des');time.sleep(0.3);B.click('[data-a=sub][data-v=mom]')
     ok=wait(lambda:B.evaluate("[...document.querySelectorAll('#app img')].some(i=>i.src.startsWith('data:image'))"),6)
     res('11 photo shows in B Diario',ok,f'A FOT keys={nfot}; B text={txt(B)[:150]!r}')
     # 12 offline
     B.evaluate("localStorage.setItem('mock.offline','1')")
-    tab(B,'hoy');B.click('#bT');time.sleep(1.5)
-    idb=B.evaluate("Store.live()[0].id")
+    tab(B,'hoy');toma(B);time.sleep(1.5)
+    idb=B.evaluate("Store.ev[Store.ev.length-1].id")
     seenA=A.evaluate(f"Store.ev.some(e=>e.id=='{idb}')")
     B.evaluate("localStorage.removeItem('mock.offline')")
     ok=wait(lambda:A.evaluate(f"Store.ev.some(e=>e.id=='{idb}')"),5)
     res('12 offline queue then A receives',(not seenA) and ok,f'A had it while offline={seenA}')
     # screenshots
     tab(A,'his');tab(B,'his');time.sleep(0.5)
-    A.screenshot(path='/home/claude/qa2/A_his.png');B.screenshot(path='/home/claude/qa2/B_his.png')
+    A.screenshot(path=os.path.join(SALIDA,'A_his.png'));B.screenshot(path=os.path.join(SALIDA,'B_his.png'))
     print('ERRORS');
     for k,v in ERR.items():
         for l in v:print(k,l[:300])
