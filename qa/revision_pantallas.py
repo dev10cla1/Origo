@@ -1,5 +1,8 @@
-import datetime, json
+import sys, os, datetime, json
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from comun import copia_local,navegador,SALIDA
 from playwright.sync_api import sync_playwright
+URL=copia_local()
 seed="""(function(){var n=Date.now(),D=864e5,H=36e5,ev=[];function A(t,i,f,d){ev.push({id:Math.random().toString(36).slice(2),tipo:t,inicio:i,fin:f,datos:d,borrado:false})}
 for(var d=0;d<10;d++){for(var k=0;k<6;k++)A('toma',n-d*D-k*3*H-H,null,{ml:110+k*2,leche:'formula',talla:'1'});for(k=0;k<5;k++)A('panal',n-d*D-k*4*H-H,null,{k:k%3?'pis':'caca',talla:'1'});for(k=0;k<3;k++)A('sueno',n-d*D-k*6*H-9*H,n-d*D-k*6*H-8*H,{})}
 A('temp',n-5*H,null,{c:38.2,m:'oi',nota:'Irritable, poco apetito y algo de tos durante la noche'});A('med',n-2*H,null,{farmaco:'Paracetamol',ml:2.5});A('medida',n-1*D,null,{peso:5.6,talla:60,pc:39});A('medida',n-60*D,null,{peso:4.1,talla:55,pc:35});
@@ -13,11 +16,11 @@ for k in ['mom','hit','ali']:SCR.append(('Desarrollo/'+k,'tab="mas";masSub="des"
 SCR.append(('Hoy embarazo','tab="hoy";masSub=null;cfg.nac=new Date(Date.now()+75*864e5).toISOString().slice(0,10)'))
 bad=[];tot=0
 with sync_playwright() as p:
-    b=p.chromium.launch()
-    for tema in ['claro','noche']:
+    b=navegador(p)
+    for tema in ['dia','noche']:  # fase del día (la app siempre usa tema oscuro)
         for W,Hh in [(320,640),(360,740),(414,896),(768,1024),(1280,800)]:
             ctx=b.new_context(viewport={'width':W,'height':Hh},locale='es-ES');pg=ctx.new_page();pg.set_default_timeout(3000)
-            pg.add_init_script(seed.replace('%s',tema));pg.goto('file:///mnt/user-data/outputs/index.html');pg.wait_for_timeout(200)
+            pg.add_init_script(seed.replace('%s',tema));pg.goto(URL);pg.wait_for_timeout(200)
             for name,code in SCR:
                 pg.evaluate(code+";render()");tot+=1
                 r=pg.evaluate("""()=>{const W=document.documentElement.clientWidth,o=[];document.querySelectorAll('#app *').forEach(e=>{const r=e.getBoundingClientRect();if(r.width&&r.right>W+1&&!e.closest('[style*="overflow-x:auto"]')&&!e.closest('.chips'))o.push(e.tagName+'.'+(e.className||'')+' '+Math.round(r.right)+'>'+W)});return{sw:document.documentElement.scrollWidth,W,o:o.slice(0,3)}}""")
@@ -25,9 +28,9 @@ with sync_playwright() as p:
             ctx.close()
     # capturas de referencia
     for tema,W in [('claro',320),('noche',360)]:
-        ctx=b.new_context(viewport={'width':W,'height':900},locale='es-ES');pg=ctx.new_page();pg.add_init_script(seed.replace('%s',tema));pg.goto('file:///mnt/user-data/outputs/index.html');pg.wait_for_timeout(200)
-        pg.evaluate('tab="hoy";render()');pg.screenshot(path='/tmp/qa/r_hoy_%d.png'%W)
-        pg.evaluate('tab="cre";sal="med";render()');pg.screenshot(path='/tmp/qa/r_med_%d.png'%W)
+        ctx=b.new_context(viewport={'width':W,'height':900},locale='es-ES');pg=ctx.new_page();pg.add_init_script(seed.replace('%s',tema));pg.goto(URL);pg.wait_for_timeout(200)
+        pg.evaluate('tab="hoy";render()');pg.screenshot(path=os.path.join(SALIDA,'r_hoy_%d.png'%W))
+        pg.evaluate('tab="cre";sal="med";render()');pg.screenshot(path=os.path.join(SALIDA,'r_med_%d.png'%W))
         ctx.close()
     b.close()
 print('pantallas revisadas:',tot,'| con desborde:',len(bad))

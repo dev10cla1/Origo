@@ -25,12 +25,6 @@ h1{font-size:22px;margin:0;font-weight:600}h2{font-size:17px;margin:18px 0 8px;f
 .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--hok);width:0;transition:width .5s}
 .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:var(--accbg);color:var(--acc)}
 .big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
-#qbar{position:fixed;left:0;right:0;bottom:calc(var(--nh,62px) + 0px);z-index:8;background:var(--bg);border-top:1px solid var(--line);padding:8px 14px}
-#qbar .big{max-width:452px;margin:0 auto;gap:8px}
-#qbar .big button{height:64px;min-height:56px;border-radius:16px;gap:2px;font-size:15px}
-#qbar .big button svg{width:24px;height:24px}
-body.qb #toast{bottom:calc(var(--nh,62px) + 84px)}
-.qsp{height:96px}
 .delb{flex:none;width:40px;height:40px;margin:0 -8px 0 2px;border:0;border-radius:10px;background:none;color:var(--mute);display:grid;place-items:center;padding:0}
 .delb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.delb:active{background:var(--badbg);color:var(--bad)}
 .emb{text-align:left}.emb .cd{font-size:44px;font-weight:700;line-height:1.1;margin:2px 0}.emb .tip{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16);font-size:15px}
@@ -41,10 +35,6 @@ body.qb #toast{bottom:calc(var(--nh,62px) + 84px)}
 button.sec{background:var(--accbg);color:var(--acc);border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600}
 button.sec.bad{background:var(--badbg);color:var(--bad)}
 button.lnk{background:none;border:0;color:var(--mute);font:inherit;font-size:13px;padding:4px}
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;background:none;border:0;padding:10px 0 8px;font:inherit;font-size:12px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px}
-nav button.on{color:var(--acc);font-weight:600}
-nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #ban{display:none;position:sticky;top:0;z-index:5;background:var(--c1);color:var(--c1t);padding:10px 14px;font-weight:600;justify-content:space-between;align-items:center}
 #ban button{background:var(--c3);color:var(--ct);border:0;border-radius:8px;padding:6px 12px;font:inherit;font-weight:600}
 input,select,textarea{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin:4px 0 10px}
@@ -88,13 +78,13 @@ main{padding:16px}h1{letter-spacing:-.01em}
 .tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:18px}.tli{position:relative;cursor:pointer}.tld{position:absolute;left:-24px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--acc);border:2px solid var(--bg)}.tl .day{margin-top:6px}
 
 /* ===== Escena: fondo ilustrado según la luz del día (Hoy) ===== */
-:root{--nh:72px}
+:root{--nh:0px}
 #scene{display:none;position:absolute;top:0;left:0;right:0;margin:0 auto;max-width:640px;aspect-ratio:1438/2576;background:center top/cover no-repeat;z-index:0;pointer-events:none}
 @media (min-width:641px){#scene{-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}}
 body.scn #scene{display:block}body.scn main{position:relative;z-index:1}
 [data-f=noche]{--sb:#091523;--st:#071629;--nm:#fff;--nm2:rgba(196,220,245,.88);--hf:brightness(0) invert(1);--gb:rgba(20,44,82,.7);--gc:#fff;--img:url(assets/escena-noche.jpg)}
 [data-f=amanecer]{--sb:#113149;--st:#96caed;--nm:#15325a;--nm2:rgba(21,50,90,.78);--hf:none;--gb:rgba(255,255,255,.6);--gc:#1b3a63;--img:url(assets/escena-amanecer.jpg)}
-[data-f=dia]{--sb:#0d244c;--st:#2a9ded;--nm:#fff;--nm2:#fff;--hf:brightness(0) invert(1);--gb:rgba(255,255,255,.28);--gc:#fff;--img:url(assets/escena-dia.jpg)}
+[data-f=dia]{--sb:#0d244c;--st:#2a9ded;--nm:#fff;--nm2:#fff;--hf:brightness(0) invert(1);--gb:rgba(13,40,84,.5);--gc:#fff;--img:url(assets/escena-dia.jpg)}
 [data-f=atardecer]{--sb:#1d1841;--st:#5d3180;--nm:#fff;--nm2:rgba(255,232,214,.9);--hf:brightness(0) invert(1);--gb:rgba(40,24,80,.55);--gc:#fff;--img:url(assets/escena-atardecer.jpg)}
 #scene{background-image:var(--img)}
 body.scn{background:var(--sb)}
@@ -130,17 +120,8 @@ body.scn{background:var(--sb)}
 .hacc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
 .hacc button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:13px 10px;font:inherit;font-weight:600;font-size:15px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .scn .emb .tip{border-top-color:rgba(255,255,255,.14)}
-/* Barra de navegación */
-nav{border-top:0;border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(35,67,102,.08);z-index:9}
-nav button{position:relative;padding:11px 0 12px;font-size:13px}
-nav button.on::after{content:"";position:absolute;bottom:4px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:2px;background:currentColor}
-[data-t=dark] nav{box-shadow:none;border-top:1px solid var(--line)}
-body.scn nav{background:rgba(12,28,54,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);box-shadow:none}
-body.scn nav button{color:rgba(170,192,220,.9)}body.scn nav button.on{color:#7fe0c4}
 
 html{background:var(--bg)}html.scn{background:var(--sb)}
-nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:200px;background:var(--card)}
-body.scn nav::after{background:var(--sb)}
 /* Hojas (Toma, Pañal, Sueño…) con los colores de la escena */
 [data-f=noche]{--shb:#0f2038;--shg:#173252;--sha:#7fe0c4}
 [data-f=amanecer]{--shb:#123447;--shg:#1d5468;--sha:#fbc58a}
@@ -155,8 +136,7 @@ body.scn #sh .chips button.on{background:var(--sha);border-color:var(--sha);colo
 /* Logo en modo oscuro: blanco y más pequeño */
 [data-t=dark] .brand{background:none;padding:0;gap:9px}[data-t=dark] .brand img{filter:brightness(0) invert(1)}[data-t=dark] .brand img:first-child{height:34px}[data-t=dark] .brand img:last-child{height:16px}
 
-/* Sin barra inferior: se navega desde la tarjeta de estado */
-nav{display:none!important}
+/* Sin barra inferior: se navega con el botón de menú (cabecera) o la tarjeta de estado */
 body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(20px + env(safe-area-inset-bottom))}
 body.scn:not(.hoy) #scene{display:none}
@@ -189,16 +169,40 @@ body.scn #ban{background:var(--shg);color:#fff}
 .fl{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
 .fl button{background:none;border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600}
 .fl button.on{background:var(--accbg);border-color:var(--acc);color:var(--acc)}
+
+/* Foco visible con teclado */
+:focus-visible{outline:2px solid var(--acc,#8fd9c2);outline-offset:2px}#sh:focus{outline:0}
+[hidden]{display:none!important}
+/* Botón de menú en las pantallas interiores */
+.stopr{display:flex;align-items:center;gap:12px}
+.mb{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0}
+.mb svg,.gear svg.mi3{width:20px;height:20px;fill:currentColor}.gear svg.mi3{width:24px;height:24px}
+.mn button.on{border-color:var(--sha,var(--acc))!important;box-shadow:0 0 0 1px var(--sha,var(--acc))}
+/* Cantidad con −10 / +10 */
+.stp{display:flex;gap:8px;align-items:stretch;margin:4px 0 10px}
+.stp input{margin:0;flex:1;min-width:0;text-align:center;font-size:20px;font-weight:600}
+.stp button{flex:none;width:68px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-weight:600;touch-action:manipulation}
+.stp button:active{transform:scale(.96)}
+/* Franja de 24 h (Registros): sueño en bloques, tomas y pañales como marcas */
+.day{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.day .dsm{font-weight:500;font-size:12.5px;text-align:right}
+.fj{position:relative;height:30px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.fj i{position:absolute;display:block}
+.fj .fs{top:0;bottom:0;background:rgba(247,201,127,.5)}
+.fj .ft{top:4px;height:11px;width:3px;margin-left:-1.5px;border-radius:2px;background:#7fe0c4}
+.fj .fp{bottom:4px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#8fd6ff}
+.fj .fn{top:0;bottom:0;width:1.5px;background:#fff;opacity:.85}
+.fjx{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mute);margin:2px 1px 6px}
+.fjl{display:flex;gap:14px;font-size:12px;color:var(--mute);margin:10px 0 -6px}.fjl span{display:inline-flex;align-items:center;gap:5px}
+.fjl i{display:inline-block}.fjl .fs{width:12px;height:10px;border-radius:3px;background:rgba(247,201,127,.6)}.fjl .ft{width:3px;height:11px;border-radius:2px;background:#7fe0c4}.fjl .fp{width:7px;height:7px;border-radius:50%;background:#8fd6ff}
 </style>
 </head>
 <body>
 <div id="scene" aria-hidden="true"></div>
 <div id="ban"><span id="bant"></span><button id="banb">Despertó</button></div>
 <main id="app"></main>
-<div id="rep"><div class="repbar"><button class="sec" data-r="x">Cerrar</button><span><button class="sec" data-r="7">7 d</button><button class="sec" data-r="14">14 d</button><button class="sec" data-r="30">30 d</button></span></div><div class="repbar"><button class="sec" data-r="c">Copiar texto</button><button class="sec" data-r="p">Imprimir / PDF</button></div><div id="repb"></div></div>
-<div id="toast"><span id="tmsg"></span><button id="undo">Deshacer</button></div>
-<div id="ov"><div id="sh"></div></div>
-<nav id="nav"></nav>
+<div id="rep"><div class="repbar"><button class="sec" data-r="x">Cerrar</button><span><button class="sec" data-r="7">7 d</button><button class="sec" data-r="14">14 d</button><button class="sec" data-r="30">30 d</button></span></div><div class="repbar"><button class="sec" data-r="c">Copiar texto</button><button class="sec" data-r="s" id="reps" hidden>Compartir</button><button class="sec" data-r="p">Imprimir / PDF</button></div><div id="repb"></div></div>
+<div id="toast" role="status" aria-live="polite"><span id="tmsg"></span><button id="undo">Deshacer</button></div>
+<div id="ov"><div id="sh" role="dialog" aria-modal="true" aria-label="Ventana" tabindex="-1"></div></div>
 
 <script>
 /* ===== Conexión con Firebase =====
@@ -216,15 +220,23 @@ const FIREBASE_CONFIG = {
 /* ===== Capa de datos =====
    localStorage es la copia local; con Firebase, add() y patch() además envían el registro a Firestore
    (ver bloque "Sincronización con Firebase"). */
+/* Guardar en este móvil sin romper nada si el almacenamiento está lleno o bloqueado */
+let sinEsp=false;
+function guardaLocal(k,v){try{localStorage.setItem(k,v);return true}catch(_){if(!sinEsp){sinEsp=true;setTimeout(()=>toast('Este móvil se ha quedado sin espacio para Origo. Exporta una copia desde Ajustes.',null,null,9000),0)}return false}}
 const Store={
-  ev:JSON.parse(localStorage.getItem('bebe.ev')||'[]'),
-  save(){localStorage.setItem('bebe.ev',JSON.stringify(this.ev));render()},
+  _ev:(()=>{try{const a=JSON.parse(localStorage.getItem('bebe.ev')||'[]');return Array.isArray(a)?a:[]}catch(_){return[]}})(),_l:null,
+  get ev(){return this._ev},set ev(v){this._ev=v;this._l=null},
+  /* touch(): avisa de que los registros han cambiado (invalida la lista ordenada en caché) */
+  touch(){this._l=null},
+  write(){this._l=null;return guardaLocal('bebe.ev',JSON.stringify(this._ev))},
+  save(){this.write();render()},
   add(e){e.id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);e.borrado=false;if(Sync.on&&Sync.uid)e.por=Sync.uid;this.ev.push(e);this.save();pushEv(e);return e},
-  patch(id,p){const e=this.ev.find(e=>e.id===id);Object.assign(e,p);this.save();pushEv(e)},
-  live(){return this.ev.filter(e=>!e.borrado).sort((a,b)=>b.inicio-a.inicio)}
+  patch(id,p){const e=this.ev.find(e=>e.id===id);if(!e)return;Object.assign(e,p);this.save();pushEv(e)},
+  /* Registros vivos, del más reciente al más antiguo. La lista se reutiliza hasta el siguiente cambio: no modificarla. */
+  live(){return this._l||(this._l=this.ev.filter(e=>!e.borrado).sort((a,b)=>b.inicio-a.inicio))}
 };
-let cfg=JSON.parse(localStorage.getItem('bebe.cfg')||'{}');
-const saveCfg=()=>{localStorage.setItem('bebe.cfg',JSON.stringify(cfg));pushCfg()};
+let cfg=(()=>{try{const c=JSON.parse(localStorage.getItem('bebe.cfg')||'{}');return c&&typeof c==='object'&&!Array.isArray(c)?c:{}}catch(_){return{}}})();
+const saveCfg=()=>{guardaLocal('bebe.cfg',JSON.stringify(cfg));pushCfg()};
 
 /* ===== Sincronización con Firebase (Firestore + Auth) =====
    Si FIREBASE_CONFIG está vacío, la app funciona como antes: solo en este dispositivo.
@@ -276,7 +288,7 @@ function mergeCfg(R){
   const ME=unflat(M),nc=decCfg(ME),old=JSON.stringify(cfg);let ch=false;
   Object.keys(cfg).forEach(k=>{if(!(k in nc)){delete cfg[k];ch=true}});
   Object.keys(nc).forEach(k=>{if(JSON.stringify(cfg[k])!==JSON.stringify(nc[k])){cfg[k]=nc[k];ch=true}});
-  localStorage.setItem('bebe.cfg',JSON.stringify(cfg));
+  guardaLocal('bebe.cfg',JSON.stringify(cfg));
   LS.set('origo.base',R);pushCfg();
   return ch&&old!==JSON.stringify(cfg);
 }
@@ -386,7 +398,7 @@ async function arrancar(fid,subirTodo){
       if(!cur){Store.ev.push(e);ch=true}else if(JSON.stringify(cur)!==je){Object.keys(cur).forEach(k=>{if(!(k in e))delete cur[k]});Object.assign(cur,e);ch=true}
       if(!c.doc.metadata.hasPendingWrites&&d.act&&d.act.toMillis)seen=Math.max(seen,d.act.toMillis())});
     LS.set('origo.seen',seen);Sync.estado=q.metadata.fromCache?'Sin conexión: se enviará al volver':'Sincronizado';
-    if(ch){localStorage.setItem('bebe.ev',JSON.stringify(Store.ev));softRender()}
+    if(ch){Store.write();softRender()}
   },fbErr));
 }
 async function iniciarFirebase(){
@@ -436,24 +448,38 @@ const nowHM=()=>hm(Date.now());
 let faseFija=null;
 const FASES=[[8*60,'amanecer'],[9*60,'dia'],[18*60+30,'atardecer'],[21*60,'noche']];
 function fase(){if(faseFija)return faseFija;const d=new Date(),m=d.getHours()*60+d.getMinutes();let f='noche';FASES.forEach(([h,n])=>{if(m>=h)f=n});return f}
-function theme(){const f=fase(),t=cfg.tema||'auto';document.documentElement.dataset.f=f;document.documentElement.classList.toggle('scn',document.body.classList.contains('scn'));
-  const dark=true;
-  document.documentElement.dataset.t=dark?'dark':'light';const m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue(document.body.classList.contains('hoy')?'--st':'--shg').trim()||'#0c1524'}
+function theme(){const f=fase();document.documentElement.dataset.f=f;document.documentElement.classList.toggle('scn',document.body.classList.contains('scn'));
+  document.documentElement.dataset.t='dark';const m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue(document.body.classList.contains('hoy')?'--st':'--shg').trim()||'#0c1524'}
 
 /* ===== Hoja inferior y avisos ===== */
 function sheet(html,onSave){
   $('sh').innerHTML=html+'<div class="row" style="margin-top:6px"><button class="sec" id="shx">Cancelar</button><button class="sec" id="shs" style="background:var(--acc);color:var(--on)">Guardar</button></div>';
-  $('ov').style.display='flex';$('toast').style.display='none';
+  shOpen();
   $('shx').onclick=closeSheet;
   $('shs').onclick=()=>{if(onSave()!==false)closeSheet()};
 }
+/* Abrir una hoja añade una entrada al historial: así el gesto «atrás» del móvil la cierra en vez de salir de la pantalla.
+   Si la hoja se cierra con un botón, la entrada queda «gastada» y el siguiente «atrás» la salta (ver popstate). */
+let atSh=false;
+function shOpen(){
+  $('ov').style.display='flex';$('toast').style.display='none';
+  if(!Sync.gate){if(!(history.state&&history.state.sh))history.pushState({sh:1,sub:!!(history.state&&history.state.sub)},'');atSh=true}
+  a11y($('sh'));$('sh').scrollTop=0;try{$('sh').focus({preventScroll:true})}catch(_){}
+}
+/* Los elementos pulsables que no son botones también se pueden usar con teclado y lector de pantalla */
+function a11y(r){r.querySelectorAll('[data-a]:not(button):not([tabindex])').forEach(x=>{x.tabIndex=0;if(!x.getAttribute('role'))x.setAttribute('role','button')})}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&$('ov').style.display==='flex'&&!Sync.gate)return closeSheet();
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[data-a]:not(button)')){e.preventDefault();e.target.click()}});
+const vibra=()=>{try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}};
 const closeSheet=()=>$('ov').style.display='none';
 $('ov').onclick=e=>{if(e.target===$('ov')&&!Sync.gate)closeSheet()};
 let tt,undoFn;
-function toast(msg,fn){$('tmsg').textContent=msg;$('toast').style.display='flex';undoFn=fn;clearTimeout(tt);tt=setTimeout(()=>$('toast').style.display='none',5000)}
+function toast(msg,fn,lbl,ms){$('tmsg').textContent=msg;$('toast').style.display='flex';undoFn=fn;$('undo').textContent=lbl||'Deshacer';$('undo').hidden=!fn;clearTimeout(tt);tt=setTimeout(()=>$('toast').style.display='none',ms||5000)}
 $('undo').onclick=()=>{if(undoFn)undoFn();$('toast').style.display='none'};
 function chips(id,opts,sel){return'<div class="chips" id="'+id+'">'+opts.map(([v,l])=>'<button type="button" data-v="'+v+'" class="'+(v===sel?'on':'')+'">'+l+'</button>').join('')+'</div>'}
-document.addEventListener('click',e=>{const b=e.target.closest('.chips button');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
+document.addEventListener('click',e=>{const b=e.target.closest('.chips button');if(!b)return;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  if(b.parentNode.id==='lt'&&$('tml')){const p=b.dataset.v==='pecho';$('tml').hidden=p;$('tpe').hidden=!p}});
 const chipVal=id=>document.querySelector('#'+id+' button.on')?.dataset.v;
 
 /* ===== Registros ===== */
@@ -462,10 +488,10 @@ const lastLeche=()=>{const t=Store.live().find(e=>e.tipo==='toma');return t?t.da
 function addEv(tipo,datos,inicio,msg){
   const dec=tipo==='panal'&&cfg.talla&&(cfg.stock||{})[cfg.talla]>0;
   if(dec){cfg.stock[cfg.talla]--;datos.talla=cfg.talla;saveCfg()}
-  const e=Store.add({tipo,inicio:inicio||Date.now(),fin:null,datos});
+  const e=Store.add({tipo,inicio:inicio||Date.now(),fin:null,datos});vibra();
   const tl=cfg.talla;toast(msg,()=>{Store.patch(e.id,{borrado:true});if(dec){cfg.stock[tl]++;saveCfg();render()}})}
 function toggleSueno(ts){
-  const S=Store.live().find(e=>e.tipo==='sueno'&&!e.fin),t=typeof ts==='number'?ts:Date.now();
+  const S=Store.live().find(e=>e.tipo==='sueno'&&!e.fin),t=typeof ts==='number'?ts:Date.now();vibra();
   if(S){Store.patch(S.id,{fin:t});toast('Sueño guardado: '+dur(t-S.inicio),()=>Store.patch(S.id,{fin:null}))}
   else{const e=Store.add({tipo:'sueno',inicio:t,fin:null,datos:{}});toast('Sueño iniciado',()=>Store.patch(e.id,{borrado:true}))}
 }
@@ -488,7 +514,8 @@ $('banb').onclick=toggleSueno;
 const LOGO_SRC='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTggMjQwIiB3aWR0aD0iMjU4IiBoZWlnaHQ9IjI0MCI+PHBhdGggZmlsbD0iIzI0NDQ2NyIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTI3LjMxIDE4Ny44MSAxMjYuMTkgMTg4LjAzIDEyNS40NCAxODguNDQgMTI0Ljk4IDE4OC44NSAxMjQuMTggMTkwLjA2IDEyMy45NCAxOTEuMzEgMTIzLjk0IDIzMS4zMSAxMjQuMDMgMjMyLjA2IDEyNC4zMCAyMzIuODEgMTI0Ljg0IDIzMy41NiAxMjUuNDQgMjM0LjEyIDEyNi4wNiAyMzQuNTMgMTI2LjY5IDIzNC43NCAxMjguNDQgMjM0LjgxIDEyOS41NiAyMzQuNTcgMTMwLjc3IDIzMy43NyAxMzEuNTUgMjMyLjY5IDEzMS44MSAyMzEuNTYgMTMxLjgxIDIwNS4zMSAxMzEuOTQgMjAzLjk0IDEzMS44MSAxOTIuOTQgMTMxLjkxIDE5MS41NiAxMzEuNzkgMTkwLjU2IDEzMS41NSAxODkuODEgMTMxLjAzIDE4OS4wNiAxMzAuNDQgMTg4LjQ5IDEyOS4zMSAxODcuOTFaTTcyLjMxIDE4OC40OCA3MS41MyAxODkuMjEgNzEuMDYgMTg5Ljk0IDcwLjgxIDE5MC42OSA3MC42OSAxOTEuNjkgNzAuNjkgMjE4Ljk0IDcwLjU2IDIyMC4zMSA3MC42OSAyMjEuOTQgNzAuNjkgMjMxLjQ0IDcwLjg2IDIzMi40NCA3MS4zMSAyMzMuMzAgNzEuOTUgMjMzLjk1IDcyLjY5IDIzNC40NCA3My40NCAyMzQuNzIgNzQuMTkgMjM0LjgxIDc2LjA2IDIzNC42NSA3Ni44MSAyMzQuMzAgNzcuNjUgMjMzLjY1IDc4LjIxIDIzMi45NCA3OC41NSAyMzIuMTkgNzguODEgMjMwLjA2IDc4LjY5IDIyMS44MSA3OC43OCAyMTkuMTkgNzguOTMgMjE4LjU2IDc5LjM0IDIxOC4wNiA4MC4xOSAyMTcuNzQgODUuNTYgMjE3LjY5IDg2LjQ0IDIxNy44MSA4Ny4wNiAyMTguMTAgODguMDQgMjE5LjA2IDg5Ljg2IDIyMS41NiA5Ni41NCAyMzEuNDQgOTguMDYgMjMzLjI2IDk5LjY5IDIzNC4zNyAxMDEuMzEgMjM0Ljg5IDEwMi45NCAyMzQuOTQgMTAzLjgxIDIzNC44MiAxMDUuMzEgMjM0LjE1IDEwNi4yMSAyMzMuMzEgMTA2LjgxIDIzMi4xOSAxMDYuOTAgMjMxLjA2IDEwNi41NSAyMjkuOTQgMTA1LjkxIDIyOS4xMCAxMDMuOTQgMjI3LjY5IDEwMi40NCAyMjYuMDYgOTguMDIgMjE5Ljk0IDk2LjQxIDIxNy41NiA5Ni4xNCAyMTYuODEgOTYuMzAgMjE2LjMyIDk2LjY5IDIxNS45MyA5OS42OSAyMTQuMjIgMTAxLjg2IDIxMi4zMCAxMDMuNTcgMjA5Ljk0IDEwNC43MiAyMDcuMzEgMTA1LjMxIDIwMy42OSAxMDUuMzEgMjAxLjY5IDEwNC45MCAxOTguODEgMTA0LjQwIDE5Ny4zMSAxMDMuNjIgMTk1LjU2IDEwMi44NSAxOTQuMzEgMTAxLjA2IDE5Mi4yMSA5OS40NCAxOTAuODEgOTguMzEgMTkwLjA2IDk2LjA2IDE4OC45NyA5NC44MSAxODguNTMgOTMuMDYgMTg4LjExIDkwLjU2IDE4Ny44MSA3NC40NCAxODcuODEgNzMuMzEgMTg3Ljk4Wk03OC45NyAxOTUuOTQgNzkuNTYgMTk1LjM4IDgwLjQ0IDE5NS4xOSA4OC45NCAxOTUuMTkgOTAuODEgMTk1LjQ2IDkyLjk0IDE5Ni4wOSA5My45NCAxOTYuNjMgOTUuMDYgMTk3LjU2IDk1LjkxIDE5OC41NiA5Ni40NyAxOTkuNTYgOTYuOTUgMjAwLjgxIDk3LjE5IDIwMi41NiA5Ny4wMiAyMDQuMzEgOTYuNjYgMjA1LjU2IDk1LjkwIDIwNy4wNiA5NS4xOSAyMDcuOTQgOTQuMDYgMjA4LjkxIDkyLjMxIDIwOS44MiA5MC44MSAyMTAuMzEgODkuODEgMjEwLjQ0IDgwLjQ0IDIxMC40NCA3OS40NCAyMTAuMTggNzguODkgMjA5LjU2IDc4LjY5IDIwOC41NiA3OC42OSAxOTkuNDQgNzguNzkgMTk4LjMxIDc4LjcwIDE5Ni45NFpNMjI2Ljk0IDE4Ny4xOSAyMjQuMTkgMTg3LjQ5IDIyMS4zMSAxODguMDYgMjE5LjgxIDE4OC40OCAyMTcuMTkgMTg5LjUzIDIxNC40NCAxOTEuMDkgMjEyLjY5IDE5Mi4zMSAyMDkuOTQgMTk0LjY5IDIwNy42OCAxOTcuMzEgMjA2LjQ0IDE5OS4xOSAyMDUuMzEgMjAxLjQ0IDIwNC4xMiAyMDQuNDQgMjAzLjYwIDIwNi40NCAyMDMuMTggMjA4Ljk0IDIwMy4wNiAyMTEuNTYgMjAzLjE5IDIxMy42OSAyMDMuNjAgMjE2LjQ0IDIwNC4xMyAyMTguNjkgMjA1LjY1IDIyMi40NCAyMDYuODkgMjI0LjU2IDIwOC40NyAyMjYuNjkgMjA5Ljg3IDIyOC4zMSAyMTEuNjkgMjI5Ljk5IDIxMy41NiAyMzEuMzYgMjE2LjE5IDIzMi45MCAyMTguMTkgMjMzLjc5IDIyMC41NiAyMzQuNjEgMjIzLjk0IDIzNS4zNyAyMjYuMTkgMjM1LjU2IDIyOS44MSAyMzUuNTYgMjMyLjQ0IDIzNS4yNiAyMzUuMDYgMjM0LjcwIDIzNy44MSAyMzMuODAgMjM5LjY5IDIzMi45NyAyNDEuNTYgMjMxLjkwIDI0My4zMSAyMzAuNzAgMjQ0Ljk0IDIyOS4zNiAyNDYuNjkgMjI3LjY5IDI0OC4wNiAyMjYuMDYgMjQ5LjE2IDIyNC40NCAyNTAuMjIgMjIyLjU2IDI1MS43OSAyMTkuMTkgMjUyLjc2IDIxNS42OSAyNTMuMDYgMjEyLjQ0IDI1My4wNiAyMTAuNDQgMjUyLjg1IDIwNy45NCAyNTIuNTUgMjA2LjE5IDI1MS43NyAyMDMuMzEgMjUwLjcyIDIwMC44MSAyNDkuNTUgMTk4LjY5IDI0OC40MyAxOTcuMDYgMjQ3LjIzIDE5NS41NiAyNDUuNDQgMTkzLjc3IDI0Mi45NCAxOTEuNzEgMjQxLjA2IDE5MC40MSAyMzcuNjkgMTg4Ljg5IDIzNC45NCAxODguMDcgMjMyLjA2IDE4Ny41MSAyMjkuMzEgMTg3LjE5Wk0yMjYuNjkgMTk0Ljc2IDIyOS42OSAxOTQuNzYgMjMzLjMxIDE5NS41MiAyMzYuMzEgMTk2Ljc4IDIzOS4wNiAxOTguNjAgMjQwLjI4IDE5OS42OSAyNDEuNDQgMjAxLjA2IDI0Mi45OSAyMDMuNDQgMjQ0LjIzIDIwNi4zMSAyNDQuNzAgMjA3Ljk0IDI0NC45NiAyMDkuNTYgMjQ1LjA2IDIxMS41NiAyNDQuODYgMjEzLjk0IDI0NC41NiAyMTUuNDQgMjQzLjYxIDIxOC4zMSAyNDIuODAgMjE5LjgxIDI0MS45MyAyMjEuMDYgMjM5LjMxIDIyNC4wMSAyMzcuOTQgMjI1LjE4IDIzNi44MSAyMjUuOTQgMjM1LjMxIDIyNi42OSAyMzMuODEgMjI3LjIzIDIzMC40NCAyMjcuOTggMjI2LjU2IDIyOC4wNiAyMjMuODEgMjI3LjU3IDIyMS4wNiAyMjYuNjAgMjE5LjMxIDIyNS43MCAyMTcuNTYgMjI0LjU3IDIxNS45NCAyMjMuMTkgMjE0Ljg3IDIyMi4wNiAyMTMuMDUgMjE5LjQ0IDIxMi4xMSAyMTcuMzEgMjExLjEzIDIxMy42OSAyMTEuMTMgMjA5LjU2IDIxMi4wMyAyMDUuOTQgMjEzLjE4IDIwMy4zMSAyMTUuMjYgMjAwLjQ0IDIxNS45NCAxOTkuNjkgMjE3LjU2IDE5OC4zMCAyMjAuNjkgMTk2LjQwIDIyMy4zMSAxOTUuNDBaTTE2OS4xOSAxODcuMTkgMTY3LjA2IDE4Ny40NiAxNjMuNTYgMTg4LjI5IDE2MS4zMSAxODkuMTAgMTU5LjU2IDE4OS45MCAxNTcuNTYgMTkxLjEzIDE1NS45NCAxOTIuMzQgMTU0LjA2IDE5My45NCAxNTIuMzggMTk1LjY5IDE1MS4yMyAxOTcuMTkgMTQ5LjQ4IDIwMC4xOSAxNDguMDIgMjAzLjk0IDE0Ny40NiAyMDYuMDYgMTQ3LjAyIDIwOC41NiAxNDYuOTQgMjEzLjE5IDE0Ny4zNCAyMTYuMDYgMTQ3LjkxIDIxOC4zMSAxNDguNTkgMjIwLjMxIDE0OS41MyAyMjIuNTYgMTUwLjM0IDIyNC4wNiAxNTEuOTYgMjI2LjQ0IDE1Mi45NCAyMjcuNTYgMTU1LjE5IDIyOS43NiAxNTYuOTQgMjMxLjExIDE1OC40NCAyMzIuMDYgMTYxLjE5IDIzMy40MSAxNjIuNjkgMjMzLjk4IDE2NC45NCAyMzQuNjggMTY3LjQ0IDIzNS4xMiAxNjkuMTkgMjM1LjMxIDE3MS45NCAyMzUuMzEgMTc1Ljk0IDIzNC43OSAxNzcuNTYgMjM0LjM2IDE4MC4xOSAyMzMuNDQgMTgyLjgxIDIzMi4yMiAxODQuMDYgMjMxLjQ4IDE4NS45NCAyMzAuMTkgMTg2Ljk0IDIyOS4zNyAxODcuODEgMjI4LjQ0IDE4OC42OSAyMjYuOTQgMTg4Ljk0IDIyNS42OSAxODkuMDYgMjIyLjk0IDE4OC45NCAyMTkuOTQgMTg4Ljk0IDIxMi42OSAxODguNzYgMjExLjU2IDE4OC4yMyAyMTAuNTYgMTg3LjMxIDIwOS43NyAxODYuMDYgMjA5LjM1IDE3Mi44MSAyMDkuMTkgMTcxLjA2IDIwOS41MSAxNzAuNDQgMjA5Ljg0IDE2OS43MSAyMTAuNDUgMTY5LjE4IDIxMS4xOSAxNjguOTAgMjExLjk0IDE2OC44NiAyMTMuNjkgMTY5LjMxIDIxNC45NCAxNjkuODIgMjE1LjUzIDE3MC40NCAyMTUuOTggMTcxLjA2IDIxNi4yNyAxNzIuMDYgMjE2LjQ0IDE3OS45NCAyMTYuNTkgMTgwLjY0IDIxNi44OSAxODEuMDMgMjE3LjQ0IDE4MS4xOCAyMTguMTkgMTgxLjA2IDIxOS41NiAxODEuMTAgMjIzLjQ0IDE4MC44NyAyMjQuMzEgMTgwLjMxIDIyNS4wMSAxNzkuMzEgMjI1LjcwIDE3Ny44MSAyMjYuNDEgMTc1LjgxIDIyNy4wOSAxNzMuMzEgMjI3LjYxIDE3MC44MSAyMjcuNzkgMTY4LjE5IDIyNy40OSAxNjUuNjkgMjI2Ljg5IDE2My4zMSAyMjUuODcgMTYxLjQ0IDIyNC42OSAxNTkuNTYgMjIyLjk0IDE1OC4xOCAyMjEuMzEgMTU3LjE4IDIxOS44MSAxNTYuMTkgMjE3LjgxIDE1NS4xOCAyMTQuNTYgMTU0Ljk0IDIxMi45NCAxNTUuMDIgMjA5LjE5IDE1NS44OSAyMDUuNjkgMTU2Ljc4IDIwMy41NiAxNTguNTYgMjAwLjgxIDE2MC4zMSAxOTguOTQgMTYyLjA2IDE5Ny40OSAxNjQuMzEgMTk2LjI2IDE2Ni42OSAxOTUuNDAgMTY5LjE5IDE5NC44OSAxNzEuNDQgMTk0Ljc2IDE3Mi45NCAxOTQuODggMTc1LjMxIDE5NS4zMCAxNzcuODEgMTk2LjE4IDE4MS40NCAxOTguMDcgMTgyLjU2IDE5OC4zNiAxODMuOTQgMTk4LjE0IDE4NC45NCAxOTcuNjMgMTg2LjA5IDE5Ni41NiAxODYuNzYgMTk1LjMxIDE4Ni45MCAxOTQuNTYgMTg2Ljg1IDE5My44MSAxODYuMjQgMTkyLjU2IDE4NC42OSAxOTEuMTIgMTgyLjE5IDE4OS42NSAxNzguOTQgMTg4LjM5IDE3NS41NiAxODcuNjEgMTcyLjMxIDE4Ny4xOVpNMjguODEgMTg2Ljk0IDI0LjMxIDE4Ny40NiAyMS4xOSAxODguMjcgMTkuNDQgMTg4Ljk0IDE3LjQ0IDE4OS45MCAxNS41NiAxOTEuMDIgMTMuOTQgMTkyLjI0IDExLjQ0IDE5NC40NCA5LjcyIDE5Ni40NCA4LjM1IDE5OC40NCA3LjQwIDIwMC4xOSA2LjEyIDIwMy4zMSA1LjQ0IDIwNS41NiA1LjE0IDIwNy4wNiA0LjgxIDIxMC4zMSA0LjgxIDIxMi42OSA1LjAxIDIxNC41NiA1LjQ1IDIxNi45NCA2LjI5IDIxOS42OSA3LjQwIDIyMi4zMSA4LjIxIDIyMy44MSA5LjMwIDIyNS40NCAxMC42OSAyMjcuMDYgMTIuNTYgMjI4Ljk0IDE0LjMxIDIzMC40NCAxNi4zMSAyMzEuODAgMTguMDYgMjMyLjc4IDIwLjMxIDIzMy43OSAyMi40NCAyMzQuNDcgMjQuNjkgMjM0Ljk5IDI5LjY5IDIzNS40NCAzMi45NCAyMzUuMjEgMzQuOTQgMjM0Ljg5IDM2LjU2IDIzNC40OCAzOS41NiAyMzMuNDQgNDEuMzEgMjMyLjY1IDQ0LjU2IDIzMC43MyA0Ni4xOSAyMjkuNTEgNDguMjcgMjI3LjU2IDQ5LjY5IDIyNS45NCA1MC45MSAyMjQuMTkgNTEuOTcgMjIyLjMxIDUzLjI5IDIxOS4zMSA1NC4yMCAyMTYuNDQgNTQuNzMgMjEzLjU2IDU0LjgxIDIwOS45NCA1NC42MiAyMDguMzEgNTQuMDcgMjA1LjU2IDUzLjM3IDIwMy4xOSA1Mi4zNSAyMDAuNjkgNTEuNDEgMTk4Ljk0IDUwLjE4IDE5Ny4wNiA0OC4zMSAxOTQuODEgNDUuMzEgMTkyLjE5IDQyLjgxIDE5MC40NSA0MC44MSAxODkuMzUgMzguNjkgMTg4LjQ2IDM3LjA2IDE4Ny45NSAzMy45NCAxODcuMjZaTTI2LjgxIDE5NC42MSAyOC4zMSAxOTQuNDQgMzAuOTQgMTk0LjQ0IDMzLjU2IDE5NC44NiAzNS4xOSAxOTUuMjcgMzYuNjkgMTk1Ljg0IDM5LjA2IDE5Ny4xMSA0MS4xOSAxOTguODEgNDMuNDUgMjAxLjMxIDQ0LjU1IDIwMi45NCA0NS4zNSAyMDQuNDQgNDYuMzEgMjA3LjA2IDQ2LjYwIDIwOC42OSA0Ni43OSAyMTEuMDYgNDYuNjMgMjEyLjk0IDQ2LjAxIDIxNi4wNiA0NC42NiAyMTkuMDYgNDIuNzcgMjIxLjgxIDQxLjA2IDIyMy42MSAzOS44MSAyMjQuNzAgMzguMDYgMjI1LjgyIDM2Ljk0IDIyNi4zNyAzNC4wNiAyMjcuMzEgMzAuNTYgMjI3LjgxIDI5LjA2IDIyNy44MSAyNy4xOSAyMjcuNjEgMjQuMTkgMjI2Ljk4IDIyLjY5IDIyNi40MSAyMC45NCAyMjUuNTYgMTkuNDQgMjI0LjU2IDE4LjQ0IDIyMy42OSAxNS45NSAyMjAuOTQgMTQuNDAgMjE4LjQ0IDEzLjY0IDIxNi41NiAxMy4yMCAyMTUuMDYgMTIuODEgMjEyLjE5IDEyLjgxIDIxMC42OSAxMy4xMyAyMDguMDYgMTMuNDMgMjA2LjU2IDE0LjA3IDIwNC41NiAxNS4zOSAyMDIuMDYgMTcuMDYgMTk5Ljk0IDE4LjgxIDE5OC4yNCAxOS45NCAxOTcuMzkgMjIuMDYgMTk2LjE1IDIzLjMxIDE5NS41OVpNMTEyLjY5IDgyLjY5IDExMi43OSA4My41NiAxMTMuMDUgODQuMzEgMTE0LjA2IDg1Ljk0IDExNS44MSA4Ny44MSAxMTcuNTYgODkuMjIgMTE5LjgxIDkwLjYyIDEyMi4xOSA5MS42MSAxMjQuMzEgOTIuMTQgMTI2LjU2IDkyLjQ0IDEyOS42OSA5Mi4yNiAxMzIuMTkgOTEuNzIgMTM0LjQ0IDkwLjg1IDEzNi4zMSA4OS43NyAxMzguNTYgODcuOTQgMTM5Ljg0IDg2LjQ0IDE0MC44MiA4NC44MSAxNDEuMjkgODMuMDYgMTQxLjEzIDgxLjk0IDE0MC42MiA4MC45NSAxMzkuNjkgODAuMjAgMTM4LjU2IDc5Ljk0IDEzNy40NCA4MC4wNSAxMzYuNTYgODAuNTIgMTM0LjA2IDgzLjMxIDEzMi41NiA4NC40NSAxMzAuNDQgODUuMzggMTI4LjMxIDg1Ljg1IDEyNy4zMSA4NS45NCAxMjUuMzEgODUuNjYgMTIzLjY5IDg1LjI0IDEyMi4xOSA4NC42NCAxMjAuOTQgODMuODkgMTE5Ljk0IDgzLjA2IDExNy42OSA4MC40OCAxMTcuMDYgODAuMDUgMTE2LjMxIDc5Ljc4IDExNS4wNiA3OS44MCAxMTMuODEgODAuMzkgMTEyLjk4IDgxLjQ0Wk0xNDguNjYgNy42OCAxNDcuODEgNy4yNCAxNDMuMTkgNi4xOCAxMzcuODEgNS4zOSAxMjkuNTYgNC44MSAxMjMuNjkgNC44MSAxMTUuNDQgNS40MSAxMDkuODEgNi4yMyAxMDMuMzEgNy42OCA5OC40NCA5LjE0IDk1LjE5IDEwLjI3IDg4LjQ0IDEzLjA2IDgzLjU2IDE1LjQ1IDc2Ljk0IDE5LjM5IDcwLjk0IDIzLjcwIDY2LjgxIDI3LjE1IDYzLjQ0IDMwLjMxIDU4Ljg5IDM1LjMxIDU0LjcwIDQwLjU2IDUwLjcyIDQ2LjU2IDQ4LjkwIDQ5LjgxIDQ3LjQwIDUyLjgxIDQ1LjMwIDU3LjU2IDQzLjIzIDYzLjE5IDQxLjcyIDY4LjgxIDQwLjUyIDc1LjQ0IDM5LjgxIDgzLjE5IDM5LjgxIDg2LjMxIDQwLjI4IDkyLjU2IDQxLjIxIDk4LjQ0IDQyLjQwIDEwMy42OSA0NC4zNCAxMDkuNjkgNDcuMzUgMTE2LjY5IDUwLjIwIDEyMS44MSA1MS44OSAxMjQuNDQgNTQuMDcgMTI3LjQ0IDU2LjQzIDEzMC4zMSA1Ny40NCAxMzEuMjcgNTguNDQgMTMxLjc2IDYyLjY5IDEzMi43OCA2Ni4xOSAxMzMuMzcgNzAuMTkgMTMzLjgxIDc2LjA2IDEzMy43MyA3OS41NiAxMzMuMTYgODMuNTYgMTMyLjMwIDg2Ljk0IDEzMS4zOSA4OS40NCAxMzAuNDMgOTIuMTkgMTI5LjIyIDk4LjgxIDEyNS44NSAxMDQuNjkgMTIyLjUxIDEwOC45NCAxMTkuNDAgMTEwLjI2IDExOC4xOSAxMTAuNTUgMTE3LjY5IDExMC42NSAxMTcuMTkgMTEwLjI3IDExNi4zMSAxMDcuMzEgMTEzLjU2IDEwNC45NCAxMTEuMTkgMTAzLjM4IDEwOS40NCAxMDAuNzkgMTA2LjA2IDk4LjIxIDEwMi4wNiA5Ni4yMiA5OC40NCA5NS4yMCA5Ni4xOSA5My44OSA5Mi45NCA5Mi4wNyA4Ny40NCA5MS40NiA4NC45NCA5MC43NyA4MC42OSA5MC4zMSA3NS4wNiA5MC4zMSA3MC40NCA5MC43OCA2NC42OSA5MS4zNCA2MS40NCA5Mi4xNSA1OC4xOSA5My4yMyA1NC42OSA5NS4wOSA0OS42OSA5Ni4xNSA0Ny4zMSA5Ny40NCA0NC44MSAxMDEuMTQgMzguNjkgMTA0LjA5IDM0LjY5IDEwNy40NCAzMC44MSAxMTEuMTkgMjcuMDYgMTEzLjgxIDI0Ljc2IDExNi41NiAyMi41NyAxMjAuMDYgMjAuMTIgMTIzLjA2IDE4LjMxIDEyNi45NCAxNi4yOCAxMzEuNTYgMTQuMjAgMTM3LjQ0IDEyLjE1IDE0MC41NiAxMS4zNCAxNDcuNjkgMTAuMDcgMTQ4LjMxIDkuODcgMTQ4Ljk3IDkuMzkgMTQ5LjI0IDguODEgMTQ5LjEyIDguMjBaIi8+PHBhdGggZmlsbD0iIzgzQURBMSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMjE3LjQ1IDExMi4zMSAyMTcuMDcgMTExLjU2IDIxNi40OSAxMTAuODEgMjE0Ljk0IDEwOS4yNyAyMTIuNjkgMTA3LjQzIDIwNy42OSAxMDMuOTcgMjA0LjMxIDEwMi4wMyAyMDAuOTQgMTAwLjQ3IDE5NS42OSA5OC41MiAxOTAuODEgOTcuMTggMTg3LjU2IDk2LjQ2IDE4MC4zMSA5NS41NiAxNzcuMzEgOTUuNDQgMTcyLjQ0IDk1LjU2IDE2OS4zMSA5NS44OCAxNjUuODEgOTYuNDYgMTYwLjE5IDk3LjcwIDE1NC45NCA5OS4zNCAxNTAuNDQgMTAxLjE5IDE0Ni42OSAxMDIuOTAgMTQyLjA2IDEwNS4zMSAxMzguMzEgMTA3LjY0IDEzMS41NiAxMTIuMzAgMTIxLjA2IDEyMC41OSAxMTUuNjkgMTI1LjA0IDExMi4xOSAxMjcuNjMgMTA1Ljk0IDEzMS43NyAxMDIuOTQgMTMzLjU1IDEwMC40NCAxMzQuODUgOTQuMzEgMTM3LjY5IDkwLjY5IDEzOC45OCA4OC4xOSAxMzkuNjkgODQuMzEgMTQwLjU2IDgwLjMxIDE0MS4yMyA3Ny42OSAxNDEuNDQgNzIuODEgMTQxLjQ0IDY1LjMxIDE0MC42OSA2NC44MSAxNDAuNzcgNjQuMzggMTQxLjAyIDY0LjE0IDE0MS40NCA2NC4xNSAxNDEuODEgNjQuNDAgMTQyLjI5IDY0Ljk0IDE0Mi44NiA2Ni41NiAxNDQuMTggNjguODEgMTQ1Ljc2IDcxLjgxIDE0Ny41NyA3Ni4xOSAxNDkuODEgNzguOTQgMTUwLjg5IDgyLjA2IDE1MS44MCA4NS42OSAxNTIuNjMgODkuOTQgMTUzLjE5IDk2LjMxIDE1My4xOSAxMDAuMzEgMTUyLjg1IDEwMy4xOSAxNTIuNDEgMTA4LjY5IDE1MS4wOSAxMTMuMzEgMTQ5LjU0IDExNy4wNiAxNDguMDUgMTIyLjQ0IDE0NS40MSAxMjcuMDYgMTQyLjc5IDEzMi44MSAxMzkuMTEgMTM2LjA2IDEzNi44MSAxNTAuNTYgMTI2LjAzIDE1Ni42OSAxMjEuOTYgMTYzLjA2IDExOC4zMCAxNjUuMzEgMTE3LjE1IDE2OS44MSAxMTUuMjAgMTc0LjY5IDExMy4zOSAxNzguNTYgMTEyLjMyIDE4My42OSAxMTEuMjMgMTkxLjA2IDExMC4zMSAxOTcuMDYgMTEwLjMxIDIwNC42OSAxMTEuMDIgMjA5LjMxIDExMS45NSAyMTYuMTkgMTEzLjcyIDIxNi44MSAxMTMuNjEgMjE3LjIzIDExMy4yOCAyMTcuNDYgMTEyLjgxWiIvPjxwYXRoIGZpbGw9IiNFREIyOTIiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTIxNy4xNSAxMjguMDYgMjE2Ljg2IDEyNy42MCAyMTYuMzEgMTI3LjExIDIxNC44MSAxMjYuMjAgMjEyLjU2IDEyNS4wNiAyMTAuMTkgMTI0LjE0IDIwNi41NiAxMjMuMDkgMjAyLjk0IDEyMi4zNyAxOTguOTQgMTIxLjc4IDE5Ni41NiAxMjEuNTYgMTkxLjA2IDEyMS41NiAxODguODEgMTIxLjc5IDE4NC42OSAxMjIuMzcgMTgxLjA2IDEyMy4wNyAxNzYuNjkgMTI0LjI3IDE3MS41NiAxMjYuMDkgMTY5LjU2IDEyNi45NSAxNjUuMDYgMTI5LjEwIDE2MS41NiAxMzEuMDkgMTUzLjgxIDEzNi4xNSAxNDcuNjkgMTQwLjU3IDEzOC40NCAxNDcuNTkgMTM1LjMxIDE0OS43MyAxMzEuMTkgMTUyLjI5IDEyNC40NCAxNTUuNzYgMTIwLjgxIDE1Ny40MyAxMTYuOTQgMTU4Ljg2IDExMS40NCAxNjAuNTMgMTEwLjk0IDE2MC45NiAxMTAuODggMTYxLjU0IDExMS40NCAxNjIuMDIgMTEyLjQ0IDE2Mi4xOSAxMjEuMDYgMTYyLjMxIDEyNy40NCAxNjEuNjIgMTMxLjY5IDE2MC44MSAxMzQuNjkgMTU5Ljk3IDEzOC4wNiAxNTguODAgMTQyLjk0IDE1Ni44MCAxNDkuNjkgMTUzLjI5IDE1NS41NiAxNDkuNzQgMTY2LjQ0IDE0Mi4zOSAxNzAuNTYgMTM5Ljg1IDE3OC4zMSAxMzUuNTEgMTgzLjQ0IDEzMy4yMSAxODguMzEgMTMxLjUyIDE5Mi42OSAxMzAuMzAgMTk4Ljk0IDEyOS4xMiAyMDIuOTQgMTI4LjY5IDIwOC44MSAxMjguNjkgMjEyLjk0IDEyOS4wMSAyMTUuOTQgMTI5LjUyIDIxNi41NiAxMjkuMzUgMjE2Ljk4IDEyOS4wMiAyMTcuMjEgMTI4LjU2Wk0xOTIuNjkgMjguNTIgMTkyLjE5IDI4LjYwIDE5MS40NSAyOC45NiAxOTAuODAgMjkuNTcgMTkwLjM4IDMwLjE5IDE4OS44OSAzMS4zMSAxODguNzMgMzUuNDQgMTg4LjA0IDM3LjE5IDE4Ny4xMyAzOC44MSAxODYuMzAgMzkuNzcgMTg1LjA2IDQwLjY0IDE4My4wNiA0MS41MiAxNzYuOTQgNDMuNDcgMTc2LjA2IDQ0LjAyIDE3NS42MyA0NC40NSAxNzUuMjQgNDUuMDYgMTc1LjExIDQ1LjY5IDE3NS4xOCA0Ni4xOSAxNzUuNDMgNDYuNjkgMTc1Ljk0IDQ3LjI4IDE3Ni41NiA0Ny43MyAxODMuOTQgNTAuNDYgMTg1LjE5IDUxLjA5IDE4Ni4zOCA1Mi4wOSAxODcuMTggNTMuMTkgMTg4LjA1IDU1LjA2IDE4OS4zOSA1OS42OSAxOTAuMjIgNjEuOTQgMTkwLjYzIDYyLjU2IDE5MS4xOSA2My4xMSAxOTEuODEgNjMuNDggMTkyLjQ0IDYzLjY0IDE5My4xOSA2My41NCAxOTMuODEgNjMuMjYgMTk0LjUzIDYyLjY4IDE5NC45OCA2Mi4wNiAxOTUuNjQgNjAuNTYgMTk3LjA5IDU1LjY5IDE5OC4xMyA1My40NCAxOTguODggNTIuNDYgMjAwLjE5IDUxLjM2IDIwMi40NCA1MC4xNSAyMDguNjkgNDcuNzQgMjA5Ljc0IDQ2LjgxIDIxMC4xNiA0NS44MSAyMTAuMTEgNDUuMTkgMjA5LjkwIDQ0LjY5IDIwOS41NCA0NC4yMiAyMDguOTQgNDMuNzYgMjA3LjQ0IDQzLjEzIDIwMi44MSA0MS43OCAyMDAuNDQgNDAuNjkgMTk5LjE5IDM5Ljc4IDE5OC4yMCAzOC41NiAxOTcuMDYgMzYuMzEgMTk2LjI3IDM0LjE5IDE5NS4zOCAzMS4xOSAxOTQuODEgMjkuOTQgMTk0LjM3IDI5LjM1IDE5My44MSAyOC44OCAxOTMuMTkgMjguNTlaIi8+PC9zdmc+';
 const LOGO=h=>'<img src="'+LOGO_SRC+'" height="'+h+'" alt="Origo" style="display:block;height:'+h+'px;width:auto">';
 const MARK_SRC='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjYgMTEyIiB3aWR0aD0iMTI2IiBoZWlnaHQ9IjExMiI+PHBhdGggZmlsbD0iIzI0NDQ2NyIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNNTIuMDYgNTUuNTYgNTIuMzYgNTYuNjkgNTMuMjAgNTcuOTQgNTQuMzEgNTkuMTIgNTUuODEgNjAuMjYgNTYuODEgNjAuODUgNTguNTYgNjEuNjMgNjAuMTkgNjIuMDEgNjEuOTQgNjIuMTkgNjQuMDYgNjEuOTkgNjUuMzEgNjEuNzMgNjcuMTkgNjAuOTcgNjguMTkgNjAuMzggNjkuNjkgNTkuMTggNzAuNDYgNTguMzEgNzEuMjIgNTcuMDYgNzEuNjUgNTUuODEgNzEuNTEgNTQuOTQgNzEuMTIgNTQuMzUgNzAuNDQgNTMuODQgNjkuNjkgNTMuNjUgNjkuMDYgNTMuNzcgNjguNDQgNTQuMTMgNjYuODEgNTUuODEgNjUuNjkgNTYuNzAgNjQuMTkgNTcuMzYgNjMuMDYgNTcuNjQgNjEuMDYgNTcuNjMgNTguNjkgNTYuOTAgNTcuMTkgNTUuODkgNTUuMzEgNTMuOTYgNTQuNDQgNTMuNTQgNTMuNjkgNTMuNTUgNTIuODIgNTQuMDIgNTIuMjcgNTQuNjlaTTc2LjU0IDMuOTEgNzUuNjkgMy40OSA3NC41NiAzLjIxIDY5LjE5IDIuMjkgNjQuMzEgMS45NCA1OS4wNiAxLjk0IDUzLjMxIDIuMzggNDguNDQgMy4yMSA0NC4xOSA0LjI4IDM4LjMxIDYuMzEgMzIuMTkgOS4xNSAyNy4wNiAxMi4yMyAyMy44MSAxNC41NyAyMC42OSAxNy4xNCAxOC4wMSAxOS42OSAxNS4zNyAyMi41NiAxMi40NCAyNi4xOSA5LjQ1IDMwLjY5IDguMjYgMzIuODEgNi4xOCAzNy4xOSA0LjM3IDQxLjk0IDMuMzQgNDUuNjkgMi4zOCA1MC45NCAxLjk0IDU3LjA2IDIuMjggNjIuMzEgMy4yMyA2Ny44MSA0LjI2IDcxLjY5IDUuMjIgNzQuNDQgNy4xMiA3OC44MSA4Ljc0IDgxLjgxIDExLjQzIDg1LjgxIDEzLjAxIDg3LjgxIDEzLjgxIDg4LjYzIDE0LjgxIDg5LjIxIDE2Ljk0IDg5Ljc5IDIyLjk0IDkwLjY5IDI2LjgxIDkwLjYyIDMxLjgxIDg5LjY1IDM1LjY5IDg4LjQ1IDQxLjU2IDg1LjYwIDQ2LjY5IDgyLjc2IDQ5LjA2IDgxLjAzIDUwLjE0IDgwLjA2IDUwLjQ5IDc5LjMxIDUwLjIzIDc4LjU2IDQ3LjAxIDc1LjQ0IDQ1Ljc2IDc0LjA2IDQzLjY0IDcxLjMxIDQxLjg0IDY4LjQ0IDQwLjI4IDY1LjQ0IDM5LjMyIDYzLjE5IDM4LjE1IDU5LjgxIDM3LjQzIDU3LjA2IDM3LjAyIDU0LjY5IDM2LjY5IDUwLjgxIDM2LjY5IDQ2LjY5IDM2LjgxIDQ0LjgxIDM3LjMyIDQwLjk0IDM4LjE1IDM3LjY5IDM5LjEyIDM0LjgxIDQwLjA2IDMyLjQ0IDQxLjI0IDI5Ljk0IDQ0LjUzIDI0LjU2IDQ2LjYzIDIxLjgxIDQ4Ljk0IDE5LjE5IDUyLjk0IDE1LjQ5IDU1LjA2IDEzLjg0IDU3LjQ0IDEyLjIwIDYyLjgxIDkuMjggNjUuMzEgOC4yMSA2OC4zMSA3LjE1IDcxLjgxIDYuMjIgNzYuMTkgNS40MCA3Ni43MyA1LjAyIDc2Ljg5IDQuNjkgNzYuODYgNC4zMloiLz48cGF0aCBmaWxsPSIjODRBRUEyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMjMuODggNzUuODEgMTIzLjQzIDc0Ljk4IDEyMi4wNiA3My42NSAxMjAuNTYgNzIuNDMgMTE3LjMxIDcwLjE4IDExMy41NiA2OC4xOCAxMTEuMzEgNjcuMjEgMTA4LjY5IDY2LjI4IDEwNC41NiA2NS4yMSA5OC4xOSA2NC4zMSA5My40NCA2NC4zMSA5MS41NiA2NC41MSA4Ny4zMSA2NS4yMiA4My40NCA2Ni4xNSA4MC4wNiA2Ny4zMiA3NS40NCA2OS40MCA3Mi4wNiA3MS4xOCA2OC45NCA3My4xNCA2NC4zMSA3Ni40MyA1NC40NCA4NC4zOCA1MS40NCA4Ni42MSA0NS4wNiA5MC42OCAzOS44MSA5My4xOCAzOC4wNiA5My44OSAzNC45NCA5NC44MiAzMC4zMSA5NS43NCAyOC41NiA5NS45NCAyNC4xOSA5NS45NCAxOS44MSA5NS40NCAxOS4xMyA5NS42OCAxOC45NCA5NS45NSAxOC45MSA5Ni4zMCAxOS4yNCA5Ni44NSAyMC4wNiA5Ny41NCAyMy41NiA5OS45MSAyNy4zMSAxMDEuODQgMjkuODEgMTAyLjcyIDM0LjA2IDEwMy43MyAzNy41NiAxMDQuMDYgNDEuOTQgMTAzLjk0IDQ1LjE5IDEwMy41NCA0OC40NCAxMDIuODAgNTEuODEgMTAxLjczIDU2LjE5IDk5Ljk0IDU4Ljk0IDk4LjU1IDYzLjU2IDk1LjgyIDY3LjA2IDkzLjQ2IDc3Ljk0IDg1LjM4IDgxLjY5IDgyLjg2IDg2LjA2IDgwLjMwIDg4LjMxIDc5LjEzIDkzLjQ0IDc3LjAyIDk2LjA2IDc2LjE5IDEwMC4xOSA3NS4yMiAxMDQuNDQgNzQuNjUgMTA3LjA2IDc0LjQ0IDExMC42OSA3NC41NiAxMTUuNDQgNzUuMDEgMTE5LjE5IDc1LjgyIDEyMi44MSA3Ni43OCAxMjMuMTkgNzYuNzcgMTIzLjYyIDc2LjU2IDEyMy44NyA3Ni4xOFoiLz48cGF0aCBmaWxsPSIjRUVCMzkzIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMjMuNjIgODYuNzEgMTIzLjI3IDg2LjE5IDEyMi41NiA4NS42OSAxMjEuMDYgODQuOTAgMTE4Ljk0IDg0LjAyIDExNi41NiA4My4zMSAxMTEuMDYgODIuMzggMTA4LjY5IDgyLjE5IDEwNi41NiA4Mi4xOSAxMDQuNDQgODIuMzkgOTguOTQgODMuMzAgOTUuOTQgODQuMTQgOTIuNTYgODUuMzQgODguMTkgODcuMzYgODUuMTkgODkuMDkgODEuNDQgOTEuNTEgNzcuNjkgOTQuMTUgNjkuMzEgMTAwLjQ2IDY0LjY5IDEwMy40MyA1Ny45NCAxMDYuODIgNTUuNTYgMTA3Ljc0IDUxLjU2IDEwOC45OCA1MS4xOCAxMDkuMjggNTEuMDkgMTA5LjY4IDUxLjM1IDExMC4wMSA1MS44MSAxMTAuMTYgNTYuOTQgMTEwLjMxIDYxLjk0IDEwOS44NiA2Ni45NCAxMDguNzQgNzIuMDYgMTA2LjgxIDc2LjMxIDEwNC43MCA4MC4wNiAxMDIuNTUgODguMzEgOTcuMDEgOTIuODEgOTQuMjAgOTYuMzEgOTIuMjQgMTAwLjgxIDkwLjIwIDEwMy40NCA4OS4yNiAxMDYuODEgODguMzAgMTExLjY5IDg3LjM4IDExNC45NCA4Ny4wNiAxMTcuMDYgODcuMDYgMTIwLjQ0IDg3LjI3IDEyMi44MSA4Ny42NiAxMjMuNDYgODcuMzYgMTIzLjYyIDg3LjA1Wk0xMDYuOTQgMTguMzIgMTA2LjA2IDE4LjczIDEwNS4zNiAxOS41NiAxMDUuMDMgMjAuMzEgMTAzLjk3IDIzLjgxIDEwMy4zOCAyNC45NCAxMDIuNTYgMjUuOTAgMTAwLjk0IDI2Ljk1IDk2LjA2IDI4LjYzIDk1LjI4IDI5LjMyIDk1LjAyIDMwLjA2IDk1LjI5IDMwLjc5IDk2LjA2IDMxLjQ1IDEwMC40NCAzMy4wNSAxMDEuNjkgMzMuNzAgMTAyLjUzIDM0LjM1IDEwMy4xOCAzNS4xOSAxMDMuODAgMzYuNDQgMTA1LjI2IDQxLjA2IDEwNS42MSA0MS41NCAxMDYuMTkgNDEuOTkgMTA3LjA2IDQyLjIxIDEwNy45NCA0MS44NiAxMDguNjYgNDEuMDYgMTEwLjA3IDM2LjY5IDExMC43NCAzNS40NCAxMTEuNDggMzQuNDggMTEzLjMxIDMzLjI4IDExNy44MSAzMS40NyAxMTguNjEgMzAuNzkgMTE4LjkwIDI5Ljk0IDExOC41MiAyOS4xMiAxMTcuNTYgMjguNDcgMTEzLjMxIDI3LjA2IDExMi4zMSAyNi41NSAxMTEuNDUgMjUuOTAgMTEwLjYxIDI0LjgxIDEwOS45NiAyMy41NiAxMDguNTIgMTkuNDQgMTA3LjY5IDE4LjU1WiIvPjwvc3ZnPg==',WORD_SRC='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNjYgNTYiIHdpZHRoPSIyNjYiIGhlaWdodD0iNTYiPjxwYXRoIGZpbGw9IiMyNTQ1NjgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEzMS40NCAzLjQ0IDEzMC4xOSAzLjcwIDEyOC44NSA0LjQ5IDEyOC4yNyA1LjMxIDEyNy45NCA2Ljk0IDEyNy45NCAxOC40NCAxMjcuNjkgMjIuMzEgMTI3LjgxIDI4Ljk0IDEyNy45NCAzMC4zMSAxMjcuOTQgMzYuNTYgMTI3LjczIDM4LjgxIDEyNy45NCA0MC40NCAxMjcuOTQgNDEuNTYgMTI3LjY5IDQzLjk0IDEyNy42OSA0Ni42OSAxMjcuODUgNDkuODEgMTI3Ljk3IDUwLjMxIDEyOC4zNiA1MC45NCAxMjkuMzEgNTEuODQgMTMwLjE5IDUyLjM3IDEzMS4wNiA1Mi42MyAxMzIuNDQgNTIuNjkgMTMzLjY5IDUyLjM3IDEzNC4zMSA1MS45NyAxMzQuOTggNTEuMzEgMTM1LjY2IDUwLjA2IDEzNS45NCA0OC4zMSAxMzUuOTQgNDUuNDQgMTM1LjgxIDQ0LjA2IDEzNS45MyA0Mi44MSAxMzUuODEgNDAuMzEgMTM1Ljk0IDM4Ljk0IDEzNS45NCAzNC42OSAxMzUuODEgMzMuMzEgMTM1Ljk0IDMwLjA2IDEzNS44MSAyNi4zMSAxMzUuOTQgMjIuODEgMTM1LjgxIDE4LjE5IDEzNS45NCAxNC4xOSAxMzUuODEgMTIuODEgMTM1LjgxIDkuODEgMTM1Ljk0IDcuMzEgMTM1LjYxIDUuNjkgMTM1LjIwIDQuOTQgMTM0LjU2IDQuMjQgMTMzLjk0IDMuODEgMTMzLjE5IDMuNTNaTTk5LjY5IDUuMjEgOTYuNjkgNC4wNSA5NC40NCAzLjYyIDkxLjgxIDMuMzEgODkuMTkgMy41NiA4Ni41NiAzLjQ0IDc1LjgxIDMuNDQgNzQuOTQgMy41NSA3NC4wNiAzLjg4IDczLjIwIDQuNTYgNzIuNTEgNS40NCA3Mi4yMiA2LjA2IDcxLjk5IDcuMDYgNzIuMDUgOC40NCA3MS45NCA5LjY5IDcxLjk0IDE1LjU2IDcyLjA2IDE2Ljk0IDcxLjk0IDE4LjQ0IDcxLjk0IDM1LjMxIDcyLjAzIDM2LjMxIDcxLjk0IDM4LjU2IDcyLjA2IDM5Ljk0IDcxLjk0IDQyLjE5IDcxLjk0IDQ4LjA2IDcyLjEwIDQ5LjgxIDcyLjI5IDUwLjQ0IDcyLjk4IDUxLjQ0IDczLjgxIDUyLjEyIDc1LjQ0IDUyLjYzIDc3LjE5IDUyLjQ5IDc3Ljk0IDUyLjIyIDc4Ljk0IDUxLjYyIDc5Ljc3IDUwLjU2IDgwLjA3IDQ5LjY5IDgwLjE5IDQ4LjgxIDgwLjI3IDQ0LjE5IDgwLjA2IDQyLjMxIDgwLjA2IDQwLjE5IDgwLjMxIDM4LjE5IDgwLjE5IDM2LjU2IDgwLjI3IDM1Ljk0IDgwLjU1IDM1LjM2IDgxLjA2IDM0Ljk1IDgxLjgxIDM0LjcyIDgzLjA2IDM0LjU2IDg0LjgxIDM0LjY5IDg2LjQ0IDM0LjU2IDg3Ljk0IDM0LjYxIDg4LjY5IDM0LjgyIDg5LjU2IDM1LjQ1IDkwLjk5IDM3LjE5IDk5LjY4IDQ5Ljk0IDEwMC40OSA1MC45MCAxMDEuMzEgNTEuNTUgMTAyLjU2IDUyLjIwIDEwMy42OSA1Mi41NyAxMDQuNTYgNTIuNzQgMTA1LjgxIDUyLjc3IDEwNi45NCA1Mi40NiAxMDcuOTQgNTEuOTYgMTA4LjY2IDUxLjQwIDEwOS4zNSA1MC41NiAxMDkuNjkgNDkuNjkgMTA5Ljc0IDQ4Ljk0IDEwOS41OSA0OC4xOSAxMDkuMTQgNDcuMzEgMTA4LjMxIDQ2LjM4IDEwNi40NCA0NS4xNiAxMDUuNTYgNDQuMTkgMTAzLjM4IDQxLjMxIDk5LjYyIDM1Ljk0IDk4LjUyIDMzLjk0IDk4LjYxIDMzLjMxIDk5LjA2IDMyLjc3IDEwMS41NiAzMS4zOSAxMDQuMTkgMjkuMzEgMTA2LjExIDI2LjgxIDEwNi43OCAyNS42OSAxMDcuNDcgMjMuOTQgMTA4LjE5IDE5LjY5IDEwNy45OCAxNi45NCAxMDcuNjAgMTQuNjkgMTA2LjgyIDEyLjU2IDEwNi4yMCAxMS4zMSAxMDUuMjcgOS44MSAxMDQuNDQgOC44NCAxMDIuMDYgNi42OFpNODAuNjYgMTEuNTkgODEuMzEgMTEuMTEgODIuMzEgMTAuOTQgODQuNDQgMTEuMDYgODcuMzEgMTAuOTYgOTAuMDYgMTEuMDYgOTEuNDQgMTAuOTYgOTQuODEgMTEuNzEgOTYuNTYgMTIuNjggOTcuNTUgMTMuNTMgOTguNDUgMTQuNTYgOTkuNDEgMTYuNTYgOTkuNzcgMTcuODEgOTkuODEgMTkuNTYgOTkuNTQgMjEuMzEgOTguODUgMjIuODEgOTcuODUgMjQuNDQgOTYuOTQgMjUuMjcgOTUuMzEgMjYuMjIgOTMuNTYgMjcuMDEgOTIuNDQgMjcuMjYgODEuODEgMjcuMjIgODEuMzEgMjcuMTQgODAuODQgMjYuODYgODAuNDggMjYuNDQgODAuMjggMjUuOTQgODAuMzEgMjQuNTYgODAuMDYgMjIuNTYgODAuMDYgMTcuOTQgODAuMzEgMTUuMzEgODAuMzEgMTIuNjkgODAuNDEgMTIuMDZaTTIzMi42OSAzLjExIDIyOC4zMSA0LjEzIDIyNS44MSA1LjE1IDIyMy4zMSA2LjQ0IDIyMS44MSA3LjQ0IDIxOS4zMSA5LjM3IDIxNy42OSAxMC44MSAyMTYuNDMgMTIuMTkgMjE0LjYzIDE0LjY5IDIxMy40NyAxNi42OSAyMTEuODUgMjAuNjkgMjExLjE5IDIzLjE5IDIxMC44MSAyNi41NiAyMTAuOTQgMzEuNjkgMjExLjA3IDMyLjY5IDIxMS44MCAzNS45NCAyMTIuMjEgMzcuMTkgMjEzLjM4IDM5LjY5IDIxNC43NyA0MS45NCAyMTYuMjEgNDMuOTQgMjE4LjA2IDQ2LjA2IDIyMS40NCA0OC44OSAyMjUuNTYgNTEuMTkgMjMxLjA2IDUyLjk1IDIzNC41NiA1My4zMSAyMzguODEgNTMuMzEgMjQyLjA2IDUyLjk1IDI0Ni4wNiA1MS44OSAyNDcuODEgNTEuMjEgMjUxLjU2IDQ5LjEyIDI1NC41NiA0Ni43NyAyNTYuMzEgNDUuMDYgMjU3LjA3IDQ0LjE5IDI1OC43NiA0MS44MSAyNTkuNzcgNDAuMTkgMjYxLjQ1IDM2LjU2IDI2Mi4zMiAzMy45NCAyNjIuOTQgMjguMDYgMjYyLjU0IDIzLjQ0IDI2MS42MSAyMC4xOSAyNjAuOTAgMTguMzEgMjU4Ljg5IDE0LjMxIDI1Ni4zMSAxMC45NCAyNTIuMDYgNy4zMiAyNDguODEgNS40NCAyNDUuODEgNC4yMiAyNDMuMTkgMy41NCAyNDAuMzEgMy4wMyAyMzcuMDYgMi44MVpNMjM2Ljk0IDEwLjMxIDIzOC4wNiAxMC40MCAyNDEuNDQgMTEuMDYgMjQzLjA2IDExLjU3IDI0NS42OSAxMi44MSAyNDcuODEgMTQuMTQgMjQ4LjkzIDE0Ljk5IDI1MC44NCAxNy4wNiAyNTIuODUgMjAuMTkgMjUzLjg5IDIyLjY5IDI1NC41MyAyNS40NCAyNTQuNjYgMjYuNjkgMjU0LjUxIDMxLjA2IDI1My41NSAzNC42OSAyNTIuNzAgMzYuNDQgMjUxLjM2IDM4LjQ0IDI0OS4wNiA0MS4wNiAyNDcuODEgNDIuMjAgMjQ2LjMxIDQzLjI0IDI0My42OSA0NC41NiAyMzkuNTYgNDUuNjQgMjM2LjQ0IDQ1Ljg2IDIzNC4xOSA0NS42MyAyMzEuNTYgNDUuMDcgMjI4LjgxIDQzLjk3IDIyNi4wNiA0Mi4yNiAyMjQuOTQgNDEuMzkgMjIyLjM3IDM4LjY5IDIyMS4xNSAzNi44MSAyMjAuMTIgMzQuODEgMjE5LjY1IDMzLjU2IDIxOS4wMiAzMC40NCAyMTguOTQgMjYuMzEgMjE5LjQ5IDIzLjQ0IDIyMC45OCAxOS44MSAyMjIuNjggMTcuMzEgMjI0LjY5IDE1LjEzIDIyNi4zMSAxMy44NyAyMjkuNDQgMTIuMDUgMjMxLjk0IDExLjE0IDIzNS4xOSAxMC41MVpNMTc2LjE5IDIuODEgMTczLjk0IDIuOTkgMTY5Ljk0IDMuNzEgMTY4LjA2IDQuMzAgMTY0LjE5IDYuMTAgMTYzLjA2IDYuNzcgMTYwLjk0IDguMzcgMTU5LjEwIDEwLjA2IDE1Ny4xOCAxMi4xOSAxNTUuNTUgMTQuNTYgMTU0LjU2IDE2LjQ0IDE1Mi42OSAyMS4xOSAxNTEuODggMjUuNTYgMTUxLjgxIDI4Ljk0IDE1MS45OCAzMC44MSAxNTIuNTUgMzQuMDYgMTUyLjk5IDM1LjgxIDE1NC40MyAzOS41NiAxNTYuMTggNDIuNTYgMTU4LjM3IDQ1LjMxIDE1OS4zMSA0Ni4yNyAxNjEuMzEgNDcuOTggMTY0LjA2IDQ5LjgyIDE2Ny42OSA1MS41NSAxNzEuMDYgNTIuNTUgMTczLjgxIDUzLjAyIDE3OC40NCA1My4wNiAxODIuMTkgNTIuNTkgMTg1LjMxIDUxLjYyIDE4Ny45NCA1MC41NSAxOTEuMDYgNDguODggMTkzLjQ0IDQ3LjE0IDE5NC42MCA0NS45NCAxOTUuMzIgNDQuNjkgMTk1LjU3IDQzLjk0IDE5NS42OSA0My4wNiAxOTUuODEgMzkuODEgMTk1LjY5IDM3LjgxIDE5NS42OSAyOS42OSAxOTUuNTIgMjguNDQgMTk1LjAxIDI3LjQ0IDE5My44MSAyNi4zOCAxOTIuNjkgMjUuOTggMTg2LjY5IDI2LjA2IDE4NS4zMSAyNS45NCAxNzkuNTYgMjUuOTQgMTc3LjMxIDI2LjIwIDE3Ni4zMSAyNi42OSAxNzUuNjMgMjcuMzEgMTc1LjAzIDI4LjU2IDE3NC45NyAzMC42OSAxNzUuMTQgMzEuMzEgMTc1LjUxIDMxLjk0IDE3NS45OSAzMi41MiAxNzYuNTYgMzIuOTMgMTc3LjgxIDMzLjIzIDE4MC45NCAzMy40NCAxODYuMzEgMzMuMzQgMTg3LjE2IDMzLjY2IDE4Ny43NCAzNC40NCAxODcuODUgMzQuOTQgMTg3Ljc2IDM2LjQ0IDE4Ny44MSA0MC4zMSAxODcuNTUgNDEuNTYgMTg3LjA0IDQyLjI5IDE4Ni4zMSA0Mi44OSAxODQuODEgNDMuNzggMTgzLjA2IDQ0LjQ1IDE4MC4xOSA0NS4xNCAxNzcuMzEgNDUuMzEgMTc1LjA2IDQ1LjI2IDE3Mi4wNiA0NC43NiAxNjkuMzEgNDMuNjEgMTY2LjY5IDQyLjA2IDE2NS41NiA0MS4wNiAxNjMuMjYgMzguMzEgMTYxLjMyIDM0Ljk0IDE2MC4yMyAzMS4zMSAxNjAuMDYgMzAuMzEgMTU5Ljk0IDI3LjMxIDE2MC4wMSAyNi40NCAxNjAuNTkgMjMuODEgMTYxLjYxIDIwLjU2IDE2Mi45NyAxOC4xOSAxNjQuODYgMTUuODEgMTY1LjU2IDE1LjExIDE2OC4wNiAxMy4wNyAxNzAuNjkgMTEuODEgMTcyLjgxIDExLjA5IDE3Ni41NiAxMC40OCAxNzguMDYgMTAuNDkgMTgwLjMxIDEwLjg2IDE4Mi45NCAxMS41MiAxODQuNDQgMTIuMTEgMTg4LjA2IDE0LjA3IDE4OS4xOSAxNC4zMSAxOTAuMzEgMTQuMTYgMTkxLjgxIDEzLjQwIDE5Mi43MyAxMi41NiAxOTMuMzEgMTEuNTYgMTkzLjU2IDEwLjE5IDE5My40MyA5LjMxIDE5My4wNiA4LjU2IDE5Mi4wNiA3LjU0IDE4OS4xOSA1LjYzIDE4NS40NCA0LjA5IDE4Mi42OSAzLjQzIDE4MC4wNiAyLjk4Wk0yNy44MSAyLjU2IDI1LjQ0IDIuNzYgMjIuNTYgMy4zMiAxOS4zMSA0LjIxIDE2LjQ0IDUuNDggMTQuMTkgNi44OSAxMS45NCA4LjU1IDguOTQgMTEuNDQgOC4wMiAxMi41NiA2LjI4IDE1LjE5IDMuOTggMjAuNTYgMy4zNSAyMy4zMSAyLjk0IDI5LjMxIDMuNjkgMzQuMzEgNS4xNSAzOC4zMSA3LjI0IDQyLjMxIDEwLjgxIDQ2LjMxIDEyLjgxIDQ3LjkzIDE1LjE5IDQ5LjU3IDE5Ljk0IDUxLjgyIDIzLjgxIDUyLjg2IDI4LjgxIDUzLjMxIDMyLjU2IDUyLjk5IDM0LjMxIDUyLjY4IDM5LjE5IDUxLjE5IDQyLjA2IDQ5Ljg5IDQzLjU2IDQ5LjA0IDQ1LjE5IDQ3LjkxIDQ3LjIyIDQ2LjA5IDQ5LjEzIDQ0LjA2IDUwLjcxIDQyLjA2IDUyLjU3IDM4Ljk0IDUzLjc2IDM2LjA2IDU0LjcxIDMyLjgxIDU1LjEyIDI5LjgxIDU1LjI0IDI3LjA2IDU0LjU3IDIyLjk0IDUzLjc2IDE5Ljk0IDUyLjQ1IDE2LjU2IDUxLjY2IDE1LjA2IDQ5Ljg1IDEyLjQ0IDQ3LjY5IDEwLjE0IDQ1LjY5IDguNDMgNDEuOTQgNS43NCA0MS4wNiA1LjI0IDM4LjU2IDQuMTggMzQuMDYgMi45OSAyOS4wNiAyLjU2Wk0yNi4xOSAxMC4yNiAzMC45NCAxMC4zMSAzMy4zMSAxMC42OCAzNi41NiAxMS43MiAzNy44MSAxMi4zNyAzOS44MSAxMy43OSA0MS45NCAxNS42MiA0My44OSAxNy45NCA0NC44NSAxOS41NiA0NS45MCAyMS44MSA0Ni40NyAyMy40NCA0Ni43NiAyNC42OSA0Ny4wNSAyNy45NCA0Ni4zMiAzMi42OSA0NS42MCAzNC42OSA0NC44MiAzNi4xOSA0My44NSAzNy42OSA0MS41NiA0MC40NCA0MC4wNiA0MS44NiAzOC44MSA0Mi44MCAzNS41NiA0NC4zOSAzMS4xOSA0NS4zNyAyOS4zMSA0NS41NSAyNy4wNiA0NS4zOSAyNC40NCA0NC45NCAyMC45NCA0My43MiAxOS4wNiA0Mi43MCAxNy45NCA0MS45MCAxNi44MSA0MC45NCAxNC42OCAzOC40NCAxMy4xOCAzNi4wNiAxMS44OCAzMy4xOSAxMS4xMyAyOS40NCAxMS4xMyAyNi41NiAxMS44NyAyMi44MSAxMi45MCAyMC4wNiAxNS4wOSAxNi42OSAxNi45NCAxNC43OSAxOS4zMSAxMi45MyAyMi41NiAxMS4zMSAyNS4wNiAxMC40OVoiLz48cGF0aCBmaWxsPSIjODk5QUFEIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9IiIvPjxwYXRoIGZpbGw9IiNFQ0FGOEUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iIi8+PC9zdmc+';
-const subTop=()=>'<div class="stop"><button class="back" data-a="inicio"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Inicio</button><div class="brand"><img src="'+MARK_SRC+'" height="30" alt="Origo"><img src="'+WORD_SRC+'" height="14" alt="" aria-hidden="true"></div></div>';
+const MENUI='<svg class="mi3" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.4" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="16.2" width="16" height="2.4" rx="1.2"/></svg>';
+const subTop=()=>'<div class="stop"><button class="back" data-a="inicio"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Inicio</button><div class="stopr"><div class="brand"><img src="'+MARK_SRC+'" height="30" alt="Origo"><img src="'+WORD_SRC+'" height="14" alt="" aria-hidden="true"></div><button class="mb" data-a="menu" aria-label="Menú">'+MENUI+'</button></div></div>';
 const brand=x=>'<div class="top"><div class="brand"><img src="'+MARK_SRC+'" height="44" alt="Origo"><img src="'+WORD_SRC+'" height="22" alt="" aria-hidden="true"></div>'+(x||'')+'</div>';
 
 /* ===== Pantallas ===== */
@@ -498,13 +525,12 @@ const ico={des:'<svg viewBox="0 0 24 24"><path d="M12 21V11M12 11C12 7 9 5 5 5c0
  his:'<svg viewBox="0 0 24 24"><path d="M12 7v5l3 2M3 12a9 9 0 1 0 3-6.7M3 4v4h4"/></svg>',
  cre:'<svg viewBox="0 0 24 24"><path d="M3 20h18M6 16l4-5 4 3 5-7"/></svg>',
  aju:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>'};
-function renderNav(){$('nav').innerHTML=[['hoy','Hoy'],['his','Registros'],['cre','Salud'],['mas','Más']].map(([k,l])=>'<button data-k="'+k+'" class="'+(k===tab?'on':'')+'">'+ico[k]+l+'</button>').join('');
-  $('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{tab=b.dataset.k;render()})}
-
+let stC=null;
 function state(){
   const L=Store.live(),t0=dayStart();
+  if(stC&&stC.L===L&&stC.t0===t0)return stC; /* el reloj llama cada segundo: solo se recalcula si hay cambios o cambia el día */
   const tomas=L.filter(e=>e.tipo==='toma'),pan=L.filter(e=>e.tipo==='panal'&&e.inicio>=t0);
-  return{L,last:tomas[0],tomasHoy:tomas.filter(e=>e.inicio>=t0),pan,
+  return stC={L,t0,last:tomas[0],tomasHoy:tomas.filter(e=>e.inicio>=t0),pan,
     lastPan:L.find(e=>e.tipo==='panal'),S:L.find(e=>e.tipo==='sueno'&&!e.fin),lastSleep:L.find(e=>e.tipo==='sueno'&&e.fin)};
 }
 
@@ -512,7 +538,7 @@ function state(){
 function vAju(){
   return'<h1>Ajustes</h1><div class="card" style="margin-top:12px"><label>Nombre</label><input id="cn" value="'+esc(cfg.nombre)+'"><label>Fecha de nacimiento</label><input id="cf" type="date" value="'+esc(cfg.nac)+'"><label>Sexo (curvas de la OMS)</label>'+chips('cx',[['f','Niña'],['m','Niño']],cfg.sexo)+'<button class="sec" id="cs" style="width:100%">Guardar ajustes</button></div>'+
   vFam()+'<h2>Copia de seguridad</h2><div class="card"><div class="mute" style="margin-bottom:10px">'+(Sync.on?'Los datos se comparten entre los móviles de la familia. Aun así, exporta una copia de vez en cuando.':'Los datos viven solo en este dispositivo. Haz copias de vez en cuando.')+'</div><div class="grid"><button class="sec" id="ex">Exportar</button><button class="sec" id="im">Importar</button></div><input type="file" id="fi" accept=".json" style="display:none"></div>'+
-  '<button class="sec bad" id="rs" style="width:100%">Borrar todos los datos</button>';
+  '<h2 style="margin-top:30px">Borrar</h2><div class="mute" style="margin:-2px 0 10px">Elimina todos los registros'+(Sync.on?' de toda la familia':'')+'. Exporta antes una copia.</div><button class="sec bad" id="rs" style="width:100%">Borrar todos los datos</button>';
 }
 
 function bind(){
@@ -535,10 +561,11 @@ function bind(){
 }
 
 function render(){
+  Store.touch();
   document.body.classList.add('scn');document.body.classList.toggle('hoy',tab==='hoy');
-  if(tab!=='hoy'&&!(history.state&&history.state.sub))history.pushState({sub:1},'');
+  if(tab!=='hoy'&&!(history.state&&history.state.sub)){history.pushState({sub:1},'');atSh=false}
   $('app').innerHTML=(tab==='hoy'?'':subTop())+{hoy:vHoy,his:vHis,cre:vSalud,mas:vMas}[tab]();
-  renderNav();theme();document.documentElement.style.setProperty('--nh',$('nav').offsetHeight+'px');document.body.classList.toggle('qb',!!$('qbar'));bind();tick();
+  theme();bind();a11y($('app'));tick();
 }
 
 /* ===== Salud: temperatura, pauta del pediatra, citas y vacunas ===== */
@@ -547,12 +574,6 @@ function render(){
 const VAC=[[2,'Hexavalente, neumococo, meningococo B y rotavirus'],[4,'Hexavalente, neumococo, meningococo B, meningococo ACWY y rotavirus'],[6,'Neumococo'],[11,'Hexavalente y neumococo'],[12,'Triple vírica y meningococo ACWY'],[15,'Meningococo B y varicela'],[24,'Triple vírica y varicela']];
 /* ===== Más: preparativos y stock de pañales ===== */
 const ACT={
-  temp(){sheet('<h2 style="margin-top:0">Temperatura</h2><label>Grados (°C)</label><input id="tc" type="number" step="0.1" inputmode="decimal"><label>Hora</label><input id="hr" type="time" value="'+nowHM()+'">',()=>{const c=+$('tc').value;if(!c||c<30||c>43)return false;addEv('temp',{c},toTs($('hr').value),'Temperatura registrada')})},
-  dosis(){const i=pautaInfo(),go=()=>addEv('med',{farmaco:i.p.farmaco,ml:i.p.ml},0,'Dosis registrada');
-    if(i.ok)go();else sheet('<h2 style="margin-top:0">¿Registrar igualmente?</h2><div class="mute" style="margin-bottom:12px">Según la pauta aún no toca (próxima a las '+hm(i.next)+'). Registra solo si ya se la has dado.</div>',()=>{go()})},
-  pauta(){const p=cfg.pauta||{};sheet('<h2 style="margin-top:0">Pauta del pediatra</h2><div class="mute" style="margin-bottom:8px">Copia exactamente lo que te indicó. La app no calcula dosis.</div><label>Fármaco</label><input id="pf" value="'+esc(p.farmaco)+'"><label>Dosis (ml)</label><input id="pm" type="number" step="0.1" inputmode="decimal" value="'+esc(p.ml)+'"><label>Mínimo de horas entre dosis</label><input id="ph" type="number" inputmode="decimal" value="'+esc(p.horas)+'"><label>Máximo de dosis en 24 h</label><input id="px" type="number" inputmode="numeric" value="'+esc(p.max)+'"><label>Quién la indicó</label><input id="pd" value="'+esc(p.medico)+'">',()=>{
-    const q={farmaco:$('pf').value.trim(),ml:+$('pm').value,horas:+$('ph').value,max:+$('px').value,medico:$('pd').value.trim()};
-    if(!q.farmaco||!q.ml||!q.horas||!q.max)return false;cfg.pauta=q;saveCfg();render()})},
   cita(){sheet('<h2 style="margin-top:0">Nueva cita</h2><label>Tipo</label><select id="ct2"><option>Vacuna</option><option>Revisión del niño sano</option><option>Otra consulta</option></select><label>Fecha y hora</label><input id="cf2" type="datetime-local"><label>Dudas para el médico</label><input id="cp">',()=>{
     if(!$('cf2').value)return false;cfg.citas=(cfg.citas||[]).concat({id:Date.now().toString(36),t:$('ct2').value,f:$('cf2').value,p:$('cp').value.trim()});saveCfg();render()})},
   cdel(id){cfg.citas=cfg.citas.filter(c=>c.id!==id);saveCfg();render()},
@@ -651,12 +672,13 @@ function showRep(){$('repb').innerHTML=informe(repD);document.querySelectorAll('
 $('rep').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;const v=b.dataset.r;
   if(v==='x'){$('rep').style.display='none';return}
   if(v==='p'){window.print();return}
+  if(v==='s'){navigator.share({title:'Informe de '+(cfg.nombre||'Bebé'),text:$('repb').innerText}).catch(()=>{});return}
   if(v==='c'){(navigator.clipboard?navigator.clipboard.writeText($('repb').innerText):Promise.reject()).then(()=>toast('Informe copiado',null)).catch(()=>toast('No se pudo copiar',null));return}
   repD=+v;showRep()};
 Object.assign(ACT,{
   cv(v){curva=v;render()},
   sexo(v){cfg.sexo=v;saveCfg();render()},
-  inf(){$('rep').style.display='block';showRep()}
+  inf(){$('rep').style.display='block';$('reps').hidden=!navigator.share;showRep()}
 });
 
 /* ===== Desarrollo: momentos, hitos, alimentos nuevos y alimentación complementaria ===== */
@@ -700,7 +722,7 @@ const GR={toma:'f',alim:'f',comida:'f',panal:'p',sueno:'s',temp:'h',med:'h',medi
 const LK={formula:'fórmula',materna:'leche materna',pecho:'pecho'},PK={pis:'Pipí',caca:'Caca',ambos:'Pipí y caca',seco:'Seco'};
 let filt='all',dia='',masSub=null;
 const dtl=t=>new Date(t-new Date(t).getTimezoneOffset()*6e4).toISOString().slice(0,16);
-function panel(html,lbl){$('sh').innerHTML=html+'<button class="sec" id="shx" style="width:100%;margin-top:8px">'+(lbl||'Cancelar')+'</button>';$('ov').style.display='flex';$('toast').style.display='none';$('shx').onclick=closeSheet}
+function panel(html,lbl){$('sh').innerHTML=html+'<button class="sec" id="shx" style="width:100%;margin-top:8px">'+(lbl||'Cancelar')+'</button>';shOpen();$('shx').onclick=closeSheet}
 $('sh').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b)ACT[b.dataset.a](b.dataset.v)});
 function evInfo(e){const d=e.datos;switch(e.tipo){
   case'toma':return d.leche==='pecho'?['Pecho',[{i:'izquierdo',d:'derecho',a:'ambos'}[d.lado],d.min&&d.min+' min'].filter(Boolean).join(' · ')]:['Biberón',(d.ml?d.ml+' ml · ':'')+(LK[d.leche]||'')];
@@ -754,7 +776,7 @@ const IQ={toma:'<svg viewBox="0 0 48 48" aria-hidden="true"><g transform="rotate
  sueno:'<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M29 5a19 19 0 1 0 14 27A16 16 0 0 1 29 5z" fill="#f7c97f"/></svg>',
  sol:'<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="9.5" fill="#f7d77f"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2" stroke="#f7d77f" stroke-width="3.2" stroke-linecap="round"/></svg>'};
 const GEAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L14.9 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.4 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1l.4 2.9h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12.9 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" fill-rule="evenodd"/></svg>';
-function hTop(nom,sub,emb){return'<section class="hx'+(emb?' emb':'')+'"><div class="htop"><div class="hb"><img src="'+MARK_SRC+'" height="40" alt="Origo"><img src="'+WORD_SRC+'" height="18" alt="" aria-hidden="true"></div><button class="gear" data-a="perfil" aria-label="Ajustes">'+GEAR+'</button></div><div class="hn"><div class="nm">'+esc(nom)+'</div><div class="ag"'+(emb?' id="cd"':'')+'>'+sub+'</div></div>'}
+function hTop(nom,sub,emb){return'<section class="hx'+(emb?' emb':'')+'"><div class="htop"><div class="hb"><img src="'+MARK_SRC+'" height="40" alt="Origo"><img src="'+WORD_SRC+'" height="18" alt="" aria-hidden="true"></div><button class="gear" data-a="menu" aria-label="Menú">'+MENUI+'</button></div><div class="hn"><div class="nm">'+esc(nom)+'</div><div class="ag"'+(emb?' id="cd"':'')+'>'+sub+'</div></div>'}
 function vHoy(){
   if(!nacido())return vEmb();
   const s=state(),n=Date.now(),hr=new Date().getHours(),sal=hr<6||hr>=21?'Buenas noches':hr<13?'Buenos días':'Buenas tardes',nom=cfg.nombre||'Bebé',t0=dayStart();
@@ -771,24 +793,47 @@ function vHoy(){
   (s.L.length?'<div class="card" style="padding:2px 14px">'+s.L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'<div class="card mute" style="text-align:center;padding:20px 14px">Aún no hay registros. Usa los botones de arriba para empezar.</div>')+pendientes();
 }
 const FIL={f:['toma','alim','comida'],p:['panal'],s:['sueno'],h:['temp','med','medida']};
+/* Franja de un día (k = 'AAAA-MM-DD'): devuelve [html, resumen en texto]. El sueño que cruza la medianoche se reparte entre los dos días. */
+function franja(k){
+  const a=new Date(k+'T00:00').getTime(),b=a+864e5,n=Date.now(),pc=t=>(Math.max(0,Math.min(1,(t-a)/864e5))*100).toFixed(2);let h='',sm=0,nt=0,np=0;
+  Store.live().forEach(e=>{
+    if(e.tipo==='sueno'){const f=e.fin||n;if(f>a&&e.inicio<b){const x=Math.max(e.inicio,a),y=Math.min(f,b);if(y>x){sm+=y-x;h+='<i class="fs" style="left:'+pc(x)+'%;width:'+((y-x)/864e5*100).toFixed(2)+'%"></i>'}}}
+    else if(e.inicio>=a&&e.inicio<b){if(e.tipo==='toma'){nt++;h+='<i class="ft" style="left:'+pc(e.inicio)+'%"></i>'}else if(e.tipo==='panal'){np++;h+='<i class="fp" style="left:'+pc(e.inicio)+'%"></i>'}}});
+  if(!sm&&!nt&&!np)return['',''];
+  if(n>a&&n<b)h+='<i class="fn" style="left:'+pc(n)+'%"></i>';
+  const tx=[sm?'Sueño '+dur(sm).replace(' min','').replace(' h ',' h ')+(sm<36e5?' min':''):'',nt?nt+(nt===1?' toma':' tomas'):'',np?np+(np===1?' pañal':' pañales'):''].filter(Boolean).join(' · ');
+  return['<div class="fj" role="img" aria-label="Día en 24 horas: '+tx+'">'+h+'</div><div class="fjx" aria-hidden="true"><span>0 h</span><span>6</span><span>12</span><span>18</span><span>24</span></div>',tx]}
 function vCrono(){
   let L=Store.live();if(filt!=='all')L=L.filter(e=>FIL[filt].includes(e.tipo));
   L=dia?L.filter(e=>new Date(e.inicio).toLocaleDateString('sv-SE')===dia):L.slice(0,200);
   let h='<div style="height:8px"></div>'+T2('filt',[['all','Todo'],['f','Alimentación'],['p','Pañales'],['s','Sueño'],['h','Salud']],filt,1)+'<div class="row" style="align-items:flex-end"><label style="flex:1">Ver un día<input id="hd" type="date" value="'+dia+'" style="margin:4px 0 0"></label>'+(dia?'<button class="sec" data-a="hdclr" style="margin-bottom:0">Ver todo</button>':'')+'</div>';
   if(!L.length)return h+'<div class="card mute" style="text-align:center;padding:24px 14px;margin-top:12px">'+(dia||filt!=='all'?'No hay registros con este filtro.':'Aún no hay registros. Empieza desde Hoy.')+'</div>';
   const hoy=dkey(0),ayer=dkey(-1);let cur='',open=false;
-  L.forEach(e=>{const k=new Date(e.inicio).toLocaleDateString('sv-SE');if(k!==cur){if(open)h+='</div>';cur=k;open=true;h+='<div class="day">'+(k===hoy?'Hoy':k===ayer?'Ayer':new Date(e.inicio).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</div><div class="card" style="padding:2px 14px">'}h+=evRow(e)});
+  h+='<div class="fjl" aria-hidden="true"><span><i class="fs"></i>Sueño</span><span><i class="ft"></i>Toma</span><span><i class="fp"></i>Pañal</span></div>';
+  L.forEach(e=>{const k=new Date(e.inicio).toLocaleDateString('sv-SE');if(k!==cur){if(open)h+='</div>';cur=k;open=true;const fj=franja(k);h+='<div class="day"><span>'+(k===hoy?'Hoy':k===ayer?'Ayer':new Date(e.inicio).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</span><span class="dsm">'+fj[1]+'</span></div>'+fj[0]+'<div class="card" style="padding:2px 14px">'}h+=evRow(e)});
   return h+(open?'</div>':'');
 }
 ico.mas='<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>';ico.pan=IC.panal;
-function sheetToma(){sheet('<h2 style="margin-top:0">Toma</h2>'+chips('lt',[['formula','Biberón fórmula'],['materna','Biberón materna'],['pecho','Pecho']],lastLeche())+'<label>Cantidad (ml)</label><input id="ml" type="number" inputmode="numeric" value="'+lastMl()+'"><label>Solo pecho: lado y duración</label>'+chips('ld',[['i','Izquierdo'],['d','Derecho'],['a','Ambos']],'')+'<input id="mn" type="number" inputmode="numeric" placeholder="Minutos (opcional)"><label>Hora</label><input id="hr" type="time" value="'+nowHM()+'">',()=>{
-  const l=chipVal('lt'),d={ml:l==='pecho'?0:(+$('ml').value||0),leche:l};if(l==='pecho'){d.lado=chipVal('ld');d.min=+$('mn').value||0}
-  addEv('toma',d,toTs($('hr').value),'Toma registrada')})}
+/* Campos de una toma: solo se ve lo que aplica (cantidad para biberón; lado y minutos para pecho) */
+function tomaCampos(d){const l=d.leche||'formula',p=l==='pecho';
+  return chips('lt',[['formula','Biberón fórmula'],['materna','Biberón materna'],['pecho','Pecho']],l)+
+  '<div id="tml"'+(p?' hidden':'')+'><label for="ml">Cantidad (ml)</label><div class="stp"><button type="button" data-a="mlpm" data-v="-10" aria-label="Quitar 10 ml">−10</button><input id="ml" type="number" inputmode="numeric" value="'+esc(d.ml||'')+'"><button type="button" data-a="mlpm" data-v="10" aria-label="Añadir 10 ml">+10</button></div></div>'+
+  '<div id="tpe"'+(p?'':' hidden')+'><label>Lado</label>'+chips('ld',[['i','Izquierdo'],['d','Derecho'],['a','Ambos']],d.lado||'')+'<label for="mn">Minutos (opcional)</label><input id="mn" type="number" inputmode="numeric" value="'+esc(d.min||'')+'"></div>'}
+function tomaLee(){const l=chipVal('lt')||'formula',d={ml:l==='pecho'?0:(+$('ml').value||0),leche:l};if(l==='pecho'){d.lado=chipVal('ld');d.min=+$('mn').value||0}return d}
+function sheetToma(){sheet('<h2 style="margin-top:0">Toma</h2>'+tomaCampos({leche:lastLeche(),ml:lastMl()})+'<label for="hr">Hora</label><input id="hr" type="time" value="'+nowHM()+'">',()=>{
+  addEv('toma',tomaLee(),toTs($('hr').value),'Toma registrada')})}
 function panelPanal(){panel('<h2 style="margin-top:0">Pañal</h2><div class="pg">'+[['pis','Pipí'],['caca','Caca'],['ambos','Ambos'],['seco','Seco']].map(([k,l])=>'<button data-a="pn" data-v="'+k+'">'+IC.panal+l+'</button>').join('')+'</div>')}
 const MENU=[['his','Registros',ico.his],['stats','Estadísticas',ico.cre],['cre','Salud',IC.temp],['pan','Pañales',IC.panal],['prep','Preparativos',IC.prep],['des','Desarrollo',IC.alim],['resumen','Resumen del día',IC.momento],['aju','Ajustes',ico.aju]];
-window.addEventListener('popstate',()=>{if(tab!=='hoy'){tab='hoy';masSub=null;render();window.scrollTo(0,0)}});
+window.addEventListener('popstate',e=>{
+  const gastada=atSh;atSh=!!(e.state&&e.state.sh);
+  if(Sync.gate)return;
+  if($('ov').style.display==='flex'){closeSheet();return}
+  if(gastada){history.back();return}
+  if(tab!=='hoy'&&!(e.state&&e.state.sub)){tab='hoy';masSub=null;render();window.scrollTo(0,0)}});
 Object.assign(ACT,{
-  menu(){panel('<h2 style="margin-top:0">Menú</h2><div class="pg mn">'+MENU.map(([k,l,i])=>'<button data-a="'+(k==='resumen'?'resumen':'ir')+'" data-v="'+k+'">'+i+l+'</button>').join('')+'</div>','Cerrar')},
+  menu(){const cur=tab==='his'?(regVista==='stats'?'stats':'his'):tab==='cre'?'cre':tab==='mas'?masSub:'';
+    panel('<h2 style="margin-top:0">Menú</h2><div class="pg mn">'+MENU.map(([k,l,i])=>'<button data-a="'+(k==='resumen'?'resumen':'ir')+'" data-v="'+k+'"'+(k===cur?' class="on" aria-current="page"':'')+'>'+i+l+'</button>').join('')+'</div>','Cerrar')},
+  mlpm(v){const i=$('ml');if(i)i.value=Math.max(0,(+i.value||0)+ +v)},
   ir(v){closeSheet();if(v==='his'||v==='stats'){tab='his';regVista=v==='stats'?'stats':'crono'}else if(v==='cre')tab='cre';else{tab='mas';masSub=v}render();window.scrollTo(0,0)},
   inicio(){if(history.state&&history.state.sub)history.back();else{tab='hoy';masSub=null;render();window.scrollTo(0,0)}},
   tab(v){tab=v;render();window.scrollTo(0,0)},
@@ -823,7 +868,7 @@ Object.assign(ACT,{
   ev(id){
     const e=Store.ev.find(x=>x.id===id),t=e.tipo,d=e.datos,H='<label>Hora</label><input id="eh" type="datetime-local" value="'+dtl(e.inicio)+'">',del='<button class="sec bad" style="width:100%;margin-bottom:12px" data-a="elim" data-v="'+id+'">Eliminar registro</button>';
     let f=H,save=()=>{};
-    if(t==='toma'){f=chips('lt',[['formula','Biberón fórmula'],['materna','Biberón materna'],['pecho','Pecho']],d.leche)+'<label>Cantidad (ml)</label><input id="ml" type="number" inputmode="numeric" value="'+esc(d.ml)+'">'+H;save=()=>{d.ml=+$('ml').value||0;d.leche=chipVal('lt')||d.leche}}
+    if(t==='toma'){f=tomaCampos(d)+H;save=()=>{const q=tomaLee();if(q.leche!=='pecho'){delete d.lado;delete d.min}Object.assign(d,q)}}
     else if(t==='panal'){f=chips('pk',[['pis','Pipí'],['caca','Caca'],['ambos','Ambos'],['seco','Seco']],d.k)+H;save=()=>{d.k=chipVal('pk')||d.k}}
     else if(t==='sueno')f=H+'<label>Fin</label><input id="ef" type="datetime-local" value="'+(e.fin?dtl(e.fin):'')+'"><div class="mute" style="margin:-4px 0 10px">Déjalo vacío si sigue durmiendo.</div>';
     else if(t==='temp'){f='<label>Grados (°C)</label><input id="tc" type="number" step="0.1" inputmode="decimal" value="'+esc(d.c)+'"><label>Método</label>'+chips('tm',[['ax','Axilar'],['oi','Oído'],['fr','Frente'],['re','Rectal']],d.m||'')+'<label>Síntomas o notas</label><input id="tn" value="'+esc(d.nota)+'">'+H;save=()=>{d.c=+$('tc').value||d.c;d.m=chipVal('tm')||d.m;d.nota=$('tn').value.trim()}}
@@ -1139,7 +1184,10 @@ Object.assign(ACT,{
 });
 
 /* ===== Reloj: actualiza tiempos sin redibujar ===== */
+let diaR=dayStart();
 function tick(){
+  if(document.hidden)return; /* con la pantalla apagada o la app en segundo plano no se gasta batería */
+  if(dayStart()!==diaR){diaR=dayStart();softRender();return} /* ha cambiado el día: rehacer «hoy» */
   const s=state(),n=Date.now();
   if(s.S&&tab!=='hoy'){$('ban').style.display='flex';$('bant').textContent='Durmiendo · '+clock(n-s.S.inicio)}else $('ban').style.display='none';
   if(tab!=='hoy'||!$('wk'))return;
@@ -1182,8 +1230,14 @@ function onboard(){
 theme();render();
 if(!cfg.nombre&&!Sync.on)onboard();
 setInterval(tick,1000);setInterval(theme,60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){theme();tick()}});
 iniciarFirebase();
-if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* Pide al navegador que no borre los datos de Origo si el móvil anda justo de espacio */
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{})}catch(_){}
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.addEventListener('message',e=>{if(e.data==='origo-update')toast('Hay una versión nueva de Origo',()=>location.reload(),'Actualizar',20000)});
+}
 </script>
 </body>
 </html>
