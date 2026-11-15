@@ -1,6 +1,6 @@
 # ORIGO · Guía de traspaso
 
-App web para familias: seguimiento del bebé, salud, preparativos y recuerdos. Es **un solo archivo** (`index.html`, ~190 KB: HTML + CSS + JS, sin dependencias ni servidor). Se publica en GitHub Pages y se instala en el móvil con "Añadir a pantalla de inicio".
+App web para familias: seguimiento del bebé, salud, preparativos y recuerdos. Es una página estática sin dependencias, compilación ni servidor: `index.html` (estructura), `css/origo.css` (estilos) y 13 archivos en `js/` (ver «Archivos»). Hasta nov. 2026 era un solo `index.html` de ~190 KB; se separó sin cambiar ni una línea de código. Se publica en GitHub Pages y se instala en el móvil con "Añadir a pantalla de inicio".
 
 ## Estado
 Fases 1 a 7 del rediseño **completadas y verificadas**. **Fase 8 (Firebase)**: código hecho y probado con un servidor simulado de dos móviles; configuración real ya puesta (proyecto `origo-5ae53`); comprobar que las reglas de `reglas-firestore.txt` están publicadas.
@@ -27,7 +27,31 @@ Toda la app usa los colores de la fase (`body.scn`): en Hoy con la ilustración 
   - Vacunas → Citas: al guardar una vacuna con fecha (o al añadir una), se crea o actualiza una cita enlazada (`vacSync`, campo `vac`, id `cv-…`), con hora opcional (sin hora → `dia:1`, se muestra solo la fecha con `citaF`). Editar la fecha en la cita cambia la fecha prevista de la vacuna; elegir «No» o borrar la vacuna quita la cita. Pendientes no repite la vacuna si ya tiene cita.
 - **Más**: Pañales · Preparativos · Desarrollo (Diario, Hitos, Alimentos) · Ajustes y copia de seguridad.
 
-## Arquitectura del código (dentro de `index.html`)
+## Archivos
+| Archivo | Contenido |
+|---|---|
+| `index.html` | Solo la estructura: cabecera, contenedores (`#scene #ban #app #rep #toast #ov #sh`) y la lista de scripts |
+| `css/origo.css` | Todos los estilos (colores, fases, escena, componentes). Las imágenes se referencian como `../assets/…` |
+| `js/01-config.js` | `FIREBASE_CONFIG` |
+| `js/02-datos.js` | `Store`, `cfg`, `saveCfg` |
+| `js/03-sync.js` | Sincronización con Firebase (Auth, familias, eventos, fotos) |
+| `js/04-base.js` | Ventanas de vigilia, utilidades, tema/fase, hojas (`sheet`, `panel`), avisos y registros básicos |
+| `js/05-marca.js` | Logo SVG incrustado (27 KB; rara vez se toca) |
+| `js/06-pantallas.js` | `render()`, `ACT` inicial, Salud básica, preparativos y stock |
+| `js/07-crecimiento.js` | Curvas OMS e informe para el pediatra |
+| `js/08-desarrollo.js` | Momentos, hitos y alimentos (versión base) |
+| `js/09-hoy.js` | Hoy, Registros, menú (`MENU`), escena, tarjeta de estado y botones grandes |
+| `js/10-panales-preparativos.js` | Inventario de pañales y preparativos |
+| `js/11-salud.js` | Salud por módulos (medidas, fiebre, medicinas, vacunas, citas) y estadísticas |
+| `js/12-diario.js` | Diario con fotos, hitos por categorías y alimentación completa |
+| `js/13-inicio.js` | Reloj (`tick`), tarjeta de Familia, primer uso y arranque |
+
+**Reglas al tocar los archivos**
+- Son scripts clásicos (no módulos ES, que obligarían a reescribir todas las variables compartidas y no abren con `file://`): comparten variables globales y se cargan **en el orden numérico** que marca `index.html`. Los archivos posteriores amplían o sustituyen acciones de los anteriores (`Object.assign(ACT,{…})`), así que el orden importa. El código que se ejecuta al cargar solo puede usar lo definido en su archivo o en los anteriores; el arranque (`theme();render()…`) está al final de `13-inicio.js`.
+- Si se añade, quita o renombra un archivo de `css/` o `js/`: cambiarlo en `index.html` y en la lista `APP` de `sw.js`, y subir la versión de la caché (`C`).
+- Para un cambio basta leer el archivo afectado (y `css/origo.css` si cambia el aspecto), no toda la app.
+
+## Arquitectura del código
 - **Capa de datos `Store`**: `ev` (eventos), `add`, `patch`, `live`, `save`, `write`, `touch`. `live()` devuelve la lista ordenada **en caché** (no modificarla; se invalida en `save`/`write`/`touch`/`render` y al asignar `Store.ev`); `state()` también se reutiliza, así el reloj de cada segundo no recorre el historial. Todo lo que se guarda en el móvil pasa por `guardaLocal()` (si no hay espacio avisa en vez de fallar). Todo evento tiene `id, tipo, inicio, fin, datos{}, borrado` (borrado lógico → permite deshacer).
 - **`cfg`** (objeto, `saveCfg()`): perfil y todo lo que no es un evento.
 - **`FOT`** (`saveFot()`): fotos del diario (JPEG ≤900 px).
@@ -63,23 +87,23 @@ Toda la app usa los colores de la fase (`body.scn`): en Hoy con la ilustración 
 Notificaciones reales · vídeos · avatar con foto (los registros sin conexión se envían solos al volver).
 
 ## Instalación (PWA)
-`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker **abre la copia guardada al instante** y a la vez pide la versión nueva; si la página ha cambiado, la guarda y la app muestra «Hay una versión nueva de Origo → Actualizar» (también se aplica sola en la siguiente apertura). Guarda además el SDK de Firebase. Si cambias la lista de archivos de `sw.js` o los iconos, sube la versión (`origo-v4` ahora).
+`manifest.webmanifest` + `sw.js` (en la raíz) + iconos `assets/icon-192.png` y `icon-512.png`: permiten instalar desde Chrome y abrir sin conexión. El service worker **abre la copia guardada al instante** y a la vez comprueba en internet todos los archivos de la app (lista `APP`: `index.html`, `css/origo.css` y los 13 `js/`); solo si llegan todos y alguno ha cambiado, los guarda **juntos** (nunca se mezclan archivos de versiones distintas) y la app muestra «Hay una versión nueva de Origo → Actualizar» (también se aplica sola en la siguiente apertura). Guarda además el SDK de Firebase. Si cambias las listas de archivos de `sw.js` o los iconos, sube la versión (`origo-v5` ahora).
 
 ## Pruebas (`qa/`)
 Desde la carpeta del repositorio, con Playwright instalado (`pip install playwright`) y Chromium o Chrome (variable `CHROME` si hace falta):
 - `python3 qa/e2e_pruebas_usuario.py` · 30 pasos de uso real (sin Firebase, sobre una copia temporal).
 - `python3 qa/revision_pantallas.py` · desbordes en 16 pantallas × 5 anchos × 2 fases.
 - `python3 qa/test.py` · sincronización entre dos móviles con el servidor simulado (`server.py` + `mock.js`; lo arranca solo). `extra.py`: mezcla de `cfg` sin conexión.
+- `python3 qa/sw.py` · instalación, apertura sin conexión y aviso de versión nueva con los archivos separados (7 comprobaciones).
 Pásalas antes de publicar cualquier cambio. `comun.py` tiene las utilidades compartidas (`ir(pg,'his')` navega como el menú).
 
 ## Pendiente (ideas valoradas, no hechas)
 - **Firebase (consola, no código)**: activar App Check, restringir la clave de API al dominio de GitHub Pages y validar forma/tamaño de los registros en las reglas. Poder regenerar el código de familia y quitar miembros.
-- **Separar `index.html`** en CSS + módulos JS (sin herramientas de compilación) para que cada cambio cueste menos.
 - **Pasar los registros de localStorage a IndexedDB** si el historial crece mucho (hoy se reescribe entero en cada cambio; el límite ronda los 5 MB).
 - Quedan estilos del tema claro (`:root`) que solo sirven de base para variables: limpiar con cuidado.
 
 ## Cómo publicar
-Sube `index.html` a un repositorio de GitHub → Settings → Pages → rama `main`, carpeta raíz. Abre el enlace en el móvil y "Añadir a pantalla de inicio". Haz copias periódicas con Ajustes → Exportar (incluye fotos).
+El repositorio `dev10cla1/Origo` se publica con GitHub Pages (Settings → Pages → rama `main`, carpeta raíz): al fusionar un cambio en `main` se publica solo. Hay que subir todo (`index.html`, `css/`, `js/`, `assets/`, `sw.js`, `manifest.webmanifest`), no solo `index.html`. Abre el enlace en el móvil y "Añadir a pantalla de inicio". Haz copias periódicas con Ajustes → Exportar (incluye fotos).
 
 ## Prompt para empezar el siguiente chat
-> Continúo el proyecto ORIGO (app web de seguimiento de bebé en un único `index.html`, adjunto junto con `TRASPASO.md`). Las fases 1–8 están terminadas (la 8 conecta Firebase: Firestore + Auth, familias con código, sincronización y autoría). No cambies el stack, la identidad visual ni funcionalidades existentes. Guíame paso a paso (no soy programador).
+> Continúo el proyecto ORIGO (app web de seguimiento de bebé; repo `dev10cla1/Origo`: `index.html` + `css/origo.css` + `js/01…13`; lee `TRASPASO.md` y solo los archivos que haga falta). Las fases 1–8 están terminadas (la 8 conecta Firebase: Firestore + Auth, familias con código, sincronización y autoría). No cambies el stack, la identidad visual ni funcionalidades existentes. Guíame paso a paso (no soy programador).
