@@ -42,14 +42,13 @@ function vEmb(){
     tips=['Apunta las dudas que te vayan surgiendo para llevarlas a las consultas.','Buen momento para ir revisando la lista de preparativos y marcar lo que ya tienes.','Ve preparando la bolsa del hospital, instala la silla del coche y ten a mano la tarjeta sanitaria.'],
     P=prep(),act=P.filter(x=>x.s!=='no'),ok=act.filter(x=>x.s==='comp'||x.s==='reg'),pct=act.length?Math.round(ok.length/act.length*100):0,
     ci=(cfg.citas||[]).filter(c=>new Date(c.f)-Date.now()>=7*864e5).sort((a,b)=>a.f<b.f?-1:1)[0],L=Store.live();
-  return hTop(nom,d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista',true)+'</section><div style="height:clamp(150px,30vh,300px)"></div>'+
-  '<div class="card hero emb st-like" data-a="menu"><div class="row" style="margin-bottom:6px"><span class="mute">Toca para ver el menú</span><span class="stm">Menú<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>'+(d<1?'<div class="mute">Cuando nazca, pulsa «Ya ha nacido».</div>':'')+
-  '<div style="font-weight:600;margin-top:2px">Semana '+sem+' de embarazo · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><div class="mute">Semana aproximada. Orientativo.</div>'+
-  '<div class="bar"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas':'Pasada la fecha prevista')+'</div>'+
+  return'<div class="eb">'+hTop(nom,d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista',true)+'</section><div class="hsp"></div>'+
+  '<div class="card hero emb st-like" data-a="menu"><div class="row"><div style="font-weight:600">Semana '+sem+' · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><span class="stm">Menú<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>'+
+  '<div class="bar" style="margin-top:10px"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas · aproximado':'Pasada la fecha prevista')+'</div>'+
   '<div class="tip">'+tips[tri-1]+'</div></div>'+
   '<div class="card"><div class="row"><b>Preparativos</b><span class="mute">'+ok.length+' de '+act.length+' hechos</span></div><div class="bar"><i style="width:'+pct+'%;background:var(--ok)"></i></div><button class="sec" style="width:100%;margin-top:10px" data-a="prepir">Ver preparativos</button></div>'+
   (ci?'<div class="card"><div class="mute">Próxima cita</div><b>'+esc(ci.t)+'</b><div class="mute">'+citaF(ci,1)+(ci.p?' · '+esc(ci.p):'')+'</div></div>':'')+
-  '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button>'+
+  '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button></div>'+
   (L.length?'<div class="row"><h2>Actividad reciente</h2><button class="lnk" data-a="tab" data-v="his">Ver todo ›</button></div><div class="card" style="padding:2px 14px">'+L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'')+pendientes();
 }
 
