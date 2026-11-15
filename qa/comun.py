@@ -15,11 +15,12 @@ def navegador(pw):
 def copia_local():
     """Copia de la app SIN Firebase (solo este dispositivo) para probar las pantallas. Devuelve su URL file://"""
     d=os.path.join(SALIDA,'sitio');shutil.rmtree(d,ignore_errors=True);os.makedirs(d)
-    shutil.copytree(os.path.join(RAIZ,'assets'),os.path.join(d,'assets'))
-    s=open(os.path.join(RAIZ,'index.html'),encoding='utf-8').read()
+    for x in('assets','css','js'):shutil.copytree(os.path.join(RAIZ,x),os.path.join(d,x))
+    shutil.copy(os.path.join(RAIZ,'index.html'),d)
+    f=os.path.join(d,'js','01-config.js');s=open(f,encoding='utf-8').read()
     s2=re.sub(r'const FIREBASE_CONFIG = \{.*?\};','const FIREBASE_CONFIG = null;',s,count=1,flags=re.S)
-    assert s2!=s,'No se encontró FIREBASE_CONFIG en index.html'
-    open(os.path.join(d,'index.html'),'w',encoding='utf-8').write(s2)
+    assert s2!=s,'No se encontró FIREBASE_CONFIG en js/01-config.js'
+    open(f,'w',encoding='utf-8').write(s2)
     return 'file://'+d+'/index.html'
 def ir(pg,k):
     """Navega como el menú: hoy · his · stats · cre · pan · prep · des · aju"""

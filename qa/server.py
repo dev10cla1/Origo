@@ -49,6 +49,7 @@ def write(uid,ops):
         else:
             for k,v in o['ups']:setpath(D[p],k,v)
     return {'ok':1}
+MIME={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'}
 class H(BaseHTTPRequestHandler):
     def log_message(self,*a):pass
     def send(self,j,ct='application/json'):
@@ -56,7 +57,7 @@ class H(BaseHTTPRequestHandler):
         self.send_response(200);self.send_header('Content-Type',ct);self.send_header('Content-Length',str(len(b)));self.end_headers();self.wfile.write(b)
     def do_GET(self):
         p=self.path.split('?')[0].lstrip('/') or 'index.html'
-        if os.path.isfile(p):self.send(open(p,'rb').read(),'text/html' if p.endswith('.html') else 'application/octet-stream')
+        if os.path.isfile(p):self.send(open(p,'rb').read(),MIME.get(os.path.splitext(p)[1],'application/octet-stream'))
         else:self.send_response(404);self.end_headers()
     def do_POST(self):
         b=json.loads(self.rfile.read(int(self.headers['Content-Length'])) or b'{}');ep=self.path.split('/')[-1]
