@@ -103,6 +103,9 @@ body.scn{background:var(--sb)}
 .scn main h2{color:#fff}.scn main .lnk{color:rgba(230,238,246,.85)}
 .hx{display:flex;flex-direction:column;min-height:calc(100vh - var(--nh) - env(safe-area-inset-top) - 16px);min-height:calc(100svh - var(--nh) - env(safe-area-inset-top) - 16px);padding-bottom:12px}
 .hx.emb{min-height:0;padding-bottom:0}
+.eb{display:flex;flex-direction:column;min-height:calc(100vh - 56px - env(safe-area-inset-top));min-height:calc(100svh - 56px - env(safe-area-inset-top));padding-bottom:0}.eb .hsp{min-height:0}.eb .hn{margin-top:clamp(10px,3vh,40px)}.eb .card{margin-top:0;margin-bottom:10px}.eb>button{margin-bottom:0}.eb .tip{margin-top:10px;padding-top:10px;font-size:14.5px;line-height:1.35}
+@media (max-height:700px){.eb .tip{display:none}.eb .hn .nm{font-size:clamp(38px,12vw,52px)}}
+@media (max-height:600px){.eb .card{padding:10px 14px;margin-bottom:8px}.eb .hn{margin-top:4px}.eb .hn .ag{margin-top:2px}.eb .card .sec{padding:8px;margin-top:6px!important}}
 .htop{display:flex;align-items:center;justify-content:space-between;margin:2px 0 0}
 .hb{display:flex;align-items:center;gap:10px}.hb img{display:block;width:auto;filter:var(--hf)}
 .gear{width:50px;height:50px;border-radius:50%;border:0;background:var(--gb);color:var(--gc);display:grid;place-items:center;padding:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -737,14 +740,13 @@ function vEmb(){
     tips=['Apunta las dudas que te vayan surgiendo para llevarlas a las consultas.','Buen momento para ir revisando la lista de preparativos y marcar lo que ya tienes.','Ve preparando la bolsa del hospital, instala la silla del coche y ten a mano la tarjeta sanitaria.'],
     P=prep(),act=P.filter(x=>x.s!=='no'),ok=act.filter(x=>x.s==='comp'||x.s==='reg'),pct=act.length?Math.round(ok.length/act.length*100):0,
     ci=(cfg.citas||[]).filter(c=>new Date(c.f)-Date.now()>=7*864e5).sort((a,b)=>a.f<b.f?-1:1)[0],L=Store.live();
-  return hTop(nom,d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista',true)+'</section><div style="height:clamp(150px,30vh,300px)"></div>'+
-  '<div class="card hero emb st-like" data-a="menu"><div class="row" style="margin-bottom:6px"><span class="mute">Toca para ver el menú</span><span class="stm">Menú<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>'+(d<1?'<div class="mute">Cuando nazca, pulsa «Ya ha nacido».</div>':'')+
-  '<div style="font-weight:600;margin-top:2px">Semana '+sem+' de embarazo · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><div class="mute">Semana aproximada. Orientativo.</div>'+
-  '<div class="bar"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas':'Pasada la fecha prevista')+'</div>'+
+  return'<div class="eb">'+hTop(nom,d>1?'Faltan '+d+' días':d===1?'Falta 1 día':'Ya es la fecha prevista',true)+'</section><div class="hsp"></div>'+
+  '<div class="card hero emb st-like" data-a="menu"><div class="row"><div style="font-weight:600">Semana '+sem+' · '+['primer','segundo','tercer'][tri-1]+' trimestre</div><span class="stm">Menú<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>'+
+  '<div class="bar" style="margin-top:10px"><i style="width:'+Math.round(sem/40*100)+'%"></i></div><div class="mute" style="margin-top:4px">'+(sem<=40?sem+' de 40 semanas · aproximado':'Pasada la fecha prevista')+'</div>'+
   '<div class="tip">'+tips[tri-1]+'</div></div>'+
   '<div class="card"><div class="row"><b>Preparativos</b><span class="mute">'+ok.length+' de '+act.length+' hechos</span></div><div class="bar"><i style="width:'+pct+'%;background:var(--ok)"></i></div><button class="sec" style="width:100%;margin-top:10px" data-a="prepir">Ver preparativos</button></div>'+
   (ci?'<div class="card"><div class="mute">Próxima cita</div><b>'+esc(ci.t)+'</b><div class="mute">'+citaF(ci,1)+(ci.p?' · '+esc(ci.p):'')+'</div></div>':'')+
-  '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button>'+
+  '<button class="sec" style="width:100%;padding:14px'+(d<1?';background:var(--acc);color:var(--on)':'')+'" data-a="nacio">Ya ha nacido</button></div>'+
   (L.length?'<div class="row"><h2>Actividad reciente</h2><button class="lnk" data-a="tab" data-v="his">Ver todo ›</button></div><div class="card" style="padding:2px 14px">'+L.slice(0,4).map(e=>evRow(e,false,true)).join('')+'</div>':'')+pendientes();
 }
 
