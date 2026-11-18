@@ -3,7 +3,8 @@ const I=d=>'<svg viewBox="0 0 24 24">'+d+'</svg>';
 const IC={toma:I('<path d="M9 3h6M10 3v3h4V3M8 6h8v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zM8 12h8"/>'),panal:I('<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>'),sueno:I('<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/>'),temp:I('<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/>'),med:I('<path d="M10.5 20.5l-7-7a4.9 4.9 0 0 1 7-7l7 7a4.9 4.9 0 0 1-7 7zM8.5 8.5l7 7"/>'),medida:I('<path d="M3 20h18M6 16l4-5 4 3 5-7"/>'),alim:I('<path d="M12 21V11M12 11C12 7 9 5 5 5c0 4 2 6 7 6zM12 14c0-3 2-5 6-5 0 4-2 6-6 6z"/>'),momento:I('<path d="M12 21s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9z"/>'),prep:I('<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>')};
 const GR={toma:'f',alim:'f',comida:'f',panal:'p',sueno:'s',temp:'h',med:'h',medida:'h',momento:'m'};
 const LK={formula:'fórmula',materna:'leche materna',pecho:'pecho'},PK={pis:'Pipí',caca:'Caca',ambos:'Pipí y caca',seco:'Seco'};
-let filt='all',dia='',masSub=null;
+const LIM=60; /* filas de Registros que se pintan de una vez; «Ver más» suma otras LIM */
+let filt='all',dia='',masSub=null,lim=LIM;
 const dtl=t=>new Date(t-new Date(t).getTimezoneOffset()*6e4).toISOString().slice(0,16);
 function panel(html,lbl){$('sh').innerHTML=html+'<button class="sec" id="shx" style="width:100%;margin-top:8px">'+(lbl||'Cancelar')+'</button>';shOpen();$('shx').onclick=closeSheet}
 $('sh').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b)ACT[b.dataset.a](b.dataset.v)});
@@ -78,22 +79,25 @@ const FIL={f:['toma','alim','comida'],p:['panal'],s:['sueno'],h:['temp','med','m
 /* Franja de un día (k = 'AAAA-MM-DD'): devuelve [html, resumen en texto]. El sueño que cruza la medianoche se reparte entre los dos días. */
 function franja(k){
   const a=new Date(k+'T00:00').getTime(),b=a+864e5,n=Date.now(),pc=t=>(Math.max(0,Math.min(1,(t-a)/864e5))*100).toFixed(2);let h='',sm=0,nt=0,np=0;
-  Store.live().forEach(e=>{
-    if(e.tipo==='sueno'){const f=e.fin||n;if(f>a&&e.inicio<b){const x=Math.max(e.inicio,a),y=Math.min(f,b);if(y>x){sm+=y-x;h+='<i class="fs" style="left:'+pc(x)+'%;width:'+((y-x)/864e5*100).toFixed(2)+'%"></i>'}}}
+  const D=Store.dias(),sue=e=>{const f=e.fin||n;if(f>a&&e.inicio<b){const x=Math.max(e.inicio,a),y=Math.min(f,b);if(y>x){sm+=y-x;h+='<i class="fs" style="left:'+pc(x)+'%;width:'+((y-x)/864e5*100).toFixed(2)+'%"></i>'}}};
+  /* Solo los registros de ese día (mapa por día) y los sueños que vienen de días anteriores (D.g, ya ordenados del más reciente al más antiguo) */
+  (D.get(k)||[]).forEach(e=>{
+    if(e.tipo==='sueno')sue(e);
     else if(e.inicio>=a&&e.inicio<b){if(e.tipo==='toma'){nt++;h+='<i class="ft" style="left:'+pc(e.inicio)+'%"></i>'}else if(e.tipo==='panal'){np++;h+='<i class="fp" style="left:'+pc(e.inicio)+'%"></i>'}}});
+  D.g.forEach(e=>{if(e.inicio<a)sue(e)});
   if(!sm&&!nt&&!np)return['',''];
   if(n>a&&n<b)h+='<i class="fn" style="left:'+pc(n)+'%"></i>';
   const tx=[sm?'Sueño '+dur(sm).replace(' min','').replace(' h ',' h ')+(sm<36e5?' min':''):'',nt?nt+(nt===1?' toma':' tomas'):'',np?np+(np===1?' pañal':' pañales'):''].filter(Boolean).join(' · ');
   return['<div class="fj" role="img" aria-label="Día en 24 horas: '+tx+'">'+h+'</div><div class="fjx" aria-hidden="true"><span>0 h</span><span>6</span><span>12</span><span>18</span><span>24</span></div>',tx]}
 function vCrono(){
-  let L=Store.live();if(filt!=='all')L=L.filter(e=>FIL[filt].includes(e.tipo));
-  L=dia?L.filter(e=>new Date(e.inicio).toLocaleDateString('sv-SE')===dia):L.slice(0,200);
+  let L=dia?Store.dias().get(dia)||[]:Store.live();if(filt!=='all')L=L.filter(e=>FIL[filt].includes(e.tipo));
+  const tot=L.length,mas=!dia&&tot>lim;if(!dia)L=L.slice(0,lim); /* un día se pinta entero; la lista general, por tramos */
   let h='<div style="height:8px"></div>'+T2('filt',[['all','Todo'],['f','Alimentación'],['p','Pañales'],['s','Sueño'],['h','Salud']],filt,1)+'<div class="row" style="align-items:flex-end"><label style="flex:1">Ver un día<input id="hd" type="date" value="'+dia+'" style="margin:4px 0 0"></label>'+(dia?'<button class="sec" data-a="hdclr" style="margin-bottom:0">Ver todo</button>':'')+'</div>';
   if(!L.length)return h+'<div class="card mute" style="text-align:center;padding:24px 14px;margin-top:12px">'+(dia||filt!=='all'?'No hay registros con este filtro.':'Aún no hay registros. Empieza desde Hoy.')+'</div>';
   const hoy=dkey(0),ayer=dkey(-1);let cur='',open=false;
   h+='<div class="fjl" aria-hidden="true"><span><i class="fs"></i>Sueño</span><span><i class="ft"></i>Toma</span><span><i class="fp"></i>Pañal</span></div>';
   L.forEach(e=>{const k=new Date(e.inicio).toLocaleDateString('sv-SE');if(k!==cur){if(open)h+='</div>';cur=k;open=true;const fj=franja(k);h+='<div class="day"><span>'+(k===hoy?'Hoy':k===ayer?'Ayer':new Date(e.inicio).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))+'</span><span class="dsm">'+fj[1]+'</span></div>'+fj[0]+'<div class="card" style="padding:2px 14px">'}h+=evRow(e)});
-  return h+(open?'</div>':'');
+  return h+(open?'</div>':'')+(mas?'<button class="sec" data-a="crmas" style="width:100%;margin-top:12px">Ver más</button><div class="mute" style="text-align:center;margin-top:6px;font-size:13px">'+lim+' de '+tot+' registros</div>':'');
 }
 ico.mas='<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>';ico.pan=IC.panal;
 /* Campos de una toma: solo se ve lo que aplica (cantidad para biberón; lado y minutos para pecho) */
@@ -116,14 +120,15 @@ Object.assign(ACT,{
   menu(){const cur=tab==='his'?(regVista==='stats'?'stats':'his'):tab==='cre'?'cre':tab==='mas'?masSub:'';
     panel('<h2 style="margin-top:0">Menú</h2><div class="pg mn">'+MENU.map(([k,l,i])=>'<button data-a="'+(k==='resumen'?'resumen':'ir')+'" data-v="'+k+'"'+(k===cur?' class="on" aria-current="page"':'')+'>'+i+l+'</button>').join('')+'</div>','Cerrar')},
   mlpm(v){const i=$('ml');if(i)i.value=Math.max(0,(+i.value||0)+ +v)},
-  ir(v){closeSheet();if(v==='his'||v==='stats'){tab='his';regVista=v==='stats'?'stats':'crono'}else if(v==='cre')tab='cre';else{tab='mas';masSub=v}render();window.scrollTo(0,0)},
+  ir(v){closeSheet();if(v==='his'||v==='stats'){tab='his';lim=LIM;regVista=v==='stats'?'stats':'crono'}else if(v==='cre')tab='cre';else{tab='mas';masSub=v}render();window.scrollTo(0,0)},
   inicio(){if(history.state&&history.state.sub)history.back();else{tab='hoy';masSub=null;render();window.scrollTo(0,0)}},
   tab(v){tab=v;render();window.scrollTo(0,0)},
   mas(v){masSub=v;render();window.scrollTo(0,0)},
   mback(){masSub=null;render()},
   perfil(){tab='mas';masSub='aju';render();window.scrollTo(0,0)},
-  filt(v){filt=v;render()},
-  hdclr(){dia='';render()},
+  filt(v){filt=v;lim=LIM;render()},
+  hdclr(){dia='';lim=LIM;render()},
+  crmas(){lim+=LIM;render()},
   sue(v){closeSheet();if(v==='ahora')toggleSueno();else sheetSuenoHora()},
   prepir(){tab='mas';masSub='prep';render();window.scrollTo(0,0)},
   nacio(){sheet('<h2 style="margin-top:0">Ya ha nacido</h2><label>Fecha de nacimiento</label><input id="nf" type="date" max="'+new Date().toLocaleDateString('sv-SE')+'" value="'+new Date().toLocaleDateString('sv-SE')+'">',()=>{
