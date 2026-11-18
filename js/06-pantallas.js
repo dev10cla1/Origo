@@ -23,7 +23,7 @@ function vAju(){
 
 function bind(){
   if(tab==='hoy'&&$('bT')){$('bT').onclick=sheetToma;$('bP').onclick=panelPanal;$('bS').onclick=panelSueno}
-  if(tab==='his'&&$('hd'))$('hd').onchange=e=>{dia=e.target.value;render()};
+  if(tab==='his'&&$('hd'))$('hd').onchange=e=>{dia=e.target.value;lim=LIM;render()};
   if(tab==='cre'&&$('addM'))$('addM').onclick=()=>ACT.medidas();
   if(tab==='mas'&&masSub==='aju'){
     if(Sync.ready&&!Sync.fotTodas){Sync.fotTodas=true;todasFotos().catch(()=>{Sync.fotTodas=false})}
