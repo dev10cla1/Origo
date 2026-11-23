@@ -4,7 +4,7 @@
    archivos de versiones distintas. Si alguno ha cambiado, se avisa a la app («Hay una versión nueva» → Actualizar).
    No toca las peticiones a Firestore ni al inicio de sesión.
    Si añades, quitas o renombras un archivo de css/ o js/, o cambias los iconos, actualiza las listas y sube la versión (C). */
-const C='origo-v5',
+const C='origo-v6',
   APP=['index.html','css/origo.css','js/01-config.js','js/02-datos.js','js/03-sync.js','js/04-base.js','js/05-marca.js','js/06-pantallas.js','js/07-crecimiento.js',
     'js/08-desarrollo.js','js/09-hoy.js','js/10-panales-preparativos.js','js/11-salud.js','js/12-diario.js','js/13-inicio.js'],
   BASE=[...APP,'manifest.webmanifest','assets/icon-192.png','assets/icon-512.png','assets/escena-noche.jpg','assets/escena-amanecer.jpg','assets/escena-dia.jpg','assets/escena-atardecer.jpg'],
