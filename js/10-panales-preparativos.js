@@ -32,11 +32,32 @@ function consumo(){
   const first=Math.min(...L.map(e=>e.inicio)),dias=Math.max(1,Math.min(7,(n-first)/864e5)),u=L.filter(e=>e.inicio>=n-7*864e5).length;
   return{dia:u/dias,sem:u/dias*7,ok:(n-first)>=2*864e5};
 }
+/* Estimación orientativa de pañales en el primer año (bebé de peso medio). Por talla: días de vida en que se suele usar [desde, hasta) y pañales al día.
+   La talla 0 solo se cuenta si el primer peso registrado es menor de 3 kg (entonces la talla 1 empieza a las 2 semanas). */
+const PEST={'0':[0,14,10],'1':[0,42,10],'2':[42,120,8],'3':[120,270,6.5],'4':[270,365,5.5]};
+function estPan(){
+  const p=medidas().find(e=>e.datos.peso&&(!cfg.nac||mesesDe(e.inicio)<0.5)),peq=!!(p&&+p.datos.peso<3),
+    nac=cfg.nac&&!nacFut()?new Date(cfg.nac).getTime():null,hoy=nac?Math.max(0,(Date.now()-nac)/864e5):0,ia=TAL.indexOf(cfg.talla),R={};
+  TAL.forEach((t,i)=>{let[a,b,r]=PEST[t];if(t==='0'&&!peq){R[t]={tot:0,fal:0,r};return}if(t==='1'&&peq)a=14;
+    const tot=Math.round((b-a)*r/10)*10;let rest=Math.max(0,b-Math.max(a,hoy));
+    if(ia>=0&&i<ia)rest=0;else if(ia===i)rest=Math.max(rest,7); /* la talla en uso manda sobre la edad */
+    R[t]={tot,fal:Math.round(rest*r/10)*10,r,sup:!!nac&&rest===0,a,b}});
+  return{R,nac:!!nac,peq,tot:TAL.reduce((s,t)=>s+R[t].tot,0)}}
+const semM=d=>d<56?Math.round(d/7)+' sem.':Math.round(d/30.4)+' meses';
+function vEst(S){
+  const E=estPan(),fal=TAL.reduce((s,t)=>s+Math.max(0,E.R[t].fal-(S[t]||0)),0);
+  let h='<h2>Estimación del primer año</h2><div class="card" style="padding:2px 14px">';
+  TAL.forEach(t=>{const e=E.R[t],u=S[t]||0;if(!e.tot&&!u)return;
+    const nec=E.nac?e.fal:e.tot,dif=u-nec,pc=nec?Math.min(100,Math.round(u/nec*100)):100;
+    const est=e.sup?(u?'<span class="mute">Superada · sobran '+u+'</span>':'<span class="mute">Superada</span>'):!nec?'<span class="mute">No suele hacer falta</span>':dif>=0?'<b style="color:var(--ok)">Cubierta'+(dif?' (+'+dif+')':'')+'</b>':'<b style="color:var(--warn)">Faltan ~'+(-dif)+'</b>';
+    h+='<div class="it" style="display:block;padding:11px 0"><div class="row"><b>Talla '+t+'</b>'+est+'</div><div class="mute" style="margin-top:2px">'+(e.sup?'Por edad o talla ya no se usa (≈'+e.tot+' en total)':'Tienes '+u+' de ~'+nec+(E.nac&&nec<e.tot?' que aún harían falta (≈'+e.tot+' en total)':' estimados'))+(e.tot?' · '+(e.a?'de '+semM(e.a)+' ':'desde el nacimiento ')+'a '+semM(e.b)+', unos '+fx(e.r)+' al día':' · solo si pesa menos de 3 kg')+'</div>'+(nec&&!e.sup?'<div class="bar" style="margin-top:6px"><i style="width:'+pc+'%;background:var(--'+(dif>=0?'ok':'mint')+')"></i></div>':'')+'</div>'});
+  h+='</div><div class="mute" style="margin:6px 2px 10px">Total aproximado en el primer año: unos '+E.tot.toLocaleString('es-ES')+' pañales'+(fal?' · te faltarían unos '+fal.toLocaleString('es-ES'):'')+'. Es orientativo: cada bebé cambia de talla según su peso; marca la talla en uso para ajustar.'+(E.peq?'':' La talla 0 solo se cuenta si el primer peso registrado es menor de 3 kg.')+'</div>';
+  return h}
 function vPan(){
   const S=cfg.stock||{},inf=cfg.panInfo||{},tot=TAL.reduce((a,t)=>a+(S[t]||0),0),c=consumo(),mx=Math.max(1,...TAL.map(t=>S[t]||0)),act=cfg.talla,i=TAL.indexOf(act),sig=i>=0?TAL.slice(i+1).find(t=>(S[t]||0)>0):null;
   let h='<h1>Pañales</h1><div class="card hero" style="margin-top:12px"><div class="mute">Pañales disponibles</div><div class="val" style="font-size:34px">'+tot+'</div><div class="mute">'+(act?'Talla en uso: '+act+(sig?' · siguiente con stock: talla '+sig:''):'Toca una talla para marcarla como en uso')+'</div>'+(c&&c.ok&&tot?'<div class="mute" style="margin-top:6px">Con tu consumo actual, unos '+Math.floor(tot/c.dia)+' días en total (orientativo)</div>':'')+'</div><button class="sec" style="width:100%;margin-bottom:6px" data-a="pana">Registrar compra o regalo</button>';
   h+='<h2>Existencias por talla</h2><div class="card" style="padding:2px 14px">'+TAL.map(t=>{const u=S[t]||0,m=inf[t]||{},nom=[m.marca,m.modelo].filter(Boolean).join(' ');
-    return'<div class="it ev" data-a="pant" data-v="'+t+'" style="display:block;padding:11px 0"><div class="row"><b>Talla '+t+(act===t?' <span class="pill">en uso</span>':t===sig?' <span class="pill" style="background:var(--t2);color:var(--ok)">siguiente</span>':'')+'</b><b>'+u+'</b></div><div class="bar" style="background:var(--line);margin-top:6px"><i style="width:'+Math.round(u/mx*100)+'%;background:var('+(act===t?'--acc':'--mint')+')"></i></div>'+(nom?'<div class="mute" style="margin-top:4px">'+esc(nom)+(m.upp?' · paquetes de '+m.upp:'')+'</div>':'')+'</div>'}).join('')+'</div>';
+    return'<div class="it ev" data-a="pant" data-v="'+t+'" style="display:block;padding:11px 0"><div class="row"><b>Talla '+t+(act===t?' <span class="pill">en uso</span>':t===sig?' <span class="pill" style="background:var(--t2);color:var(--ok)">siguiente</span>':'')+'</b><b>'+u+'</b></div><div class="bar" style="background:var(--line);margin-top:6px"><i style="width:'+Math.round(u/mx*100)+'%;background:var('+(act===t?'--acc':'--mint')+')"></i></div>'+(nom?'<div class="mute" style="margin-top:4px">'+esc(nom)+(m.upp?' · paquetes de '+m.upp:'')+'</div>':'')+'</div>'}).join('')+'</div>'+vEst(S);
   h+='<h2>Consumo</h2><div class="card">';
   if(!c)h+='<div class="mute">Aún no hay pañales registrados en Hoy.</div>';
   else if(!c.ok)h+='<div class="mute">Necesito al menos 2 días de registros para calcular el consumo.</div>';
